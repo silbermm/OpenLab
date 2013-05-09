@@ -14,13 +14,13 @@
 
     <context:component-scan base-package="edu.uc.labs.heartbeat.web" />
     <mvc:annotation-driven>
-			<!-- <mvc:message-converters>
+		<mvc:message-converters>
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                 <property name="objectMapper">
                     <bean class="edu.uc.labs.heartbeat.utils.HibernateAwareObjectMapper" />
                 </property>
             </bean>
-				</mvc:message-converters> -->
+		</mvc:message-converters>
     </mvc:annotation-driven>
     <!-- Forwards requests to the "/" resource to the "welcome" view -->
     <mvc:view-controller path="/" view-name="index" />
