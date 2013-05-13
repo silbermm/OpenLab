@@ -81,7 +81,7 @@ public class RabbitConfig {
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory());
         container.setQueues(machineQueue());
-        container.setMessageListener(new MessageListener());
+        container.setMessageListener(new MessageListener(heartbeatService, rabbitTemplate()));
         container.setAutoStartup(true);
         container.setConcurrentConsumers(1);
         return container;
