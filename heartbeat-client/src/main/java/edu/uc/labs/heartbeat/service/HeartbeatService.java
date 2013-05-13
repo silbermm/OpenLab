@@ -54,7 +54,7 @@ public class HeartbeatService {
         this.config = config;
     }
 
-    public void setMessages(ResourceBundleMessageSource messages){
+    public void setMessages(ResourceBundleMessageSource messages) {
         this.messages = messages;
     }
 

@@ -6,7 +6,7 @@ import edu.uc.labs.heartbeat.domain.Machine;
 import edu.uc.labs.heartbeat.service.HeartbeatService;
 import org.apache.log4j.Logger;
 
-public class HeartbeatSchedule implements Scheduler{
+public class HeartbeatSchedule implements Scheduler {
 
     public HeartbeatSchedule(Config config, HeartbeatService heartbeatService) {
         this.config = config;

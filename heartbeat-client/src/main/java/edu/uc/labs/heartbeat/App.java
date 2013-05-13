@@ -15,6 +15,7 @@ import java.util.ResourceBundle;
 
 /**
  * The entry point for Heartbeat
+ *
  * @author Matt Silbernagel
  */
 public class App {
@@ -22,7 +23,7 @@ public class App {
     public App(String[] args) {
         parse(args);
 
-        if (cmd.hasOption("r")){
+        if (cmd.hasOption("r")) {
             ctx = new AnnotationConfigApplicationContext(AppConfig.class, RabbitConfig.class);
         } else {
             ctx = new AnnotationConfigApplicationContext(AppConfig.class);
@@ -35,7 +36,7 @@ public class App {
             service.writeMachineInfo(m);
             System.out.println(m.getUuid());
             System.exit(0);
-        } else if (cmd.hasOption("a")){
+        } else if (cmd.hasOption("a")) {
             HeartbeatService service = ctx.getBean(HeartbeatService.class);
             Machine m = service.getMachineInfo();
             service.writeMachineInfo(m);

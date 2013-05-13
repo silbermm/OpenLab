@@ -92,8 +92,8 @@ public class MachineDaoImpl implements MachineDao {
                     "/" + config.getString("heartbeat.path");
             restTemplate.postForLocation(url, m);
             // now post it to the server...
-        //} catch (JsonProcessingException ex) {
-        //    log.error("There was a problem converting the machine to JSON... " + ex.getMessage());
+            //} catch (JsonProcessingException ex) {
+            //    log.error("There was a problem converting the machine to JSON... " + ex.getMessage());
         } catch (RestClientException ex) {
             log.error("There was a problem sending the data to the server: " + ex.getMessage());
         }

@@ -12,7 +12,7 @@ import org.springframework.amqp.rabbit.core.ChannelAwareMessageListener;
 
 public class MessageListener implements ChannelAwareMessageListener {
 
-    public MessageListener(HeartbeatService heartbeatService, AmqpTemplate rabbitTemplate){
+    public MessageListener(HeartbeatService heartbeatService, AmqpTemplate rabbitTemplate) {
         this.heartbeatService = heartbeatService;
         this.rabbitTemplate = rabbitTemplate;
     }
@@ -22,13 +22,13 @@ public class MessageListener implements ChannelAwareMessageListener {
         final MessageProperties props = message.getMessageProperties();
         Machine m = heartbeatService.getMachineInfo();
         rabbitTemplate.convertAndSend(props.getReplyTo(), m,
-            new MessagePostProcessor() {
-                @Override
-                public Message postProcessMessage(Message message) throws AmqpException {
-                    message.getMessageProperties().setCorrelationId(props.getCorrelationId());
-                    return message;
+                new MessagePostProcessor() {
+                    @Override
+                    public Message postProcessMessage(Message message) throws AmqpException {
+                        message.getMessageProperties().setCorrelationId(props.getCorrelationId());
+                        return message;
+                    }
                 }
-            }
         );
     }
 
