@@ -9,4 +9,6 @@ public interface MachineDao extends Dao<Machine> {
 
     boolean serialNumberExists(String serialNumber);
 
+    Machine findByUuid(String uuid);
+
 }

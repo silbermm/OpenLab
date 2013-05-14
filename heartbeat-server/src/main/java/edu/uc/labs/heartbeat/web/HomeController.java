@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -20,7 +21,7 @@ public class HomeController {
 
     final static Logger log = LoggerFactory.getLogger(HomeController.class);
 
-    @RequestMapping(value="", method = RequestMethod.POST, headers ={"Accept=application/json"})
+    @RequestMapping(value="", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void acceptMachineInfo(@RequestBody Machine machine){
         log.info("in the acceptMachineInfo method");
@@ -30,6 +31,14 @@ public class HomeController {
     public @ResponseBody List<Machine> getAllMachines(){
         return heartbeatService.getAllMachines();
     }
+
+    @RequestMapping(value="update/{uuid}", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public void acceptUuid(@PathVariable String uuid){
+        heartbeatService.updateMachineRecord(uuid);
+    }
+
+
 
 
     @Autowired

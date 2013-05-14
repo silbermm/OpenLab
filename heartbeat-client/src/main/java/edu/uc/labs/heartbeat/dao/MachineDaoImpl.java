@@ -111,7 +111,7 @@ public class MachineDaoImpl implements MachineDao {
         Map<String, String> uuidMap = new HashMap<String, String>();
         uuidMap.put("justuuid", uuid);
         try {
-            restTemplate.postForLocation(url, uuidMap);
+            restTemplate.put(url, uuidMap);
         } catch (RestClientException ex) {
             log.error("There was a problem sending the data to the server: " + ex.getMessage());
         }

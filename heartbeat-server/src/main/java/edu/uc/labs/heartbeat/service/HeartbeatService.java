@@ -6,6 +6,7 @@ import edu.uc.labs.heartbeat.models.Machine;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -36,6 +37,13 @@ public class HeartbeatService {
             return false;
         }
         return true;
+    }
+
+    @Transactional(readOnly = false)
+    public void updateMachineRecord(String uuid){
+        Machine m = machineDao.findByUuid(uuid);
+        m.setLastSeen(new Date(System.currentTimeMillis()));
+        machineDao.update(m);
     }
 
     public void setConfig(Config config){

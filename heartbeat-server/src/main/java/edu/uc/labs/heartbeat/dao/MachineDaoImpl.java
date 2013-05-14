@@ -19,6 +19,11 @@ public class MachineDaoImpl extends AbstractDao<Machine> implements MachineDao {
         return (Machine) getSession().createQuery("from Machine where serviceTag = ?").setParameter(1, serialNumber).uniqueResult();
     }
 
+    public Machine findByUuid(String uuid){
+        return (Machine) getSession().createQuery("from Machine where uid = :uuid").setString("uuid", uuid).uniqueResult();
+
+    }
+
     @Override
     public boolean serialNumberExists(String serialNumber) {
         Machine m = findBySerialNumber(serialNumber);
