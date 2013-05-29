@@ -6,6 +6,7 @@ import com.jacob.com.EnumVariant;
 import com.jacob.com.Variant;
 import com.typesafe.config.Config;
 import edu.uc.labs.heartbeat.domain.Machine;
+import edu.uc.labs.heartbeat.domain.MachineGroup;
 import edu.uc.labs.heartbeat.utils.HeartbeatPropertiesLoader;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
@@ -22,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -32,6 +34,7 @@ public class MachineDaoImpl implements MachineDao {
     private static final Logger log = Logger.getLogger(MachineDaoImpl.class);
     private Config config;
     private RestTemplate restTemplate;
+    private MachineGroup g = new MachineGroup();
 
     public MachineDaoImpl(Config config, RestTemplate restTemplate) {
         this.config = config;
@@ -84,12 +87,9 @@ public class MachineDaoImpl implements MachineDao {
 
     public void sendToServer(Machine m) {
         try {
-            // convert data to JSON and send to the server
-            //String jsonObject = mapper.writeValueAsString(m);
-            //log.debug(jsonObject);
             String url = config.getString("heartbeat.protocol") + "://" +
                     config.getString("heartbeat.server") + ":" + config.getString("heartbeat.port") +
-                    "/" + config.getString("heartbeat.path");
+                    "/" + config.getString("heartbeat.path") + "/create";
             restTemplate.postForLocation(url, m);
             // now post it to the server...
             //} catch (JsonProcessingException ex) {
@@ -107,11 +107,9 @@ public class MachineDaoImpl implements MachineDao {
     public void sendToServer(String uuid) {
         String url = config.getString("heartbeat.protocol") + "://" +
                 config.getString("heartbeat.server") + ":" + config.getString("heartbeat.port") +
-                "/" + config.getString("heartbeat.path");
-        Map<String, String> uuidMap = new HashMap<String, String>();
-        uuidMap.put("justuuid", uuid);
+                "/" + config.getString("heartbeat.path") + "/update/" + uuid;
         try {
-            restTemplate.put(url, uuidMap);
+            restTemplate.put(url, null);
         } catch (RestClientException ex) {
             log.error("There was a problem sending the data to the server: " + ex.getMessage());
         }
@@ -191,13 +189,15 @@ public class MachineDaoImpl implements MachineDao {
                 int returnval = executor.execute(commandLine);
                 s = stdout.toString().replaceAll("\\n", "");
             } catch (ExecuteException e) {
-                s = "";
+                s = "none";
             } catch (IOException e) {
-                s = "";
+                s = "none";
             }
             serialNumber = s;
 
         }
+        if(serialNumber.equals(null) || serialNumber.equals(""))
+            serialNumber = "none";
         return serialNumber;
     }
 

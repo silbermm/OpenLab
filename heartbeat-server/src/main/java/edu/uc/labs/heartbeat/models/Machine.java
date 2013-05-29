@@ -145,4 +145,20 @@ public class Machine implements Serializable {
     public void setCurrentUser(String currentUser) {
         this.currentUser = currentUser;
     }
+
+    @Override
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n\tComputer Name = ").append(this.name).append("\n");
+        sb.append("\tMac Addresses = ").append(this.mac).append("\n");
+        sb.append("\tOS = ").append(this.os).append("\n");
+        sb.append("\tOSVersion = ").append(this.osVersion).append("\n");
+        sb.append("\tManufacturer = ").append(this.manufacturer).append("\n");
+        sb.append("\tModel = ").append(this.model).append("\n");
+        sb.append("\tSerial Number = ").append(this.serialNumber).append("\n");
+        sb.append("\tUUID = ").append(this.uid).append("\n");
+        sb.append("\tUser = ").append(this.currentUser).append("\n");
+        sb.append("\tID = ").append(this.id).append("\n");
+        return sb.toString();
+    }
 }

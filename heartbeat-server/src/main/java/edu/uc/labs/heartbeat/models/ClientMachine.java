@@ -1,6 +1,6 @@
-package edu.uc.labs.heartbeat.domain;
+package edu.uc.labs.heartbeat.models;
 
-public class Machine {
+public class ClientMachine {
 
     private String uuid;
     private String name;
@@ -98,5 +98,6 @@ public class Machine {
         sb.append("\tUser = ").append(this.currentUser).append("\n");
         return sb.toString();
     }
+
 
 }
