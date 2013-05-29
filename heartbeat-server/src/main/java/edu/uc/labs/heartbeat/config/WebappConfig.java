@@ -3,6 +3,8 @@ package edu.uc.labs.heartbeat.config;
 import com.typesafe.config.Config;
 import edu.uc.labs.heartbeat.dao.MachineDao;
 import edu.uc.labs.heartbeat.dao.MachineDaoImpl;
+import edu.uc.labs.heartbeat.dao.MachineGroupDao;
+import edu.uc.labs.heartbeat.dao.MachineGroupDaoImpl;
 import edu.uc.labs.heartbeat.service.HeartbeatService;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -45,11 +47,19 @@ public class WebappConfig {
         return machineDao;
     }
 
+    public MachineGroupDao machineGroupDao(){
+        MachineGroupDao machineGroupDao = new MachineGroupDaoImpl(sessionFactory());
+        return machineGroupDao;
+    }
+
     @Bean
     public HeartbeatService heartbeatService(){
         HeartbeatService h = new HeartbeatService();
         h.setConfig(config);
         h.setMachineDao(machineDao());
+        h.setMachineGroupDao(machineGroupDao());
+
+
         return h;
     }
 

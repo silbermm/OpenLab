@@ -2,8 +2,10 @@ package edu.uc.labs.heartbeat.service;
 
 import com.typesafe.config.Config;
 import edu.uc.labs.heartbeat.dao.MachineDao;
+import edu.uc.labs.heartbeat.dao.MachineGroupDao;
 import edu.uc.labs.heartbeat.models.ClientMachine;
 import edu.uc.labs.heartbeat.models.Machine;
+import edu.uc.labs.heartbeat.models.MachineGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,10 @@ public class HeartbeatService {
 
     public List<Machine> getAllMachines(){
         return machineDao.getAll();
+    }
+
+    public List<MachineGroup> getAllMachineGroups(){
+        return machineGroupDao.getAll();
     }
 
     public Machine getMachine(String uuid){
@@ -88,8 +94,13 @@ public class HeartbeatService {
         this.machineDao = machineDao;
     }
 
+    public void setMachineGroupDao(MachineGroupDao machineGroupDao){
+        this.machineGroupDao = machineGroupDao;
+    }
+
     final static Logger log = LoggerFactory.getLogger(HeartbeatService.class);
     private Config config;
     private MachineDao machineDao;
+    private MachineGroupDao machineGroupDao;
 
 }

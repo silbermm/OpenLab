@@ -47,6 +47,7 @@
         <property name="cacheSeconds" value="0" />
     </bean>
 
+
 		<bean id="templateResolver" 
 					class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
         <property name="prefix" value="/WEB-INF/views/" />

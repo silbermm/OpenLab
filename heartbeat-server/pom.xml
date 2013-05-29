@@ -135,12 +135,11 @@
 	 	   <version>0.9.18</version>
 		 </dependency>
      
-  <dependency>
+    <dependency>
 		   <groupId>ch.qos.logback</groupId>
 	 	   <artifactId>logback-access</artifactId>
 	 	   <version>0.9.18</version>
-		 </dependency>
-
+    </dependency>
   </dependencies>
   <build>
 		<finalName>heartbeat</finalName>

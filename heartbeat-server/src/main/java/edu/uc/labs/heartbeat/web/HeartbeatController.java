@@ -4,6 +4,7 @@ package edu.uc.labs.heartbeat.web;
 
 import edu.uc.labs.heartbeat.models.Machine;
 import edu.uc.labs.heartbeat.models.ClientMachine;
+import edu.uc.labs.heartbeat.models.MachineGroup;
 import edu.uc.labs.heartbeat.service.HeartbeatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,12 @@ public class HeartbeatController {
         log.info("Updated " + success);
     }
 
+    /*@RequestMapping(value="create/group", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void createGroup(@RequestBody MachineGroup machineGroup){
+
+    }*/
+
     @RequestMapping(value="show/all", method = RequestMethod.GET)
     public @ResponseBody List<Machine> getAllMachines(){
         return heartbeatService.getAllMachines();
@@ -41,6 +48,11 @@ public class HeartbeatController {
         return heartbeatService.getMachine(uuid);
     }
 
+    @RequestMapping(value = "show/groups", method = RequestMethod.GET)
+    public @ResponseBody List<MachineGroup> getGroups(){
+        return heartbeatService.getAllMachineGroups();
+    }
+
     @RequestMapping(value="update/{uuid}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void acceptUuid(@PathVariable String uuid){
@@ -49,8 +61,10 @@ public class HeartbeatController {
 
     @RequestMapping(value="", method = RequestMethod.GET)
     public String homePage(Model model){
-        return
+        return "index";
     }
+
+
 
     @Autowired
     HeartbeatService heartbeatService;
