@@ -81,12 +81,12 @@ public abstract class AbstractDao<T extends Object> implements Dao<T> {
 		return (Long) getSession().createQuery("select count(*) from " + getDomainClassName()).uniqueResult();
 	}
 	
-        @Override
+  @Override
 	public boolean exists(Serializable id) {
 		return (get(id) != null); 
 	}
 	
-        @Override
+  @Override
 	public void setSessionFactory(SessionFactory sessionFactory){
 		this.sessionFactory = sessionFactory;
 	}

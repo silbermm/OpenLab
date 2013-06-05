@@ -38,14 +38,19 @@ public class HeartbeatController {
 
     }*/
 
-    @RequestMapping(value="show/all", method = RequestMethod.GET)
+    @RequestMapping(value="show/machines", method = RequestMethod.GET)
     public @ResponseBody List<Machine> getAllMachines(){
         return heartbeatService.getAllMachines();
     }
 
-    @RequestMapping(value="show/{uuid}", method = RequestMethod.GET)
-    public @ResponseBody Machine getMachine(@PathVariable String uuid){
-        return heartbeatService.getMachine(uuid);
+    @RequestMapping(value="show/machine/uuid/{uuid}", method = RequestMethod.GET)
+    public @ResponseBody Machine getMachineByUuid(@PathVariable String uuid){
+        return heartbeatService.getMachineByUuid(uuid);
+    }
+
+    @RequestMapping(value="show/machine/id/{id}", method = RequestMethod.GET)
+    public @ResponseBody Machine getMachineById(@PathVariable Long id){
+        return heartbeatService.getMachineById(id);
     }
 
     @RequestMapping(value = "show/groups", method = RequestMethod.GET)
@@ -53,7 +58,13 @@ public class HeartbeatController {
         return heartbeatService.getAllMachineGroups();
     }
 
-    @RequestMapping(value="update/{uuid}", method = RequestMethod.PUT)
+		@RequestMapping(value = "show/group/id/{id}", method = RequestMethod.GET)
+		public @ResponseBody MachineGroup getGroupById(@PathVariable Long id){
+				return heartbeatService.getGroupById(id);
+		}
+
+
+    @RequestMapping(value="update/machine/uuid/{uuid}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void acceptUuid(@PathVariable String uuid){
         heartbeatService.updateMachineRecord(uuid);

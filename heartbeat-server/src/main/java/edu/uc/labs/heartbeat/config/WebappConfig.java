@@ -68,7 +68,8 @@ public class WebappConfig {
         p.setProperty("hibernate.dialect", config.getString("hibernate.dialect"));
         p.setProperty("hibernate.show_sql", config.getString("hibernate.show_sql"));
         p.setProperty("hibernate.format_sql", config.getString("hibernate.format_sql"));
-        p.setProperty("hibernate.hbm2dll.auto", config.getString("hibernate.hbm2dll.auto"));
+        p.setProperty("hibernate.hbm2ddl.auto", config.getString("hibernate.hbm2ddl.auto"));
+				log.info("" + p);
         return p;
     }
 

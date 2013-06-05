@@ -2,54 +2,45 @@ package edu.uc.labs.heartbeat.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
-@Table(name = "lab_shorts")
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+@Table(name = "machine_groups")
+@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@group_id")
 public class MachineGroup implements Serializable {
 
-    private long id;
-    private String shortName;
-    private String longName;
+    private long groupId;
+    private String name;
     private String description;
-    private Machine machine;
+    private Set<Machine> machines;
+		private double xCoordinate;
+		private double yCoordinate;
 
     @Id
-    @GenericGenerator(name = "generator", strategy = "foreign", parameters = @Parameter(name = "property", value = "machine"))
-    @GeneratedValue(generator = "generator")
-    @Column(name = "id", nullable = false, unique = true)
-    public long getId() {
-        return id;
+		@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "group_id", nullable = false, unique = true)
+    public long getGroupId() {
+        return groupId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setGroupId(long groupId) {
+        this.groupId = groupId;
     }
 
-    @Column(name = "short_name")
-    public String getShortName() {
-        return shortName;
+    @Column(name = "name")
+    public String getName() {
+        return name;
     }
 
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    @Column(name = "long_name")
-    public String getLongName() {
-        return longName;
-    }
-
-    public void setLongName(String longName) {
-        this.longName = longName;
-    }
-
-    @Column(name = "lab_name")
+    @Column(name = "description")
     public String getDescription() {
         return description;
     }
@@ -58,13 +49,30 @@ public class MachineGroup implements Serializable {
         this.description = description;
     }
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
-    public Machine getMachine(){
-        return this.machine;
+		@Column(name = "xCoordinate")
+		public void setXCoordinate(double xCoordinate){
+			this.xCoordinate = xCoordinate;
+		}
+
+		public double getXCoordinate(){
+			return this.xCoordinate;
+		}
+		
+		@Column(name = "yCoordinate")
+		public void setYCoordinate(double yCoordinate){
+			this.yCoordinate = yCoordinate;
+		}
+
+		public double getYCoordinate(){
+			return this.yCoordinate;
+		}
+
+		@OneToMany(mappedBy="group",cascade={CascadeType.ALL})	
+    public Set<Machine> getMachines(){
+        return this.machines;
     }
 
-    public void setMachine(Machine machine){
-        this.machine = machine;
+    public void setMachines(Set<Machine> machines){
+        this.machines = machines;
     }
 }

@@ -5,43 +5,20 @@
         <div th:include="template::navbar"></div>
 
 
-
-
-        <table class="table table-striped">
-           <!-- <thead>
-                <tr>
-                    <td> Uid </td>
-                    <td> Name </td>
-                    <td> User </td>
-                    <td> Group </td>
-                    <td> Last Seen </td>
-                </tr>
-            </thead>
-
-
-            <tbody data-bind="foreach: machines, visible: machines().length > 0">
-                <tr>
-                    <td>
-                        <div class="computer">
-                            <i class="icon-desktop icon-4x"></i> <br />
-                            <span data-bind="text: name"></span>
-                        </div>
-
-                    </td>
-                </tr>
-            </tbody>
-            -->
-        </table>
-
-        <div data-bind="foreach: machines, visible: machines().length > 0">
-            <div class="computer">
-                <i class="icon-desktop icon-4x" data-bind="css: isLoggedIn()"></i> <br />
-                <span data-bind="text: name"></span>
-            </div>
-        </div>
-
-    <form>
-        <input type="hidden" id="show-all-tasks" value="/heartbeat/show/all" th:value="@{/show/all}" />
+        <div data-bind="foreach: groups">
+		    <div class="span4">
+			    <div class="portlet">
+				  <div class="portlet-header" data-bind="text: description"></div>
+				  <div class="portlet-content" data-bind="foreach: machines">
+				    <i class="icon-circle" data-bind="css: isLoggedIn()"></i>
+					    <span data-bind="text: name"></span>
+				  </div>
+				</div>
+			</div>
+		</div>
+				
+	<form>
+        <input type="hidden" id="show-all-tasks" value="/heartbeat/show/machines" th:value="@{/show/machines}" />
         <input type="hidden" id="show-groups" value="/heartbeat/show/groups" th:value="@{/show/groups}" />
     </form>
 

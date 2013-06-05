@@ -7,10 +7,10 @@
     </layout>
   </appender>
   
-  <logger name="edu.uc.labs.heartbeat" level="ERROR"/>
+  <logger name="edu.uc.labs.heartbeat" level="DEBUG"/>
   
 
-  <root level="error">
+  <root level="debug">
     <appender-ref ref="STDOUT" />
   </root>
 </configuration>

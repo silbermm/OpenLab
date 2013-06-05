@@ -17,7 +17,7 @@ body {
 }
 
 .logged-in {
-    color: black;
+    color: #c09853;
 }
 
 .offline {
@@ -28,6 +28,3 @@ body {
     color: #468847;
 }
 
-.icon-6 {
-    font-size: 10em;
-}

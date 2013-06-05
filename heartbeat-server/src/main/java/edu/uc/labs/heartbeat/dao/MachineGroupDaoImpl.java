@@ -12,6 +12,6 @@ public class MachineGroupDaoImpl extends AbstractDao<MachineGroup> implements Ma
 
     @Override
     public MachineGroup getGroupByShortName(String name) {
-        return (MachineGroup) getSession().createQuery("from MachineGroup where shortName=:shortName").setString("shortName", name).uniqueResult();
+        return (MachineGroup) getSession().createQuery("from MachineGroup where name=:name").setString("name", name).uniqueResult();
     }
 }

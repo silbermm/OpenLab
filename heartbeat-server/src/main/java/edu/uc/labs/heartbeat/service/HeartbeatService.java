@@ -30,13 +30,23 @@ public class HeartbeatService {
         return machineDao.getAll();
     }
 
+    public Machine getMachineByUuid(String uuid){
+        return machineDao.findByUuid(uuid);
+    }
+
+		public Machine getMachineById(Long id){
+				return machineDao.get(id);
+		}
+
     public List<MachineGroup> getAllMachineGroups(){
         return machineGroupDao.getAll();
     }
 
-    public Machine getMachine(String uuid){
-        return machineDao.findByUuid(uuid);
-    }
+	public MachineGroup getGroupById(Long id){
+	    MachineGroup g =  machineGroupDao.get(id);
+		g.setMachines(machineDao.findByGroup(g));
+        return g;
+	}
 
     @Transactional(readOnly = false)
     public boolean updateMachine(ClientMachine cm, String ipaddress){
