@@ -4,8 +4,12 @@ requirejs.config({
       "app": "../app"
     },
     "shim": {
+			  "jquery": { exports: 'jQuery' },
         "jquery.validate": ["jquery"],
         "compViewModel" : ["knockout"],
+				"jquery-ui" : {
+					deps: ['jquery']
+        },
     }
 });
 

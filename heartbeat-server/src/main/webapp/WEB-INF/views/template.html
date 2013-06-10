@@ -9,7 +9,7 @@
         <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css" rel="stylesheet" />
         <link href="http://netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet" />
         <link href="/heartbeat/resources/css/heartbeat.css" rel="stylesheet" th:href="@{/resources/css/heartbeat.css}" />
-        <script data-main="../resources/js/heartbeatConfig" th:attr="data-main=@{/resources/js/heartbeatConfig}" src="/heartbeat/resources/js/lib/require.js" th:src="@{/resources/js/lib/require.js}"></script>
+				<script data-main="../resources/js/heartbeatConfig" th:attr="data-main=@{/resources/js/heartbeatConfig}" src="/heartbeat/resources/js/lib/require.js" th:src="@{/resources/js/lib/require.js}"></script>
         <!--[if lt IE 9]>
             <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
@@ -30,6 +30,61 @@
                 </form>
             </div>
             </div>
-        </div>
-    </body>
+					</div>	
+					
+		<div th:fragment="group-sidebar">
+			<div id="group-sidebar" class="span3 well">
+				<ul class="nav nav-list">
+					<li class="nav-header"> Groups </li>
+					<!-- ko foreach: groups -->
+					<li> 	
+						<a href="#" style="float:left" data-bind="click: $parent.toggleGroup">
+							<i class="icon-fixed-width"	data-bind="css: currentClass()"></i>
+						</a>
+						<a>
+							<span class="group-name-sidebar" data-bind="text:description"></span>
+							<span class="machine-count label" data-bind="text: machines().length"> </span>
+						</a> 	
+						</li>	
+						<ul class="nav nav-list" id="machine-list" data-bind="foreach: machines,css: hiddenClass()">
+							<li class='ui-widget-content' data-bind="attr: {id: sidebarId()}" >
+								<a href="#">
+									<i class="icon-circle" data-bind="css: isLoggedIn()"> </i>
+									<span data-bind="text: name"> </span> </a>
+							</li>
+						</ul>
+					<!-- /ko -->
+				  	
+					<li class="divider"> </li>
+					<li> 
+						<span class="group-name-sidebar"> Total Machines </span>
+						<span class="machine-count label"> 300 </span>
+					</li>		 
+				</ul>
+			</div>			
+		</div>
+
+		<div th:fragment="group-view">
+			
+		</div>
+
+		<div th:fragment="home-view">
+			<div class="ui-widget-content" id="dragme" style="width: 50px; height: 50px; border: 1px solid black;">
+			</div>
+
+			<div class="span10" data-bind="foreach: groups">
+				<div class="span4 ui-widget-content" data-bind="attr: {id: linkId() }">
+					<div class="widget">
+						<div class="widget-header">
+							<i class="icon-folder-close"> </i>
+							<h3 data-bind="text: description"></h3>
+							<span class="machine-count label" data-bind="text: machines().length"></span>
+						</div>	
+					</div>	
+				</div>
+			</div>		
+		</div>
+
+
+	</body>
 </html>

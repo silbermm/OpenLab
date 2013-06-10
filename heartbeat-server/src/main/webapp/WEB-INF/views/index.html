@@ -1,26 +1,13 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-    <head th:include="template::head"></head>
-    <body>
-        <div th:include="template::navbar"></div>
-
-
-        <div data-bind="foreach: groups">
-		    <div class="span4">
-			    <div class="portlet">
-				  <div class="portlet-header" data-bind="text: description"></div>
-				  <div class="portlet-content" data-bind="foreach: machines">
-				    <i class="icon-circle" data-bind="css: isLoggedIn()"></i>
-					    <span data-bind="text: name"></span>
-				  </div>
-				</div>
-			</div>
-		</div>
-				
+<head th:include="template::head"></head>
+<body>
+  <div th:include="template::navbar"></div>
+	<div th:include="template::group-sidebar"></div>
+	<div th:include="template::home-view"></div>
 	<form>
-        <input type="hidden" id="show-all-tasks" value="/heartbeat/show/machines" th:value="@{/show/machines}" />
-        <input type="hidden" id="show-groups" value="/heartbeat/show/groups" th:value="@{/show/groups}" />
-    </form>
-
-    </body>
+  	<input type="hidden" id="show-all-tasks" value="/heartbeat/show/machines" th:value="@{/show/machines}" />
+    <input type="hidden" id="show-groups" value="/heartbeat/show/groups" th:value="@{/show/groups}" />
+	</form>
+</body>
 </html>

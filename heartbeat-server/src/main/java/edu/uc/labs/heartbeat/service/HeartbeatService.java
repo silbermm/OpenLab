@@ -27,7 +27,8 @@ public class HeartbeatService {
     }
 
     public List<Machine> getAllMachines(){
-        return machineDao.getAll();
+        List<Machine> machines = machineDao.getAll();
+			  return machines;	
     }
 
     public Machine getMachineByUuid(String uuid){
@@ -39,7 +40,11 @@ public class HeartbeatService {
 		}
 
     public List<MachineGroup> getAllMachineGroups(){
-        return machineGroupDao.getAll();
+        List<MachineGroup> groups =  machineGroupDao.getAll();
+				for(MachineGroup g: groups){
+					g.setMachines(machineDao.findByGroup(g));
+				}
+				return groups;
     }
 
 	public MachineGroup getGroupById(Long id){
