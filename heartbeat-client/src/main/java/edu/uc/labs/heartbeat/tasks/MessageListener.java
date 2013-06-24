@@ -20,6 +20,7 @@ public class MessageListener implements ChannelAwareMessageListener {
     @Override
     public void onMessage(Message message, Channel channel) throws Exception {
         final MessageProperties props = message.getMessageProperties();
+				
         Machine m = heartbeatService.getMachineInfo();
         rabbitTemplate.convertAndSend(props.getReplyTo(), m,
                 new MessagePostProcessor() {

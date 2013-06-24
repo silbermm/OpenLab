@@ -36,13 +36,24 @@ public class RabbitConfig {
         return q;
     }
 
+		@Bean
+		public Queue commandQueue() {
+			Queue q = new Queue(heartbeatService.getUUID() + "-cmd");
+			return q;
+		}
+
 
     @Bean
     public DirectExchange heartbeatExchange() {
-
         DirectExchange ex = new DirectExchange("machine.status", true, false);
         return ex;
     }
+
+		@Bean
+		public DirectExchange commandExchange() {
+			DirectExchange ex = new DirectExchange("machine.cmd", true, false);
+			return ex;
+		}
 
     @Bean
     public Binding heartbeatBinding() {
@@ -50,12 +61,21 @@ public class RabbitConfig {
                 machineQueue()).to(heartbeatExchange()).with(heartbeatService.getUUID());
     }
 
+		@Bean
+		public Binding commandBinding() {
+			return BindingBuilder.bind(
+				commandQueue()).to(commandExchange()).with(heartbeatService.getUUID() + "-cmd");
+		}
+
     @Bean
     public AmqpAdmin rabbitAdmin() {
         RabbitAdmin admin = new RabbitAdmin(connectionFactory());
         admin.declareQueue(machineQueue());
+				admin.declareQueue(commandQueue());
         admin.declareExchange(heartbeatExchange());
+				admin.declareExchange(commandExchange());
         admin.declareBinding(heartbeatBinding());
+				admin.declareBinding(commandBinding());
         admin.setAutoStartup(true);
         return admin;
     }

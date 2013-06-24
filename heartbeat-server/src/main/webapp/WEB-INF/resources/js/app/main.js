@@ -1,3 +1,4 @@
-define(["knockout", "compViewModel"], function(ko, compViewModel) {
-    ko.applyBindings(new compViewModel());
+define(["knockout", "viewModels/compViewModel"], function(ko, compViewModel) {
+ 	var compModel = new compViewModel();	
+	ko.applyBindings(compModel);
 });

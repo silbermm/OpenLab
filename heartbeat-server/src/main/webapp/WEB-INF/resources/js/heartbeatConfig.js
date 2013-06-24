@@ -1,13 +1,20 @@
 requirejs.config({
     "baseUrl": "resources/js/lib",
     "paths": {
+			ko: "knockout",
+      jquery: "jquery",
+			jqueryui: "jquery-ui",
+			jqueryVal: "jquery.validate",
+			//compViewModel: "viewModels/compViewModel",
       "app": "../app"
     },
     "shim": {
-			  "jquery": { exports: 'jQuery' },
-        "jquery.validate": ["jquery"],
-        "compViewModel" : ["knockout"],
-				"jquery-ui" : {
+			  ko: {exports: "ko"},
+			  jquery: { exports: 'jQuery' },
+        jqueryVal: {
+					deps: ["jquery"]
+				},
+				jqueryui : {
 					deps: ['jquery']
         },
     }
