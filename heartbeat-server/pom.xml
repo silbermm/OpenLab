@@ -144,7 +144,17 @@
 	 	   <artifactId>logback-access</artifactId>
 	 	   <version>0.9.18</version>
     </dependency>
-  </dependencies>
+	 <dependency>
+	  <groupId>${project.groupId}</groupId>
+	  <artifactId>heartbeat-lib</artifactId>
+	  <version>1.0.5</version>
+	 </dependency>
+	 <dependency>
+	  <groupId>org.codehaus.jackson</groupId>
+	  <artifactId>jackson-mapper-asl</artifactId>
+	  <version>1.9.12</version>
+	 </dependency>
+	</dependencies>
   <build>
 		<finalName>heartbeat</finalName>
 		<plugins>

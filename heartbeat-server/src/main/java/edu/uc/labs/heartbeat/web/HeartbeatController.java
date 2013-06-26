@@ -2,8 +2,8 @@ package edu.uc.labs.heartbeat.web;
 
 
 
+import edu.uc.labs.heartbeat.domain.ClientMachine;
 import edu.uc.labs.heartbeat.models.Machine;
-import edu.uc.labs.heartbeat.models.ClientMachine;
 import edu.uc.labs.heartbeat.models.MachineGroup;
 import edu.uc.labs.heartbeat.service.HeartbeatService;
 import org.slf4j.Logger;

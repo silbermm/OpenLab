@@ -1,6 +1,6 @@
 package edu.uc.labs.heartbeat.domain;
 
-public class Machine {
+public class ClientMachine {
 
     private String uuid;
     private String name;

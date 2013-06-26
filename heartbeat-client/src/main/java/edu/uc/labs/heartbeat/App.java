@@ -2,7 +2,7 @@ package edu.uc.labs.heartbeat;
 
 import edu.uc.labs.heartbeat.config.AppConfig;
 import edu.uc.labs.heartbeat.config.RabbitConfig;
-import edu.uc.labs.heartbeat.domain.Machine;
+import edu.uc.labs.heartbeat.domain.ClientMachine;
 import edu.uc.labs.heartbeat.service.HeartbeatService;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Level;
@@ -32,13 +32,13 @@ public class App {
 
         if (cmd.hasOption("u")) {
             HeartbeatService service = ctx.getBean(HeartbeatService.class);
-            Machine m = service.getMachineInfo();
+            ClientMachine m = service.getMachineInfo();
             service.writeMachineInfo(m);
             System.out.println(m.getUuid());
             System.exit(0);
         } else if (cmd.hasOption("a")) {
             HeartbeatService service = ctx.getBean(HeartbeatService.class);
-            Machine m = service.getMachineInfo();
+            ClientMachine m = service.getMachineInfo();
             service.writeMachineInfo(m);
             System.out.println(m);
             System.exit(0);

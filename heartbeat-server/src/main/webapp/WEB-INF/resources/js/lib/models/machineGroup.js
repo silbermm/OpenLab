@@ -1,28 +1,33 @@
-define(["knockout", "models/machine"],function(ko, Machine){
-	
-	var MachineGroup = function(data){
-		var self = this;
-		self.groupId = ko.observable(data.groupId);
-		self.name = ko.observable(data.name);
-		self.description = ko.observable(data.description);
-		self.machines = ko.observableArray();
+define(["knockout", "models/machine"], function(ko, Machine) {
 
-		$.each(data.machines, function(machine){
-			var m = new Machine(machine);
-			self.machines.push(m);	
-		});
+    var MachineGroup = function(data) {
+        var self = this;
+        self.groupId = ko.observable(data.groupId);
+        self.name = ko.observable(data.name);
+        self.description = ko.observable(data.description);
+        self.machines = ko.observableArray();
 
-		self.expanded = ko.observable(false);
-		self.currentClass = ko.computed(function() {
-			if(self.expanded()){
-				return "icon-caret-down";
-			} else {	
-				return "icon-caret-right";
-			}
-		});
+        var mappedMachines = $.map(data.machines, function(m) {
+            return new Machine(m);
+        });
+        self.machines(mappedMachines);
+        self.expanded = ko.observable(false);
+        self.currentClass = ko.computed(function() {
+            if (self.expanded()) {
+                return "icon-caret-down";
+            } else {
+                return "icon-caret-right";
+            }
+        });
+        self.hiddenClass = ko.computed(function() {
+            if (!self.expanded()) {                
+                return "hidden";
+            }
+        });
+        self.linkId = ko.computed(function() {
+            return "groupId-" + self.groupId;
+        });
+    };
 
-	}
-
-	return MachineGroup;
-
+    return MachineGroup;
 });

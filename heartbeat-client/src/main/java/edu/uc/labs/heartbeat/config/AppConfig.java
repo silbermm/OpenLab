@@ -2,8 +2,7 @@ package edu.uc.labs.heartbeat.config;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-import edu.uc.labs.heartbeat.dao.MachineDao;
-import edu.uc.labs.heartbeat.dao.MachineDaoImpl;
+import edu.uc.labs.heartbeat.dao.*;
 import edu.uc.labs.heartbeat.service.HeartbeatService;
 import edu.uc.labs.heartbeat.tasks.HeartbeatSchedule;
 import edu.uc.labs.heartbeat.tasks.Scheduler;
@@ -15,6 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.context.annotation.CommonAnnotationBeanPostProcessor;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -59,12 +59,19 @@ public class AppConfig implements SchedulingConfigurer {
         return new MachineDaoImpl(config(), restTemplate());
     }
 
+		@Bean
+		public CommandDao commandDao(){
+			return new CommandDaoImpl(config());
+		}
+
     @Bean
     public HeartbeatService heartbeatService() {
         HeartbeatService heartbeatService = new HeartbeatService();
         heartbeatService.setMachineDao(machineDao());
+				heartbeatService.setCommandDao(commandDao());
         heartbeatService.setConfig(config());
         heartbeatService.setMessages(resourceBundle());
+				heartbeatService.getMachineInfo();
         return heartbeatService;
     }
 
@@ -78,5 +85,9 @@ public class AppConfig implements SchedulingConfigurer {
         return new RestTemplate();
     }
 
+	  @Bean
+	  public CommonAnnotationBeanPostProcessor beanPostProcessor(){
+			return new CommonAnnotationBeanPostProcessor();
+		}	
 
 }

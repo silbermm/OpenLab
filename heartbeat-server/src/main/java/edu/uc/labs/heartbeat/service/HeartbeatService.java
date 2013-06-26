@@ -3,7 +3,7 @@ package edu.uc.labs.heartbeat.service;
 import com.typesafe.config.Config;
 import edu.uc.labs.heartbeat.dao.MachineDao;
 import edu.uc.labs.heartbeat.dao.MachineGroupDao;
-import edu.uc.labs.heartbeat.models.ClientMachine;
+import edu.uc.labs.heartbeat.domain.ClientMachine;
 import edu.uc.labs.heartbeat.models.Machine;
 import edu.uc.labs.heartbeat.models.MachineGroup;
 import org.slf4j.Logger;
@@ -18,45 +18,44 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class HeartbeatService {
 
-    public HeartbeatService(){
-
+    public HeartbeatService() {
     }
 
-    public HeartbeatService(Config config){
+    public HeartbeatService(Config config) {
         this.config = config;
     }
 
-    public List<Machine> getAllMachines(){
+    public List<Machine> getAllMachines() {
         List<Machine> machines = machineDao.getAll();
-			  return machines;	
+        return machines;
     }
 
-    public Machine getMachineByUuid(String uuid){
+    public Machine getMachineByUuid(String uuid) {
         return machineDao.findByUuid(uuid);
     }
 
-		public Machine getMachineById(Long id){
-				return machineDao.get(id);
-		}
-
-    public List<MachineGroup> getAllMachineGroups(){
-        List<MachineGroup> groups =  machineGroupDao.getAll();
-				for(MachineGroup g: groups){
-					g.setMachines(machineDao.findByGroup(g));
-				}
-				return groups;
+    public Machine getMachineById(Long id) {
+        return machineDao.get(id);
     }
 
-	public MachineGroup getGroupById(Long id){
-	    MachineGroup g =  machineGroupDao.get(id);
-		g.setMachines(machineDao.findByGroup(g));
+    public List<MachineGroup> getAllMachineGroups() {
+        List<MachineGroup> groups = machineGroupDao.getAll();
+        for (MachineGroup g : groups) {
+            g.setMachines(machineDao.findByGroup(g));
+        }
+        return groups;
+    }
+
+    public MachineGroup getGroupById(Long id) {
+        MachineGroup g = machineGroupDao.get(id);
+        g.setMachines(machineDao.findByGroup(g));
         return g;
-	}
+    }
 
     @Transactional(readOnly = false)
-    public boolean updateMachine(ClientMachine cm, String ipaddress){
+    public boolean updateMachine(ClientMachine cm, String ipaddress) {
         try {
-            if(machineDao.serialNumberExists(cm.getSerialNumber())){
+            if (machineDao.serialNumberExists(cm.getSerialNumber())) {
                 // The machine already exists in the database, we just need to update it...
                 log.debug("Machine already exists...");
                 Machine m = machineDao.findBySerialNumber(cm.getSerialNumber());
@@ -87,7 +86,7 @@ public class HeartbeatService {
                 log.debug("Creating Machine " + m);
                 machineDao.create(m);
             }
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             log.error(e.getClass().getCanonicalName() + ": " + e.getMessage());
             return false;
         }
@@ -95,27 +94,25 @@ public class HeartbeatService {
     }
 
     @Transactional(readOnly = false)
-    public void updateMachineRecord(String uuid){
+    public void updateMachineRecord(String uuid) {
         Machine m = machineDao.findByUuid(uuid);
         m.setLastSeen(new Date(System.currentTimeMillis()));
         machineDao.update(m);
     }
 
-    public void setConfig(Config config){
+    public void setConfig(Config config) {
         this.config = config;
     }
 
-    public void setMachineDao(MachineDao machineDao){
+    public void setMachineDao(MachineDao machineDao) {
         this.machineDao = machineDao;
     }
 
-    public void setMachineGroupDao(MachineGroupDao machineGroupDao){
+    public void setMachineGroupDao(MachineGroupDao machineGroupDao) {
         this.machineGroupDao = machineGroupDao;
     }
-
     final static Logger log = LoggerFactory.getLogger(HeartbeatService.class);
     private Config config;
     private MachineDao machineDao;
     private MachineGroupDao machineGroupDao;
-
 }

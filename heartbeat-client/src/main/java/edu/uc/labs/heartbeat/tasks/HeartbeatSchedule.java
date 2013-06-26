@@ -2,7 +2,7 @@ package edu.uc.labs.heartbeat.tasks;
 
 
 import com.typesafe.config.Config;
-import edu.uc.labs.heartbeat.domain.Machine;
+import edu.uc.labs.heartbeat.domain.ClientMachine;
 import edu.uc.labs.heartbeat.service.HeartbeatService;
 import org.apache.log4j.Logger;
 
@@ -39,6 +39,6 @@ public class HeartbeatSchedule implements Scheduler {
     private Config config;
     private HeartbeatService heartbeatService;
     private boolean hasRun = false;
-    private Machine m;
+    private ClientMachine m;
 
 }

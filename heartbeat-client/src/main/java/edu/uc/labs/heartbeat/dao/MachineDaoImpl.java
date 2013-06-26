@@ -5,7 +5,7 @@ import com.jacob.com.Dispatch;
 import com.jacob.com.EnumVariant;
 import com.jacob.com.Variant;
 import com.typesafe.config.Config;
-import edu.uc.labs.heartbeat.domain.Machine;
+import edu.uc.labs.heartbeat.domain.ClientMachine;
 import edu.uc.labs.heartbeat.domain.MachineGroup;
 import edu.uc.labs.heartbeat.utils.HeartbeatPropertiesLoader;
 import org.apache.commons.exec.CommandLine;
@@ -41,8 +41,8 @@ public class MachineDaoImpl implements MachineDao {
         this.restTemplate = restTemplate;
     }
 
-    public Machine getMachineInfo() {
-        Machine m = new Machine();
+    public ClientMachine getMachineInfo() {
+        ClientMachine m = new ClientMachine();
         m.setOs(System.getProperty("os.name"));
         m.setOsVersion(System.getProperty("os.version"));
         m.setName(getCompName());
@@ -67,7 +67,7 @@ public class MachineDaoImpl implements MachineDao {
         return this.getUuid();
     }
 
-    public void writeToFile(Machine m) {
+    public void writeToFile(ClientMachine m) {
         File savedInfo = new File(HeartbeatPropertiesLoader.getFilename(config));
         try {
             Properties props = new Properties();
@@ -81,11 +81,24 @@ public class MachineDaoImpl implements MachineDao {
             props.setProperty("model", m.getModel());
             props.store(new FileOutputStream(savedInfo), "Heartbeat Auto Generated Properties");
         } catch (IOException ex) {
-            log.info("Unable to write the properties file " + savedInfo.getAbsolutePath());
+        	  try {	
+						File homeInfo = new File(HeartbeatPropertiesLoader.getHomeFilename(config));
+						Properties props = new Properties();
+            props.setProperty("uuid", m.getUuid());
+            props.setProperty("serialnumber", m.getSerialNumber());
+            props.setProperty("macaddresses", m.getMac());
+            props.setProperty("os", m.getOs());
+            props.setProperty("osversion", m.getOsVersion());
+            props.setProperty("manufacturer", m.getManufacturer());
+            props.setProperty("model", m.getModel());
+            props.store(new FileOutputStream(homeInfo), "Heartbeat Auto Generated Properties");
+						}catch (IOException e) {
+							log.info(" ... ");	
+						}	
         }
     }
 
-    public void sendToServer(Machine m) {
+    public void sendToServer(ClientMachine m) {
         try {
             String url = config.getString("heartbeat.protocol") + "://" +
                     config.getString("heartbeat.server") + ":" + config.getString("heartbeat.port") +
@@ -140,7 +153,7 @@ public class MachineDaoImpl implements MachineDao {
         try {
             Properties p = HeartbeatPropertiesLoader.getProperties(config);
             if (p != null) {
-                if (p.getProperty("serialnumber") != null) return p.getProperty("serialnumber");
+                if (p.getProperty("serialnumber") != null || !p.getProperty("serialnumber").equals("")) return p.getProperty("serialnumber");
             }
         } catch (IOException e) {
             log.debug(e.getMessage());

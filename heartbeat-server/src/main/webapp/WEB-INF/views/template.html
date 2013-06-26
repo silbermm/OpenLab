@@ -45,12 +45,16 @@
 							<span class="group-name-sidebar" data-bind="text:description"></span>
 							<span class="machine-count label" data-bind="text: machines().length"> </span>
 						</a> 	
-						</li>	
-						<ul class="nav nav-list" id="machine-list" data-bind="foreach: machines,css: hiddenClass()">
+						</li>
+                                                <ul class="nav nav-list" id="machine-list" data-bind="foreach: machines,css: hiddenClass()">
 							<li class='ui-widget-content' data-bind="attr: {id: sidebarId()}" >
 								<a href="#">
 									<i class="icon-circle" data-bind="css: isLoggedIn()"> </i>
-									<span data-bind="text: name"> </span> </a>
+									<span data-bind="text: name"> </span>
+                                                                        <div style="float:right">
+                                                                        <i class="icon-info" data-bind="attr: {id: infoIconId()}"> </i>
+                                                                        </div>
+                                                                </a>
 							</li>
 						</ul>
 					<!-- /ko -->

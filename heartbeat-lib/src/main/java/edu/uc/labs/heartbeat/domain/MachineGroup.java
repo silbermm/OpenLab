@@ -1,18 +1,14 @@
 package edu.uc.labs.heartbeat.domain;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
 import java.io.Serializable;
 
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
 public class MachineGroup implements Serializable {
 
     private long id;
     private String shortName;
     private String longName;
     private String description;
-    private Machine machine;
+    private ClientMachine machine;
 
 
     public long getId() {
@@ -48,11 +44,11 @@ public class MachineGroup implements Serializable {
         this.description = description;
     }
 
-    public Machine getMachine(){
+    public ClientMachine getMachine(){
         return this.machine;
     }
 
-    public void setMachine(Machine machine){
+    public void setMachine(ClientMachine machine){
         this.machine = machine;
     }
 }

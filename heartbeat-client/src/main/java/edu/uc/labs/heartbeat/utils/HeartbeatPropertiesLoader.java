@@ -33,7 +33,14 @@ public class HeartbeatPropertiesLoader {
             fis.close();
         } catch (FileNotFoundException ex) {
             // unable to find the file
-            return null;
+						try {
+							File f = new File(config.getString("user.home") + "/" + ".ucit/heartbeat/" + config.getString("heartbeat.propfile"));
+							FileInputStream fis = new FileInputStream(f);
+							props.load(fis);
+							fis.close();
+						} catch (FileNotFoundException e) {
+            	return null;
+						}
         }
         return props;
 
@@ -48,5 +55,10 @@ public class HeartbeatPropertiesLoader {
         File f = new File(propFile);
         return f.exists();
     }
+
+		public static String getHomeFilename(Config config) {
+			return config.getString("user.home") + "/" + ".ucit/heartbeat/" + config.getString("heartbeat.propfile");
+
+		}
 
 }

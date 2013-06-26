@@ -1,9 +1,9 @@
 package edu.uc.labs.heartbeat.dao;
 
-import edu.uc.labs.heartbeat.domain.Machine;
+import edu.uc.labs.heartbeat.domain.ClientMachine;
 
 public interface MachineDao {
-    Machine getMachineInfo();
+    ClientMachine getMachineInfo();
 
     String findLoggedInUser();
 
@@ -11,9 +11,9 @@ public interface MachineDao {
 
     String findUUID();
 
-    void writeToFile(Machine m);
+    void writeToFile(ClientMachine m);
 
-    void sendToServer(Machine m);
+    void sendToServer(ClientMachine m);
 
     void sendToServer(String uuid);
 }

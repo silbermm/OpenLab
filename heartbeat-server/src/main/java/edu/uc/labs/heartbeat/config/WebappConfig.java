@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.util.Properties;
+import org.springframework.amqp.core.AmqpTemplate;
 
 @Configuration
 @EnableTransactionManagement
@@ -58,7 +59,7 @@ public class WebappConfig {
         h.setConfig(config);
         h.setMachineDao(machineDao());
         h.setMachineGroupDao(machineGroupDao());
-
+        
 
         return h;
     }
@@ -78,5 +79,8 @@ public class WebappConfig {
 
     @Autowired
     Config config;
+    
+    @Autowired
+    AmqpTemplate heartbeatTemplate;
 
 }
