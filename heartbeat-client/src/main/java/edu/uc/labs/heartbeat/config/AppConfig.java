@@ -29,12 +29,10 @@ public class AppConfig implements SchedulingConfigurer {
         taskRegistrar.setScheduler(taskScheduler());
         taskRegistrar.addFixedDelayTask(
                 new Runnable() {
-                    public void run() {
-                        heartbeatScheduler().run();
-                    }
-                },
-                config().getLong("heartbeat.interval")
-        );
+            public void run() {
+                heartbeatScheduler().run();
+            }
+        },config().getLong("heartbeat.interval"));
     }
 
     @Bean(destroyMethod = "shutdown")
@@ -59,19 +57,19 @@ public class AppConfig implements SchedulingConfigurer {
         return new MachineDaoImpl(config(), restTemplate());
     }
 
-		@Bean
-		public CommandDao commandDao(){
-			return new CommandDaoImpl(config());
-		}
+    @Bean
+    public CommandDao commandDao() {
+        return new CommandDaoImpl(config());
+    }
 
     @Bean
     public HeartbeatService heartbeatService() {
         HeartbeatService heartbeatService = new HeartbeatService();
         heartbeatService.setMachineDao(machineDao());
-				heartbeatService.setCommandDao(commandDao());
+        heartbeatService.setCommandDao(commandDao());
         heartbeatService.setConfig(config());
         heartbeatService.setMessages(resourceBundle());
-				heartbeatService.getMachineInfo();
+        heartbeatService.getMachineInfo();
         return heartbeatService;
     }
 
@@ -85,9 +83,8 @@ public class AppConfig implements SchedulingConfigurer {
         return new RestTemplate();
     }
 
-	  @Bean
-	  public CommonAnnotationBeanPostProcessor beanPostProcessor(){
-			return new CommonAnnotationBeanPostProcessor();
-		}	
-
+    @Bean
+    public CommonAnnotationBeanPostProcessor beanPostProcessor() {
+        return new CommonAnnotationBeanPostProcessor();
+    }
 }

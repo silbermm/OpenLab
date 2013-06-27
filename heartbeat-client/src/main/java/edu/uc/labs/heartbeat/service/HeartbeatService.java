@@ -24,7 +24,8 @@ public class HeartbeatService {
      * Send the data to the server
      *
      * @param m
-     * @param changes if there were changes ( i.e. username ) send the entire object, other wise we just want to update the time
+     * @param changes if there were changes ( i.e. username ) send the entire
+     * object, other wise we just want to update the time
      */
     public void sendDataToServer(ClientMachine m, boolean changes) {
         if (changes) {
@@ -46,17 +47,17 @@ public class HeartbeatService {
         return machineDao.findComputerName();
     }
 
-		public String runCommand(Command c){
-			return commandDao.run(c);	
-		}
+    public CommandResult runCommand(Command c) {
+        return commandDao.run(c);
+    }
 
     public void setMachineDao(MachineDao machineDao) {
         this.machineDao = machineDao;
     }
 
-		public void setCommandDao(CommandDao commandDao) {
-			this.commandDao = commandDao;
-		}
+    public void setCommandDao(CommandDao commandDao) {
+        this.commandDao = commandDao;
+    }
 
     public void setConfig(Config config) {
         this.config = config;
@@ -65,11 +66,9 @@ public class HeartbeatService {
     public void setMessages(ResourceBundleMessageSource messages) {
         this.messages = messages;
     }
-
     private static final Logger log = Logger.getLogger(HeartbeatService.class);
     private MachineDao machineDao;
-		private CommandDao commandDao;
+    private CommandDao commandDao;
     private ResourceBundleMessageSource messages;
     private Config config;
-
 }

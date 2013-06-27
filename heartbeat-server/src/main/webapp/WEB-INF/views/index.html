@@ -2,12 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:include="template::head"></head>
 <body>
-  <div th:include="template::navbar"></div>
-	<div th:include="template::group-sidebar"></div>
-	<div th:include="template::home-view"></div>
-	<form>
+    <div th:include="template::navbar"></div>
+    <div th:include="template::group-sidebar"></div>
+    <div th:include="template::home-view"></div>
+    <form>
   	<input type="hidden" id="show-all-tasks" value="/heartbeat/show/machines" th:value="@{/show/machines}" />
-    <input type="hidden" id="show-groups" value="/heartbeat/show/groups" th:value="@{/show/groups}" />
-	</form>
+        <input type="hidden" id="base-url" th:value="@{/}" />
+        <input type="hidden" id="show-groups" value="/heartbeat/show/groups" th:value="@{/show/groups}" />
+    </form>
 </body>
 </html>

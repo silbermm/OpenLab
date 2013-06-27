@@ -93,7 +93,7 @@ public class RabbitConfig {
     @Bean
     public AmqpTemplate commandTemplate() {
         RabbitTemplate r = new RabbitTemplate(connectionFactory());
-        r.setMessageConverter(commandMsgConverter());
+        r.setMessageConverter(commandResultConverter());
         return r;
     }
 
@@ -111,6 +111,15 @@ public class RabbitConfig {
         JsonMessageConverter converter = new JsonMessageConverter();
         DefaultClassMapper mapper = new DefaultClassMapper();
         mapper.setDefaultType(ClientMachine.class);
+        converter.setClassMapper(mapper);
+        return converter;
+    }
+    
+    @Bean
+    public JsonMessageConverter commandResultConverter(){
+        JsonMessageConverter converter = new JsonMessageConverter();
+        DefaultClassMapper mapper = new DefaultClassMapper();
+        mapper.setDefaultType(CommandResult.class);
         converter.setClassMapper(mapper);
         return converter;
     }

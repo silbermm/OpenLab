@@ -51,7 +51,7 @@ public class RabbitConfig {
         RabbitTemplate r = new RabbitTemplate(connectionFactory());
         r.setMessageConverter(heartbeatMessageConverter());
         return r;
-    }
+    }       
         
     @Autowired
     Config config;

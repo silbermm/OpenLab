@@ -1,9 +1,6 @@
 define(["knockout"], function(ko) {
     var Machine = function(data) {
-        var self = this;
-        
-        console.log("machine - " + data.uid);
-        
+        var self = this;              
         self.id = ko.observable(data.id);
         self.uid = ko.observable(data.uid);
         self.name = ko.observable(data.name);
@@ -23,7 +20,7 @@ define(["knockout"], function(ko) {
             return "sidebar-comp-" + self.uid();
         });
         self.isLoggedIn = ko.computed(function(){
-           if(self.currentUser() != "none" || self.currentUser() != 0) {
+           if(self.currentUser() == "none" || self.currentUser() == 0) {
                 return "available";
            } else if(self.currentUser() == "unavailable") {
                 return "offline";
@@ -33,6 +30,16 @@ define(["knockout"], function(ko) {
         self.infoIconId = ko.computed(function(){
            return "info-icon-" + self.uid();
         });
+        self.machineDropDownId = ko.computed(function(){
+           return "btn-dropdown-" + self.uid(); 
+        });
+        self.machineLinkId = ko.computed(function(){
+           return "machine-link-" + self.uid(); 
+        });
+        self.showComputer = function(){
+            //var path = $("#base-url").val();
+            window.location = "/machine/" + self.uid();         
+        };
     }
     return Machine;
 });

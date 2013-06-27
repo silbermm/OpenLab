@@ -44,7 +44,8 @@ public class HeartbeatController {
     }
 
     @RequestMapping(value="show/machine/uuid/{uuid}", method = RequestMethod.GET)
-    public @ResponseBody Machine getMachineByUuid(@PathVariable String uuid){
+    public @ResponseBody
+    Machine getMachineByUuid(@PathVariable String uuid){
         return heartbeatService.getMachineByUuid(uuid);
     }
 
@@ -57,11 +58,11 @@ public class HeartbeatController {
     public @ResponseBody List<MachineGroup> getGroups(){
         return heartbeatService.getAllMachineGroups();
     }
-
-		@RequestMapping(value = "show/group/id/{id}", method = RequestMethod.GET)
-		public @ResponseBody MachineGroup getGroupById(@PathVariable Long id){
-				return heartbeatService.getGroupById(id);
-		}
+    
+    @RequestMapping(value = "show/group/id/{id}", method = RequestMethod.GET)
+    public @ResponseBody MachineGroup getGroupById(@PathVariable Long id){
+        return heartbeatService.getGroupById(id);
+    }
 
 
     @RequestMapping(value="update/machine/uuid/{uuid}", method = RequestMethod.PUT)
@@ -73,6 +74,12 @@ public class HeartbeatController {
     @RequestMapping(value="", method = RequestMethod.GET)
     public String homePage(Model model){
         return "index";
+    }
+    
+    @RequestMapping(value="machine/{uuid}", method= RequestMethod.GET)
+    public String computerPage(@PathVariable String uuid, Model model){
+        model.addAttribute("machineUUID", uuid);
+        return "computer";
     }
 
 
