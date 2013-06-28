@@ -3,8 +3,23 @@
 <head th:include="template::head"></head>
 <body>
     <div th:include="template::navbar"></div>
-    <div th:include="template::group-sidebar"></div>
-    <div th:include="template::home-view"></div>
+      
+    <ul class="breadcrumb" data-bind="with: routes">
+        <!-- ko foreach : currentBreadcrumbs -->
+        <li>
+            <a data-bind="attr : {href : path}, text : name"> </a> <span class="divider">/</span> 
+        </li>
+        <!-- /ko -->
+    </ul>
+    
+    
+    <!-- <div data-bind="with: routes" > -->
+        <div th:include="template::group-sidebar" data-bind="if: $root.routes.isInventory"> </div>
+        <div th:include="template::home-view" data-bind="if: $root.routes.isInventory"> </div>
+    <!-- </div> -->
+    
+    <div th:include="template::machine-view" data-bind="if: $root.routes.isMachine"> </div>
+    
     <form>
   	<input type="hidden" id="show-all-tasks" value="/heartbeat/show/machines" th:value="@{/show/machines}" />
         <input type="hidden" id="base-url" th:value="@{/}" />

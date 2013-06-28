@@ -75,15 +75,7 @@ public class HeartbeatController {
     public String homePage(Model model){
         return "index";
     }
-    
-    @RequestMapping(value="machine/{uuid}", method= RequestMethod.GET)
-    public String computerPage(@PathVariable String uuid, Model model){
-        model.addAttribute("machineUUID", uuid);
-        return "computer";
-    }
-
-
-
+   
     @Autowired
     HeartbeatService heartbeatService;
 

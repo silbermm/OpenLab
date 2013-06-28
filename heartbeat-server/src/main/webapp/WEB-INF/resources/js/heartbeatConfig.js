@@ -7,7 +7,7 @@ requirejs.config({
         "jquery.validate": "jquery.validate",
         "jquery.bootstrap": "bootstrap",
         sammy: "sammy",
-        "app": "app"
+        "app": "../app"
     },
     "shim": {
         ko: {exports: "ko"},
@@ -28,4 +28,4 @@ requirejs.config({
 });
 
 // Load the main app module to start the app
-requirejs(["main"]);
+requirejs(["app/main"]);

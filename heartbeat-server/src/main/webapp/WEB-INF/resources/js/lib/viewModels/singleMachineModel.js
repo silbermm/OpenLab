@@ -4,9 +4,11 @@ define(["knockout", "jquery", "models/machine", "models/machineGroup"], function
         
         self.singleMachine = ko.observable();
         
-        self.loadMachine = function(){
-            $.getJSON($('#show-groups').val(), function(data) {
-                
+        self.loadMachine = function(uuid){
+            var baseUrl = $("#base-url").val();            
+            $.getJSON(baseUrl + "/show/machine/uuid/" + uuid, function(data) {
+                var currentMachine = new Machine(data);
+                self.singleMachine(currentMachine);
             });
         };
         

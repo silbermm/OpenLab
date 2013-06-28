@@ -14,6 +14,7 @@ define(["knockout"], function(ko) {
         self.lastSeen = ko.observable(data.lastSeen);
         if (data.group) {
             self.group = ko.observable(data.group.groupId);
+            self.groupName = ko.observable(data.group.name);
         }
         self.currentUser = ko.observable(data.currentUser);
         self.sidebarId = ko.computed(function(){
@@ -38,7 +39,7 @@ define(["knockout"], function(ko) {
         });
         self.showComputer = function(){
             //var path = $("#base-url").val();
-            window.location = "/machine/" + self.uid();         
+            location.hash = "machine/" + self.uid();         
         };
     }
     return Machine;

@@ -14,8 +14,7 @@ define(["knockout", "models/machine", "models/machineGroup", "jquery","jquery.bo
                     return new MachineGroup(group);
                 });
                 self.groups(mappedGroups);;
-            });
-           
+            });           
         };
         
         self.showComputerInfo = function(m){
