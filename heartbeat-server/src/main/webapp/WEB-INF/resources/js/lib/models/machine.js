@@ -17,9 +17,19 @@ define(["knockout"], function(ko) {
             self.groupName = ko.observable(data.group.name);
         }
         self.currentUser = ko.observable(data.currentUser);
+        
         self.sidebarId = ko.computed(function(){
             return "sidebar-comp-" + self.uid();
         });
+        
+        self.clonePullId = ko.computed(function(){
+           return "clone-pull-" + self.uid(); 
+        });
+        
+        self.clonePushId = ko.computed(function(){
+           return "clone-push-" + self.uid();
+        });
+        
         self.isLoggedIn = ko.computed(function(){
            if(self.currentUser() == "none" || self.currentUser() == 0) {
                 return "available";
@@ -41,6 +51,16 @@ define(["knockout"], function(ko) {
             //var path = $("#base-url").val();
             location.hash = "machine/" + self.uid();         
         };
-    }
+        self.currentOS = function(){
+          // return the correct icon for the current os
+          if(/^m/i.test(self.os())){
+            return "icon-apple";
+          } else if(/^w/i.test(self.os())){
+            return "icon-windows";
+          } else {
+              return "icon-question";
+          }
+        };        
+    };
     return Machine;
 });

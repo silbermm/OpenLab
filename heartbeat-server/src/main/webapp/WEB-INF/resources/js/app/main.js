@@ -7,6 +7,8 @@ define(["knockout", "sammy", "viewModels/masterViewModel"], function(ko, Sammy, 
             return {controlsDescendantBindings: true};
         }
     };
+    master.computerGroups.refresh();
+    master.pageTitle("Home");
     
 
     // Client-side routes    
@@ -15,32 +17,31 @@ define(["knockout", "sammy", "viewModels/masterViewModel"], function(ko, Sammy, 
         this.get('#Inventory', function() {
             master.routes.chosenNavId("Inventory");
             master.routes.removeAllBreadcrumbs();
-            master.routes.addToBreadcrumbTrail("Inventory", "#Inventory");
-            master.computerGroups.refresh();
+            master.routes.addToBreadcrumbTrail("Inventory", false);                     
         });
 
         this.get('#Settings', function() {
+           master.pageTitle("Settings");
            master.routes.chosenNavId("Settings");
            master.routes.removeAllBreadcrumbs();
-           master.routes.addToBreadcrumbTrail("Settings", "#Settings");           
+           master.routes.addToBreadcrumbTrail("Settings", false);           
         });
         
-        this.get('#machine/:uuid', function(){
-           console.log("in the machine/uuid url");
+        this.get('#machine/:uuid', function(){           
            var uuid = this.params['uuid'];
            master.routes.chosenNavId("Machine");
-           master.computer.loadMachine(uuid);           
+           master.comp.loadMachine(uuid); 
+           master.pageTitle(master.comp.computer().name());
            master.routes.removeAllBreadcrumbs();           
-           //master.routes.addToBreadcrumbTrail("Inventory", "#Inventory");
-           //master.routes.addToBreadcrumbTrail(master.computer.singleComputer.groupName(), "#group/" + master.computer.singleComputer.group());
-           //master.routes.addToBreadcrumbTrail(master.computer.singleComputer.name(), "#machine/" + master.computer.singleComputer.uid());           
+           master.routes.addToBreadcrumbTrail("Inventory", "#Inventory");
+           master.routes.addToBreadcrumbTrail(master.comp.computer().groupName(), "#group/" + master.comp.computer().group());
+           master.routes.addToBreadcrumbTrail(master.comp.computer().name(), false);           
         });
 
         this.get("", function() {
             master.routes.chosenNavId("Inventory");
             master.routes.removeAllBreadcrumbs();
-            master.routes.addToBreadcrumbTrail("Inventory", "#Inventory");
-            master.computerGroups.refresh();
+            master.routes.addToBreadcrumbTrail("Inventory", null);
         });
 
     }).run();

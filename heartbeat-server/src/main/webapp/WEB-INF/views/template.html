@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     <head th:fragment="head">
         <meta charset="utf-8" />
-        <title th:text="${title}">Generic Page Title</title>
+        <title data-bind="text: $root.pageTitle">Generic Page Title</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content="" />
         <meta name="author" content="Matt Silbernagel" />
         <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css" rel="stylesheet" />
-        <link href="http://netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet" />
+        <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet" />
         <link href="/heartbeat/resources/css/heartbeat.css" rel="stylesheet" th:href="@{/resources/css/heartbeat.css}" />
         <script data-main="../resources/js/heartbeatConfig" 
                 th:attr="data-main=@{/resources/js/heartbeatConfig}" src="/heartbeat/resources/js/lib/require.js" 
@@ -40,7 +40,7 @@
         <div th:fragment="group-sidebar">            
             <div id="group-sidebar" data-bind="with:$root.computerGroups" class="span3 well">
                 <ul class="nav nav-list">
-                    <li class="nav-header"> Groups </li>
+                    <li class="nav-header"> Groups </li>                    
                     <!-- ko foreach: groups -->
                     <li style="clear:both"> 	
                         <a href="#" style="float:left" data-bind="click: $parent.toggleGroup">
@@ -60,11 +60,10 @@
                         </li>
                     </ul>
                     <!-- /ko -->
-
                     <li class="divider"> </li>
                     <li> 
                         <span class="group-name-sidebar"> Total Machines </span>
-                        <span class="machine-count label"> 300 </span>
+                        <span class="machine-count label" data-bind="text: $root.computerGroups.totalMachines"> </span>
                     </li>		 
                 </ul>
             </div>	            
@@ -93,10 +92,116 @@
         </div>
 
 
-        <div th:fragment="machine-view">
-            <div class="span10">
-                <h1> testing computer </h1>
+        <div th:fragment="machine-view">   
+
+            <div data-bind="with:$root.comp.computer" class="span3">   
+                <div class="row-fluid container">
+                    <span class="icon-stack icon-4x">
+                        <i class="icon-desktop icon-stack-base"> </i>
+                        <i data-bind="css: currentOS()"> </i>                
+                    </span>                
+                </div>
+
+                <div class="row-fluid container">
+                    <div class="btn-group">
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                            Cloning
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li> <a href="" data-bind="click: $root.comp.preparePullClone"> <i class="icon-li icon-arrow-down"></i> Pull Down Image </a> </li>
+                            <li> <a href="#" data-bind="" > <i class="icon-li icon-arrow-up"></i> Push Up Image </a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>       
+
+            <div data-bind="with:$root.comp.computer" class="span10"> 
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <td> <strong> Computer Name: </strong>  </td>
+                            <td data-bind ="text: name"> </td> 
+                        </tr>
+                        <tr>
+                            <td> <strong> UID: </strong> </td>
+                            <td data-bind="text: uid"> </td>
+                        </tr>
+                        <tr>
+                            <td> <strong> Serial Number: </strong> </td>
+                            <td data-bind="text:serialNumber"> </td>
+                        </tr>
+                        <tr>
+                            <td> <strong> Mac Address(es): </strong> </td>
+                            <td data-bind="text:mac"> </td>                            
+                        </tr>
+                        <tr>
+                            <td> <strong> IP Address: </strong> </td>
+                            <td data-bind="text:ipAddress"> </td>
+                        </tr>
+                        <tr>
+                            <td> <strong> OS: </strong> </td>
+                            <td data-bind="text:os"></td>
+                        </tr>
+                        <tr>
+                            <td> <strong> OS Version: </strong> </td>
+                            <td data-bind="text:osVersion"> </td>
+                        </tr>
+                        <tr>
+                            <td> <strong> Manufacturer: </strong> </td>
+                            <td data-bind="text: manufacturer"> </td>
+                        </tr>
+                        <tr>
+                            <td> <strong> Model: </strong> </td>
+                            <td data-bind="text: model"> </td>
+                        </tr>
+                        <tr>
+                            <td> <strong> Last Seen: </strong> </td>
+                            <td data-bind="text: lastSeen"> </td>
+                        </tr>
+                        <tr>
+                            <td> <strong> Current User: </strong> </td>
+                            <td data-bind="text: currentUser"> </td>
+                        </tr>
+                    </tbody>                                        
+                </table>   
+
+                <!-- Modal -->
+                <div id="compModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="compModalLabel" aria-hidden="true">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="compModalLabel">Cloning Options</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert">                        
+                            <strong>Warning!</strong> This will reboot the machine even if a user is currently logged in. Please proceed with caution
+                        </div>
+                        <form class="form-horizontal">
+                            <div class="control-group">
+                                <label class="control-label" for="imageChoice"> </label>
+                                <div class="controls">
+                                    <select>
+                                        
+                                    </select>                                    
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="inputPassword">Password</label>
+                                <div class="controls">
+                                    <input type="password" id="inputPassword" placeholder="Password" />
+                                </div>
+                            </div>                           
+                        </form> 
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <button class="btn btn-primary">Clone Me!</button>
+                    </div>
+                </div>
+
             </div>
+
         </div>
 
 

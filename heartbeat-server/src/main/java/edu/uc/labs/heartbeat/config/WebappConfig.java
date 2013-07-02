@@ -5,6 +5,7 @@ import edu.uc.labs.heartbeat.dao.MachineDao;
 import edu.uc.labs.heartbeat.dao.MachineDaoImpl;
 import edu.uc.labs.heartbeat.dao.MachineGroupDao;
 import edu.uc.labs.heartbeat.dao.MachineGroupDaoImpl;
+import edu.uc.labs.heartbeat.service.ClonezillaService;
 import edu.uc.labs.heartbeat.service.HeartbeatService;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
@@ -58,10 +59,13 @@ public class WebappConfig {
         HeartbeatService h = new HeartbeatService();
         h.setConfig(config);
         h.setMachineDao(machineDao());
-        h.setMachineGroupDao(machineGroupDao());
-        
-
+        h.setMachineGroupDao(machineGroupDao());       
         return h;
+    }
+    
+    @Bean
+    public ClonezillaService clonezillaService(){
+        return new ClonezillaService();
     }
 
     private Properties getHibernateProperties(){

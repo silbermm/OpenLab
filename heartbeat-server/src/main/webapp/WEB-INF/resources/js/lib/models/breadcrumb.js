@@ -1,7 +1,14 @@
-define([], function() {
+define(["knockout"], function(ko) {
     var Breadcrumb = function(name, path) {
-        this.name = name;
-        this.path = path;
+        var self = this;
+        self.name = ko.observable(name);
+        self.path = ko.observable(path);
+        self.isActive = ko.computed(function(){
+            if(self.path()){
+                return true;
+            }
+            return false;
+        })
     }
     return Breadcrumb;
 });

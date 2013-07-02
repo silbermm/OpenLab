@@ -5,10 +5,11 @@
     <div th:include="template::navbar"></div>
       
     <ul class="breadcrumb" data-bind="with: routes">
-        <!-- ko foreach : currentBreadcrumbs -->
+        <!-- ko foreach : currentBreadcrumbs -->        
         <li>
             <a data-bind="attr : {href : path}, text : name"> </a> <span class="divider">/</span> 
-        </li>
+        </li>        
+        
         <!-- /ko -->
     </ul>
     

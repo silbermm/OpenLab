@@ -57,7 +57,7 @@ public class HeartbeatController {
     @RequestMapping(value = "show/groups", method = RequestMethod.GET)
     public @ResponseBody List<MachineGroup> getGroups(){
         return heartbeatService.getAllMachineGroups();
-    }
+    }        
     
     @RequestMapping(value = "show/group/id/{id}", method = RequestMethod.GET)
     public @ResponseBody MachineGroup getGroupById(@PathVariable Long id){
@@ -79,4 +79,6 @@ public class HeartbeatController {
     @Autowired
     HeartbeatService heartbeatService;
 
+    
+    
 }

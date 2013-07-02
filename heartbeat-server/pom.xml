@@ -156,7 +156,7 @@
 	 </dependency>
 	</dependencies>
   <build>
-		<finalName>heartbeat</finalName>
+		<finalName>heartbeat-server</finalName>
 		<plugins>
       <!--source level should be 1.6 (which is not Maven default) for java EE 6 projects, so let's change it -->
       <plugin>
@@ -181,7 +181,17 @@
         <groupId>org.apache.tomcat.maven</groupId>
         <artifactId>tomcat7-maven-plugin</artifactId>
         <version>2.0</version>
-      </plugin>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>tomcat-maven-plugin</artifactId>
+				<configuration>
+					<url>http://labs.uc.edu:8080/manager/html</url>
+					<server>LabsTomcat</server>
+					<path>/heartbeat-server</path>
+					<warFile>${project.build.directory}/${project.build.finalName}.war</warFile>
+				</configuration>
+			</plugin>	
 		</plugins>
 		<resources>
       <resource>
