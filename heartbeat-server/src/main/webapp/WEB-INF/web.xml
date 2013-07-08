@@ -24,7 +24,7 @@
     </listener>
 
     <filter>
-        <filter-name>characterEncodingFilter</filter-name>
+        <filter-name>characterEncodingFilter</filter-name>       
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
         <init-param>
             <param-name>encoding</param-name>
@@ -37,12 +37,12 @@
     </filter>
 
     <filter-mapping>
-        <filter-name>characterEncodingFilter</filter-name>
+        <filter-name>characterEncodingFilter</filter-name>        
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 	
     <filter>
-        <filter-name>osivFilter</filter-name>
+        <filter-name>osivFilter</filter-name>        
         <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
     </filter>
 	
@@ -51,7 +51,7 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
     
-    <servlet>
+    <servlet>        
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
@@ -60,18 +60,4 @@
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-
-    <error-page> 
-        <exception-type>java.lang.Throwable</exception-type> 
-        <location>/error</location> 
-    </error-page> 
-    <error-page> 
-        <error-code>500</error-code> 
-        <location>/error</location> 
-    </error-page> 
-    <error-page> 
-        <error-code>404</error-code> 
-        <location>/404</location> 
-    </error-page> 
-
 </web-app>

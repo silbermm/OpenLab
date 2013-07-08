@@ -26,10 +26,8 @@ public class HeartbeatController {
 
     @RequestMapping(value="create", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void acceptMachineInfo(@RequestBody ClientMachine clientMachine, HttpServletRequest request){
-        log.info("in the acceptMachineInfo method");
-        boolean success = heartbeatService.updateMachine(clientMachine, request.getRemoteAddr());
-        log.info("Updated " + success);
+    public void acceptMachineInfo(@RequestBody ClientMachine clientMachine, HttpServletRequest request){       
+        boolean success = heartbeatService.updateMachine(clientMachine, request.getRemoteAddr());        
     }
 
     /*@RequestMapping(value="create/group", method = RequestMethod.POST)
@@ -63,7 +61,6 @@ public class HeartbeatController {
     public @ResponseBody MachineGroup getGroupById(@PathVariable Long id){
         return heartbeatService.getGroupById(id);
     }
-
 
     @RequestMapping(value="update/machine/uuid/{uuid}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)

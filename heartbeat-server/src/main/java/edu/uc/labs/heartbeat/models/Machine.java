@@ -23,8 +23,8 @@ public class Machine implements Serializable {
     private String manufacturer;
     private String model;
     private Date lastSeen;
-    private MachineGroup group;
-    private String currentUser;
+    private MachineGroup group;  
+    private String currentUser;            
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

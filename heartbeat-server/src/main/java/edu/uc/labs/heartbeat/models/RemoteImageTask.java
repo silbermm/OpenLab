@@ -18,7 +18,7 @@ public class RemoteImageTask implements Serializable {
     private String uuid;
     private String mac;
     private String ipAddress;
-    private String serialNumber;
+    private String serialNumber;    
     private String imageName;
     private Date created;
 
@@ -26,7 +26,7 @@ public class RemoteImageTask implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public long getId() {
         return id;
-    }
+    }   
 
     public void setId(long id) {
         this.id = id;

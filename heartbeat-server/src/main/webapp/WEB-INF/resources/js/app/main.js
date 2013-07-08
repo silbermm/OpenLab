@@ -10,6 +10,8 @@ define(["knockout", "sammy", "viewModels/masterViewModel", "jquery"], function(k
     master.computerGroups.refresh();
     master.pageTitle("Home");
     
+    
+    
     // Client-side routes    
     Sammy(function() {
 

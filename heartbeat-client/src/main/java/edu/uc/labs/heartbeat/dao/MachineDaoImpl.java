@@ -23,7 +23,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -55,18 +54,22 @@ public class MachineDaoImpl implements MachineDao {
         return m;
     }
 
+    @Override
     public String findLoggedInUser() {
         return getUser();
     }
 
+    @Override
     public String findComputerName() {
         return this.getCompName();
     }
 
+    @Override
     public String findUUID() {
         return this.getUuid();
     }
 
+    @Override
     public void writeToFile(ClientMachine m) {
         File savedInfo = new File(HeartbeatPropertiesLoader.getFilename(config));
         try {
@@ -81,28 +84,29 @@ public class MachineDaoImpl implements MachineDao {
             props.setProperty("model", m.getModel());
             props.store(new FileOutputStream(savedInfo), "Heartbeat Auto Generated Properties");
         } catch (IOException ex) {
-        	  try {	
-						File homeInfo = new File(HeartbeatPropertiesLoader.getHomeFilename(config));
-						Properties props = new Properties();
-            props.setProperty("uuid", m.getUuid());
-            props.setProperty("serialnumber", m.getSerialNumber());
-            props.setProperty("macaddresses", m.getMac());
-            props.setProperty("os", m.getOs());
-            props.setProperty("osversion", m.getOsVersion());
-            props.setProperty("manufacturer", m.getManufacturer());
-            props.setProperty("model", m.getModel());
-            props.store(new FileOutputStream(homeInfo), "Heartbeat Auto Generated Properties");
-						}catch (IOException e) {
-							log.info(" ... ");	
-						}	
+            try {
+                File homeInfo = new File(HeartbeatPropertiesLoader.getHomeFilename(config));
+                Properties props = new Properties();
+                props.setProperty("uuid", m.getUuid());
+                props.setProperty("serialnumber", m.getSerialNumber());
+                props.setProperty("macaddresses", m.getMac());
+                props.setProperty("os", m.getOs());
+                props.setProperty("osversion", m.getOsVersion());
+                props.setProperty("manufacturer", m.getManufacturer());
+                props.setProperty("model", m.getModel());
+                props.store(new FileOutputStream(homeInfo), "Heartbeat Auto Generated Properties");
+            } catch (IOException e) {
+                log.info(" ... ");
+            }
         }
     }
 
+    @Override
     public void sendToServer(ClientMachine m) {
         try {
-            String url = config.getString("heartbeat.protocol") + "://" +
-                    config.getString("heartbeat.server") + ":" + config.getString("heartbeat.port") +
-                    "/" + config.getString("heartbeat.path") + "/create";
+            String url = config.getString("heartbeat.protocol") + "://"
+                    + config.getString("heartbeat.server") + ":" + config.getString("heartbeat.port")
+                    + "/" + config.getString("heartbeat.path") + "/create";
             restTemplate.postForLocation(url, m);
             // now post it to the server...
             //} catch (JsonProcessingException ex) {
@@ -117,15 +121,30 @@ public class MachineDaoImpl implements MachineDao {
      *
      * @param uuid
      */
+    @Override
     public void sendToServer(String uuid) {
-        String url = config.getString("heartbeat.protocol") + "://" +
-                config.getString("heartbeat.server") + ":" + config.getString("heartbeat.port") +
-                "/" + config.getString("heartbeat.path") + "/update/machine/uuid/" + uuid;
+        String url = config.getString("heartbeat.protocol") + "://"
+                + config.getString("heartbeat.server") + ":" + config.getString("heartbeat.port")
+                + "/" + config.getString("heartbeat.path") + "/update/machine/uuid/" + uuid;
         try {
             restTemplate.put(url, null);
         } catch (RestClientException ex) {
             log.error("There was a problem sending the data to the server: " + ex.getMessage());
         }
+    }
+
+    private String[] getPartitions() {
+        File[] roots = File.listRoots();
+        String[] returnVal = new String[roots.length];
+        int iter = 0;
+        for (File root : roots) {
+            returnVal[iter] = root.getAbsolutePath();
+            log.info("File system root: " + root.getAbsolutePath());
+            log.info("Total space (bytes): " + root.getTotalSpace());
+            log.info("Free space (bytes): " + root.getFreeSpace());
+            log.info("Usable space (bytes): " + root.getUsableSpace());            
+        }
+        return returnVal;
     }
 
     /**
@@ -153,7 +172,9 @@ public class MachineDaoImpl implements MachineDao {
         try {
             Properties p = HeartbeatPropertiesLoader.getProperties(config);
             if (p != null) {
-                if (p.getProperty("serialnumber") != null || !p.getProperty("serialnumber").equals("")) return p.getProperty("serialnumber");
+                if (p.getProperty("serialnumber") != null || !p.getProperty("serialnumber").equals("")) {
+                    return p.getProperty("serialnumber");
+                }
             }
         } catch (IOException e) {
             log.debug(e.getMessage());
@@ -209,8 +230,9 @@ public class MachineDaoImpl implements MachineDao {
             serialNumber = s;
 
         }
-        if(serialNumber.equals(null) || serialNumber.equals(""))
+        if (serialNumber.equals(null) || serialNumber.equals("")) {
             serialNumber = "none";
+        }
         return serialNumber;
     }
 

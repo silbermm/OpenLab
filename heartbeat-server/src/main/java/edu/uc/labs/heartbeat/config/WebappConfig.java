@@ -9,9 +9,12 @@ import edu.uc.labs.heartbeat.dao.MachineGroupDao;
 import edu.uc.labs.heartbeat.dao.MachineGroupDaoImpl;
 import edu.uc.labs.heartbeat.dao.RemoteImagingDao;
 import edu.uc.labs.heartbeat.dao.RemoteImagingDaoImpl;
+import edu.uc.labs.heartbeat.dao.WebTaskDao;
+import edu.uc.labs.heartbeat.dao.WebTaskDaoImpl;
 import edu.uc.labs.heartbeat.service.ClonezillaService;
 import edu.uc.labs.heartbeat.service.HeartbeatService;
 import edu.uc.labs.heartbeat.service.RabbitService;
+import edu.uc.labs.heartbeat.service.WebTaskService;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +29,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.util.Properties;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.scheduling.annotation.Async;
 
 @Configuration
+@Async
 @EnableTransactionManagement
 @Import(PropertyPlaceholdersConfig.class)
 public class WebappConfig {
@@ -71,6 +76,12 @@ public class WebappConfig {
         MachineGroupDao machineGroupDao = new MachineGroupDaoImpl(sessionFactory());
         return machineGroupDao;
     }
+    
+    @Bean
+    public WebTaskDao webTaskDao(){
+        WebTaskDao task = new WebTaskDaoImpl(sessionFactory());
+        return task;
+    }
 
     @Bean
     public HeartbeatService heartbeatService(){
@@ -89,6 +100,11 @@ public class WebappConfig {
     @Bean
     public RabbitService rabbitService(){
         return new RabbitService();
+    }
+    
+    @Bean
+    public WebTaskService webTaskService(){
+        return new WebTaskService();
     }
 
     private Properties getHibernateProperties(){

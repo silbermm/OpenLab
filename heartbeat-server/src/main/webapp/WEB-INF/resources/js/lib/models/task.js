@@ -1,11 +1,11 @@
 define(["knockout"], function(ko) {
-  var Task = function(id, name, description, status, currentPercentage) {
+  var Task = function(data) {
       var self = this;
-      self.id = ko.observable(id);
-      self.name = ko.observable(name);
-      self.description = ko.observable(description);
-      self.status = ko.observable(status);
-      self.currentPercentage = ko.observable(currentPercentage);
+      self.id = ko.observable(data.id);
+      self.name = ko.observable(data.name);
+      self.description = ko.observable(data.description);
+      self.status = ko.observable(data.status);
+      self.completionPercentage = ko.observable(data.completionPercentage);
   };      
   return Task;    
 });

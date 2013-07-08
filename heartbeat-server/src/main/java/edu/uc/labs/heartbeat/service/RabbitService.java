@@ -35,14 +35,29 @@ public class RabbitService {
         }
     }
 
-    public CommandResult startRemoteClone(Machine m) {        
+    public CommandResult startRemoteClone(Machine m) {
         Command cmd = new Command();
-        cmd.setCmd("setBoot.pl");
+        cmd.setCmd("/Volumes/zilla/setBoot.pl");
         cmd.addArg("-r");
         cmd.addArg("Leg");
         cmd.addArg("1");
         //cmd.setCmd("say");
         //cmd.addArg("hello");
+        CommandResult response = (CommandResult) heartbeatTemplate.convertSendAndReceive("machine.cmd", m.getUid() + "-cmd", cmd, new MessagePostProcessor() {
+            @Override
+            public Message postProcessMessage(Message msg) throws AmqpException {
+                msg.getMessageProperties().setExpiration("60000");
+                return msg;
+            }
+        });
+        return response;
+    }
+
+    public CommandResult reboot(Machine m, String os) {
+        Command cmd = new Command();
+        
+        
+        
         CommandResult response = (CommandResult) heartbeatTemplate.convertSendAndReceive("machine.cmd", m.getUid() + "-cmd", cmd, new MessagePostProcessor() {
             @Override
             public Message postProcessMessage(Message msg) throws AmqpException {

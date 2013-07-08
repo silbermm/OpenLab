@@ -20,6 +20,10 @@ define(["knockout", "jquery", "models/machine", "models/machineGroup","jquery.bo
           $('#compModal').modal('show');          
         };
         
+        self.restart = function (currentComp){
+            
+        }
+        
         self.closeCloneWindow = function(){
             $('#compModal').modal('hide');
         }
