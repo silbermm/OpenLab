@@ -1,12 +1,17 @@
 package edu.uc.labs.heartbeat.config;
 
 import com.typesafe.config.Config;
+import edu.uc.labs.heartbeat.dao.ImageDao;
+import edu.uc.labs.heartbeat.dao.ImageDaoImpl;
 import edu.uc.labs.heartbeat.dao.MachineDao;
 import edu.uc.labs.heartbeat.dao.MachineDaoImpl;
 import edu.uc.labs.heartbeat.dao.MachineGroupDao;
 import edu.uc.labs.heartbeat.dao.MachineGroupDaoImpl;
+import edu.uc.labs.heartbeat.dao.RemoteImagingDao;
+import edu.uc.labs.heartbeat.dao.RemoteImagingDaoImpl;
 import edu.uc.labs.heartbeat.service.ClonezillaService;
 import edu.uc.labs.heartbeat.service.HeartbeatService;
+import edu.uc.labs.heartbeat.service.RabbitService;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,7 +53,20 @@ public class WebappConfig {
         MachineDao machineDao = new MachineDaoImpl(sessionFactory());
         return machineDao;
     }
+    
+    @Bean
+    public ImageDao imageDao(){
+        ImageDao imageDao = new ImageDaoImpl();
+        return imageDao;
+    }
+    
+    @Bean
+    public RemoteImagingDao remoteImagingDao(){
+        RemoteImagingDao remote = new RemoteImagingDaoImpl(sessionFactory());
+        return remote;
+    }
 
+    @Bean
     public MachineGroupDao machineGroupDao(){
         MachineGroupDao machineGroupDao = new MachineGroupDaoImpl(sessionFactory());
         return machineGroupDao;
@@ -67,6 +85,11 @@ public class WebappConfig {
     public ClonezillaService clonezillaService(){
         return new ClonezillaService();
     }
+    
+    @Bean
+    public RabbitService rabbitService(){
+        return new RabbitService();
+    }
 
     private Properties getHibernateProperties(){
         Properties p = new Properties();
@@ -74,7 +97,6 @@ public class WebappConfig {
         p.setProperty("hibernate.show_sql", config.getString("hibernate.show_sql"));
         p.setProperty("hibernate.format_sql", config.getString("hibernate.format_sql"));
         p.setProperty("hibernate.hbm2ddl.auto", config.getString("hibernate.hbm2ddl.auto"));
-				log.info("" + p);
         return p;
     }
 

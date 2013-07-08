@@ -1,7 +1,7 @@
-define(["knockout", "sammy", "viewModels/masterViewModel"], function(ko, Sammy, masterViewModel) {
+define(["knockout", "sammy", "viewModels/masterViewModel", "jquery"], function(ko, Sammy, masterViewModel, $) {
 
     var master = new masterViewModel();
-    ko.applyBindings(master);
+    ko.applyBindings(master, document.getElementById("topHtml"));
     ko.bindingHandlers.stopBinding = {
         init: function() {
             return {controlsDescendantBindings: true};
@@ -10,7 +10,6 @@ define(["knockout", "sammy", "viewModels/masterViewModel"], function(ko, Sammy, 
     master.computerGroups.refresh();
     master.pageTitle("Home");
     
-
     // Client-side routes    
     Sammy(function() {
 
@@ -31,6 +30,7 @@ define(["knockout", "sammy", "viewModels/masterViewModel"], function(ko, Sammy, 
            var uuid = this.params['uuid'];
            master.routes.chosenNavId("Machine");
            master.comp.loadMachine(uuid); 
+           master.imageModel.findImages();
            master.pageTitle(master.comp.computer().name());
            master.routes.removeAllBreadcrumbs();           
            master.routes.addToBreadcrumbTrail("Inventory", "#Inventory");

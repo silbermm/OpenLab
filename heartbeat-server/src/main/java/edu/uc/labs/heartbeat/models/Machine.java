@@ -7,10 +7,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-
 @Entity
 @Table(name = "labs_machines")
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
 public class Machine implements Serializable {
 
     private long id;
@@ -29,14 +28,13 @@ public class Machine implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long getId(){
+    public long getId() {
         return this.id;
     }
 
-    public void setId(long id){
+    public void setId(long id) {
         this.id = id;
     }
-
 
     @Column(name = "uid", unique = true, nullable = false)
     public String getUid() {
@@ -129,9 +127,9 @@ public class Machine implements Serializable {
         this.lastSeen = lastSeen;
     }
 
-    @ManyToOne(cascade={CascadeType.ALL},fetch = FetchType.EAGER)
-	  @JoinColumn(name="group_id")	
-	  public MachineGroup getGroup() {
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "group_id")
+    public MachineGroup getGroup() {
         return group;
     }
 
@@ -148,27 +146,34 @@ public class Machine implements Serializable {
         this.currentUser = currentUser;
     }
 
-		public boolean equals(Object other){
-			if (this == other) return true;
-			if ( !(other instanceof Machine) ) return false;
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (!(other instanceof Machine)) {
+            return false;
+        }
 
-			final Machine m = (Machine) other;
-			if ( m.getId() !=  getId() ) return false;
-			if ( !m.getGroup().equals( getGroup() ) ) return false;
+        final Machine m = (Machine) other;
+        if (m.getId() != getId()) {
+            return false;
+        }
+        if (!m.getGroup().equals(getGroup())) {
+            return false;
+        }
 
-			return true;
-		}
+        return true;
+    }
 
-		public int hashCode() {
-			int result;
-			result = getGroup().hashCode();
-			result = 29 * result + (int) getId();
-			return result;	
-		}
+    public int hashCode() {
+        int result;
+        result = getGroup().hashCode();
+        result = 29 * result + (int) getId();
+        return result;
+    }
 
-
-		@Override
-    public String toString(){
+    @Override
+    public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("\n\tComputer Name = ").append(this.name).append("\n");
         sb.append("\tMac Addresses = ").append(this.mac).append("\n");

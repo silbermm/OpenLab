@@ -3,21 +3,20 @@ package edu.uc.labs.heartbeat.service;
 import com.typesafe.config.Config;
 import edu.uc.labs.heartbeat.exceptions.*;
 import edu.uc.labs.heartbeat.dao.*;
+import edu.uc.labs.heartbeat.models.RemoteImageTask;
+import org.slf4j.Logger;
 //import edu.uc.labs.springzilla.models.ClonezillaSettings;
 //import edu.uc.labs.springzilla.models.MulticastSettings;
 //import edu.uc.labs.springzilla.json.*;
-import java.io.IOException;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 @Transactional
 public class ClonezillaService {
 
-    private static final Logger log = Logger.getLogger(ClonezillaService.class);
     /*
      public List<ClonezillaSettings> getGeneralSettings()
      {
@@ -70,13 +69,32 @@ public class ClonezillaService {
      }
      }
      */
-
+    
+    public boolean setupRemoteImaging(RemoteImageTask task){
+        try { 
+            log.info("Attempting to create the task in the database: ");
+            remoteImagingDao.create(task);
+        } catch (RuntimeException e){
+            log.error(e.getMessage());
+            throw new GenericDataException(e.getMessage());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new GenericDataException(e.getMessage());
+        }
+        return true;
+    }
+    
     public String[] getImages() {
+        log.info("Trying to get images from " + config.getString("clonezilla.imageHome"));
         String location = null;
         try {
-            location = config.getString("clonezilla.imagehome");
+            location = config.getString("clonezilla.imageHome");
             return imageDao.getImages(location);
         } catch (RuntimeException e){
+            log.error(e.getMessage());
+            throw new ImageListingException(e.getMessage());
+        } catch (Exception e){
+            log.error(e.getMessage());
             throw new ImageListingException(e.getMessage());
         }
     }
@@ -89,5 +107,8 @@ public class ClonezillaService {
     //@Autowired private MulticastDao multicastDao;
     @Autowired private ImageDao imageDao;   
     @Autowired private Config config;
+    @Autowired private RemoteImagingDao remoteImagingDao;
     //@Autowired private DrblDao drblDao;
+    
+    final private Logger log = LoggerFactory.getLogger(ClonezillaService.class);
 }

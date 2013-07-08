@@ -120,7 +120,7 @@ public class MachineDaoImpl implements MachineDao {
     public void sendToServer(String uuid) {
         String url = config.getString("heartbeat.protocol") + "://" +
                 config.getString("heartbeat.server") + ":" + config.getString("heartbeat.port") +
-                "/" + config.getString("heartbeat.path") + "/update/" + uuid;
+                "/" + config.getString("heartbeat.path") + "/update/machine/uuid/" + uuid;
         try {
             restTemplate.put(url, null);
         } catch (RestClientException ex) {

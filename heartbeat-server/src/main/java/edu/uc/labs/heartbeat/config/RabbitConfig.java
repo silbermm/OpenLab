@@ -53,6 +53,5 @@ public class RabbitConfig {
         return r;
     }       
         
-    @Autowired
-    Config config;
+    @Autowired Config config;
 }

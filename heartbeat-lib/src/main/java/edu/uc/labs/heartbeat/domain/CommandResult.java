@@ -1,6 +1,5 @@
 package edu.uc.labs.heartbeat.domain;
 
-
 public class CommandResult {
 
     private int exitCode;
@@ -32,9 +31,5 @@ public class CommandResult {
      */
     public void setMessage(String message) {
         this.message = message;
-    }
-    
-    
-    
-    
+    }                
 }
