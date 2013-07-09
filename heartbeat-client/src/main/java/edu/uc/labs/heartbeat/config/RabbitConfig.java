@@ -4,7 +4,6 @@ import com.typesafe.config.Config;
 import edu.uc.labs.heartbeat.domain.*;
 import edu.uc.labs.heartbeat.service.HeartbeatService;
 import edu.uc.labs.heartbeat.tasks.*;
-import java.util.HashMap;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -45,12 +44,6 @@ public class RabbitConfig {
         log.debug("Creating queue named " + heartbeatService.getUUID() + "-cmd");
         return q;
     }
-    
-    @Bean
-    public Queue partitionQueue() {
-        Queue q = new Queue(heartbeatService.getUUID() + "-part");
-        return q;
-    }
 
     @Bean
     public DirectExchange heartbeatExchange() {
@@ -62,13 +55,7 @@ public class RabbitConfig {
     public DirectExchange commandExchange() {
         DirectExchange ex = new DirectExchange("machine.cmd", true, false);
         return ex;
-    }
-    
-    @Bean
-    public DirectExchange partitionExchange(){
-        DirectExchange ex = new DirectExchange("machine.parts", true, false);
-        return ex;
-    }        
+    }      
 
     @Bean
     public Binding heartbeatBinding() {
