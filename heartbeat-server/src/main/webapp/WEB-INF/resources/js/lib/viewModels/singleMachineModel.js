@@ -5,6 +5,7 @@ define(["knockout", "jquery", "models/machine", "models/machineGroup","jquery.bo
         self.computer = ko.observable();
 
         self.loadMachine = function(uuid) {
+            console.log("loading machine " + uuid);
             var baseUrl = $("#base-url").val();
             $.ajax({
                 async: false,
@@ -12,6 +13,7 @@ define(["knockout", "jquery", "models/machine", "models/machineGroup","jquery.bo
                 dataType: "json",
                 type: "GET",
             }).done(function(data) {
+                console.log("done loading machine data...");
                 self.computer(new Machine(data));
             });
         };

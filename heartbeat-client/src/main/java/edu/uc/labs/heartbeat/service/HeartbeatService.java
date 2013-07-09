@@ -33,7 +33,7 @@ public class HeartbeatService {
         } else {
             machineDao.sendToServer(m.getUuid());
         }
-    }
+    }    
 
     public String getCurrentUser() {
         return machineDao.findLoggedInUser();

@@ -4,6 +4,7 @@ import com.typesafe.config.Config;
 import edu.uc.labs.heartbeat.domain.*;
 import edu.uc.labs.heartbeat.service.HeartbeatService;
 import edu.uc.labs.heartbeat.tasks.*;
+import java.util.HashMap;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -44,11 +45,16 @@ public class RabbitConfig {
         log.debug("Creating queue named " + heartbeatService.getUUID() + "-cmd");
         return q;
     }
+    
+    @Bean
+    public Queue partitionQueue() {
+        Queue q = new Queue(heartbeatService.getUUID() + "-part");
+        return q;
+    }
 
     @Bean
     public DirectExchange heartbeatExchange() {
-        DirectExchange ex = new DirectExchange("machine.status", true, false);
-        log.debug("Creating queue named " + heartbeatService.getUUID());
+        DirectExchange ex = new DirectExchange("machine.status", true, false);       
         return ex;
     }
 
@@ -57,6 +63,12 @@ public class RabbitConfig {
         DirectExchange ex = new DirectExchange("machine.cmd", true, false);
         return ex;
     }
+    
+    @Bean
+    public DirectExchange partitionExchange(){
+        DirectExchange ex = new DirectExchange("machine.parts", true, false);
+        return ex;
+    }        
 
     @Bean
     public Binding heartbeatBinding() {
@@ -69,7 +81,7 @@ public class RabbitConfig {
         return BindingBuilder.bind(
                 commandQueue()).to(commandExchange()).with(heartbeatService.getUUID() + "-cmd");
     }
-
+    
     @Bean
     public AmqpAdmin rabbitAdmin() {
         RabbitAdmin admin = new RabbitAdmin(connectionFactory());
@@ -95,7 +107,7 @@ public class RabbitConfig {
         RabbitTemplate r = new RabbitTemplate(connectionFactory());
         r.setMessageConverter(commandResultConverter());
         return r;
-    }
+    }   
 
     @Bean
     public JsonMessageConverter commandMsgConverter() {
@@ -105,7 +117,7 @@ public class RabbitConfig {
         converter.setClassMapper(mapper);
         return converter;
     }
-
+    
     @Bean
     public JsonMessageConverter heartbeatMessageConverter() {
         JsonMessageConverter converter = new JsonMessageConverter();
@@ -131,7 +143,6 @@ public class RabbitConfig {
         container.setQueues(machineQueue());
         container.setMessageListener(new HeartbeatMessageListener(heartbeatService, heartbeatTemplate()));
         container.setAutoStartup(true);
-        //container.setMessageConverter(heartbeatMessageConverter());
         container.setConcurrentConsumers(1);
         return container;
     }
@@ -146,7 +157,8 @@ public class RabbitConfig {
         //container.setMessageConverter(commandMsgConverter());
         container.setConcurrentConsumers(1);
         return container;
-    }
+    }    
+    
     @Autowired
     Config config;
     @Autowired

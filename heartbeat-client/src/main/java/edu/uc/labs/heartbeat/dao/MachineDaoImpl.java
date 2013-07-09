@@ -5,6 +5,8 @@ import com.jacob.com.Dispatch;
 import com.jacob.com.EnumVariant;
 import com.jacob.com.Variant;
 import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
 import edu.uc.labs.heartbeat.domain.ClientMachine;
 import edu.uc.labs.heartbeat.domain.MachineGroup;
 import edu.uc.labs.heartbeat.utils.HeartbeatPropertiesLoader;
@@ -51,6 +53,8 @@ public class MachineDaoImpl implements MachineDao {
         m.setMac(getMacAddresses());
         m.setUuid(getUuid());
         m.setCurrentUser(getUser());
+        getPartitions(m);
+        m.setFacility(getFacility());
         return m;
     }
 
@@ -133,18 +137,29 @@ public class MachineDaoImpl implements MachineDao {
         }
     }
 
-    private String[] getPartitions() {
-        File[] roots = File.listRoots();
-        String[] returnVal = new String[roots.length];
-        int iter = 0;
-        for (File root : roots) {
-            returnVal[iter] = root.getAbsolutePath();
-            log.info("File system root: " + root.getAbsolutePath());
-            log.info("Total space (bytes): " + root.getTotalSpace());
-            log.info("Free space (bytes): " + root.getFreeSpace());
-            log.info("Usable space (bytes): " + root.getUsableSpace());            
+    private void getPartitions(ClientMachine m) {        
+        if (config.getString("partition.file") != null) {
+            File f = new File(config.getString("partition.file"));
+            if (f.exists()) {
+                Config p = ConfigFactory.parseFile(f);
+                //Object c = p.getObject("parts");
+                for (int i = 1; i < 5; i++) {
+                    if (p.hasPath("parts." + i)) {
+                        if(i==1) { m.setPartition1(p.getString("parts.1")); }
+                        if(i==2) { m.setPartition2(p.getString("parts.2")); }
+                        if(i==3) { m.setPartition3(p.getString("parts.3")); }
+                        if(i==4) { m.setPartition4(p.getString("parts.4")); }                        
+                    }
+                }
+            }
+        }        
+    }
+    
+    private String getFacility(){
+        if(config.hasPath("FACILITY")){
+            return config.getString("FACILITY");
         }
-        return returnVal;
+        return null;
     }
 
     /**

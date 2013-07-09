@@ -41,8 +41,6 @@ public class RabbitService {
         cmd.addArg("-r");
         cmd.addArg("Leg");
         cmd.addArg("1");
-        //cmd.setCmd("say");
-        //cmd.addArg("hello");
         CommandResult response = (CommandResult) heartbeatTemplate.convertSendAndReceive("machine.cmd", m.getUid() + "-cmd", cmd, new MessagePostProcessor() {
             @Override
             public Message postProcessMessage(Message msg) throws AmqpException {

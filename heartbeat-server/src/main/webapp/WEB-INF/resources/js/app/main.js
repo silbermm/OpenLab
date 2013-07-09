@@ -8,14 +8,12 @@ define(["knockout", "sammy", "viewModels/masterViewModel", "jquery"], function(k
         }
     };
     master.computerGroups.refresh();
-    master.pageTitle("Home");
-    
-    
-    
+  
     // Client-side routes    
     Sammy(function() {
 
         this.get('#Inventory', function() {
+            master.pageTitle("Home");
             master.routes.chosenNavId("Inventory");
             master.routes.removeAllBreadcrumbs();
             master.routes.addToBreadcrumbTrail("Inventory", false);                     
@@ -39,8 +37,18 @@ define(["knockout", "sammy", "viewModels/masterViewModel", "jquery"], function(k
            master.routes.addToBreadcrumbTrail(master.comp.computer().groupName(), "#group/" + master.comp.computer().group());
            master.routes.addToBreadcrumbTrail(master.comp.computer().name(), false);           
         });
+        
+        this.get('#group/:groupid', function(){
+           var groupId = this.params['groupid'];
+           master.routes.chosenNavId("Group");
+           master.computerGroups.loadGroup(groupId);
+           master.routes.removeAllBreadcrumbs();
+           master.routes.addToBreadcrumbTrail("Inventory", false);
+           master.routes.addToBreadcrumbTrail(master.computerGroups.currentGroup().name(), "#group/" + master.computerGroups.currentGroup().groupId());
+        });
 
         this.get("", function() {
+            master.pageTitle("Home");
             master.routes.chosenNavId("Inventory");
             master.routes.removeAllBreadcrumbs();
             master.routes.addToBreadcrumbTrail("Inventory", null);

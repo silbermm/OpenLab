@@ -4,6 +4,7 @@ import com.typesafe.config.Config;
 import edu.uc.labs.heartbeat.dao.MachineDao;
 import edu.uc.labs.heartbeat.dao.MachineGroupDao;
 import edu.uc.labs.heartbeat.domain.ClientMachine;
+import edu.uc.labs.heartbeat.exceptions.GenericDataException;
 import edu.uc.labs.heartbeat.models.Machine;
 import edu.uc.labs.heartbeat.models.MachineGroup;
 import org.slf4j.Logger;
@@ -53,6 +54,20 @@ public class HeartbeatService {
     }
 
     @Transactional(readOnly = false)
+    public void moveMachine(String uuid, long toGroupId) {
+        try {
+            Machine m = getMachineByUuid(uuid);
+            MachineGroup group = getGroupById(toGroupId);
+            m.setGroup(group);
+            machineDao.update(m);
+        } catch (RuntimeException e) {
+            throw new GenericDataException(e.getMessage());
+        } catch (Exception e) {
+            throw new GenericDataException(e.getMessage());
+        }
+    }
+
+    @Transactional(readOnly = false)
     public boolean updateMachine(ClientMachine cm, String ipaddress) {
         try {
             if (machineDao.serialNumberExists(cm.getSerialNumber())) {
@@ -68,6 +83,11 @@ public class HeartbeatService {
                 m.setMac(cm.getMac());
                 m.setCurrentUser(cm.getCurrentUser());
                 m.setName(cm.getName());
+                m.setPartition1(cm.getPartition1());
+                m.setPartition2(cm.getPartition2());
+                m.setPartition3(cm.getPartition3());
+                m.setPartition4(cm.getPartition4());
+                m.setFacility(cm.getFacility());
                 log.info("updating machine " + m);
                 machineDao.update(m);
             } else {
@@ -83,6 +103,11 @@ public class HeartbeatService {
                 m.setOs(cm.getOs());
                 m.setOsVersion(cm.getOsVersion());
                 m.setUid(cm.getUuid());
+                m.setPartition1(cm.getPartition1());
+                m.setPartition2(cm.getPartition2());
+                m.setPartition3(cm.getPartition3());
+                m.setPartition4(cm.getPartition4());
+                m.setFacility(cm.getFacility());
                 log.debug("Creating Machine " + m);
                 machineDao.create(m);
             }

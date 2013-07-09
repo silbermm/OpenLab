@@ -23,8 +23,13 @@ public class Machine implements Serializable {
     private String manufacturer;
     private String model;
     private Date lastSeen;
-    private MachineGroup group;  
-    private String currentUser;            
+    private MachineGroup group;
+    private String currentUser;
+    private String partition1;
+    private String partition2;
+    private String partition3;
+    private String partition4;
+    private String facility;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -146,6 +151,52 @@ public class Machine implements Serializable {
         this.currentUser = currentUser;
     }
 
+    @Column(nullable = true)
+    public String getPartition1() {
+        return partition1;
+    }
+    
+    public void setPartition1(String partition1) {
+        this.partition1 = partition1;
+    }
+
+    @Column(nullable = true)
+    public String getPartition2() {
+        return partition2;
+    }
+
+    public void setPartition2(String partition2) {
+        this.partition2 = partition2;
+    }
+
+    @Column(nullable = true)
+    public String getPartition3() {
+        return partition3;
+    }
+
+    public void setPartition3(String partition3) {
+        this.partition3 = partition3;
+    }
+
+    @Column(nullable = true)
+    public String getPartition4() {
+        return partition4;
+    }
+
+    public void setPartition4(String partition4) {
+        this.partition4 = partition4;
+    }
+
+    @Column(nullable = true)
+    public String getFacility() {
+        return facility;
+    }
+
+    public void setFacility(String facility) {
+        this.facility = facility;
+    }
+    
+    
     public boolean equals(Object other) {
         if (this == other) {
             return true;
@@ -183,8 +234,13 @@ public class Machine implements Serializable {
         sb.append("\tModel = ").append(this.model).append("\n");
         sb.append("\tSerial Number = ").append(this.serialNumber).append("\n");
         sb.append("\tUUID = ").append(this.uid).append("\n");
-        sb.append("\tUser = ").append(this.currentUser).append("\n");
-        sb.append("\tID = ").append(this.id).append("\n");
+        sb.append("\tUser = ").append(this.getCurrentUser()).append("\n");
+        sb.append("\tPartition1").append(this.getPartition1()).append("\n");
+        sb.append("\tPartition2").append(this.getPartition2()).append("\n");
+        sb.append("\tPartition3").append(this.getPartition3()).append("\n");
+        sb.append("\tPartition4").append(this.getPartition4()).append("\n");
+        sb.append("\tFacility").append(this.getFacility()).append("\n");
         return sb.toString();
     }
+
 }

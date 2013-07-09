@@ -1,5 +1,6 @@
 package edu.uc.labs.heartbeat.domain;
 
+
 public class ClientMachine {
 
     private String uuid;
@@ -10,7 +11,12 @@ public class ClientMachine {
     private String osVersion;
     private String manufacturer;
     private String model;
+    private String facility;
     private String currentUser;
+    private String partition1;
+    private String partition2;
+    private String partition3;
+    private String partition4;
 
     public String getName() {
         return name;
@@ -84,6 +90,76 @@ public class ClientMachine {
         this.currentUser = currentUser;
     }
 
+        /**
+     * @return the facility
+     */
+    public String getFacility() {
+        return facility;
+    }
+
+    /**
+     * @param facility the facility to set
+     */
+    public void setFacility(String facility) {
+        this.facility = facility;
+    }
+
+    /**
+     * @return the partition1
+     */
+    public String getPartition1() {
+        return partition1;
+    }
+
+    /**
+     * @param partition1 the partition1 to set
+     */
+    public void setPartition1(String partition1) {
+        this.partition1 = partition1;
+    }
+
+    /**
+     * @return the partition2
+     */
+    public String getPartition2() {
+        return partition2;
+    }
+
+    /**
+     * @param partition2 the partition2 to set
+     */
+    public void setPartition2(String partition2) {
+        this.partition2 = partition2;
+    }
+
+    /**
+     * @return the partition3
+     */
+    public String getPartition3() {
+        return partition3;
+    }
+
+    /**
+     * @param partition3 the partition3 to set
+     */
+    public void setPartition3(String partition3) {
+        this.partition3 = partition3;
+    }
+
+    /**
+     * @return the partition4
+     */
+    public String getPartition4() {
+        return partition4;
+    }
+
+    /**
+     * @param partition4 the partition4 to set
+     */
+    public void setPartition4(String partition4) {
+        this.partition4 = partition4;
+    }
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -95,8 +171,16 @@ public class ClientMachine {
         sb.append("\tModel = ").append(this.model).append("\n");
         sb.append("\tSerial Number = ").append(this.serialNumber).append("\n");
         sb.append("\tUUID = ").append(this.uuid).append("\n");
-        sb.append("\tUser = ").append(this.currentUser).append("\n");
+        sb.append("\tUser = ").append(this.getCurrentUser()).append("\n");
+        sb.append("\tPartition1").append(this.getPartition1()).append("\n");
+        sb.append("\tPartition2").append(this.getPartition2()).append("\n");
+        sb.append("\tPartition3").append(this.getPartition3()).append("\n");
+        sb.append("\tPartition4").append(this.getPartition4()).append("\n");
+        sb.append("\tFacility").append(this.getFacility()).append("\n");
         return sb.toString();
     }
+
+
+
 
 }

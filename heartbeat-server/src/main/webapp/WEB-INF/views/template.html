@@ -8,7 +8,8 @@
         <meta name="author" content="Matt Silbernagel" />
         <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css" rel="stylesheet" />
         <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet" />
-        <link href="/heartbeat/resources/css/heartbeat.css" rel="stylesheet" th:href="@{/resources/css/heartbeat.css}" />
+        <link rel="stylesheet" th:href="@{/resources/css/jquery-ui.css}" />
+        <link href="/heartbeat/resources/css/heartbeat.css" rel="stylesheet" th:href="@{/resources/css/heartbeat.css}" />        
         <script data-main="../resources/js/heartbeatConfig" 
                 th:attr="data-main=@{/resources/js/heartbeatConfig}" src="/heartbeat/resources/js/lib/require.js" 
         th:src="@{/resources/js/lib/require.js}"></script>
@@ -23,7 +24,7 @@
                 <div class="navbar-inner" data-bind="with:routes">
                     <a class="brand" href="" th:href="@{/}">Heartbeat</a>
                     <ul class="nav" data-bind="foreach: navigation">
-                        <li data-bind="css: { active:name == $parent.chosenNavId() },click: $parent.goToNav">
+                        <li data-bind="css: { active:name == $parent.currentActiveNav() },click: $parent.goToNav">
                             <a>
                                 <i data-bind="css: icon"></i>
                                 <span data-bind="text:name"> Home </span>
@@ -68,147 +69,6 @@
                 </ul>
             </div>	            
         </div>
-
-        <div th:fragment="group-view">
-        </div>
-
-
-        <div th:fragment="home-view">             
-            <div databind="with: $root.computerGroups">
-                <div class="span10">
-                    <!-- ko foreach: $root.computerGroups.groups -->
-                    <div class="span4 ui-widget-content" data-bind="attr: {id: linkId() }">
-                        <div class="widget">
-                            <div class="widget-header">
-                                <i class="icon-folder-close"> </i>
-                                <h3 data-bind="text: description"></h3>
-                                <span class="machine-count label" data-bind="text: machines().length"></span>
-                            </div>	
-                        </div>	
-                    </div>
-                    <!-- /ko -->
-                </div>
-            </div>            
-        </div>
-
-
-        <div th:fragment="machine-view">   
-            <div data-bind="with:$root.comp.computer" class="span3 text-center">   
-                <div class="row-fluid container">
-                    <span class="icon-stack icon-4x">
-                        <i class="icon-desktop icon-stack-base"> </i>
-                        <i data-bind="css: currentOS()"> </i>                
-                    </span>                
-                </div>
-
-                <div class="row-fluid container">
-                    <div class="btn-group">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                            Cloning
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li> <a href="" data-bind="click: $root.comp.preparePullClone"> <i class="icon-li icon-arrow-down"></i> Pull Down Image </a> </li>
-                            <li> <a href="#" data-bind="" > <i class="icon-li icon-arrow-up"></i> Push Up Image </a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="btn-group">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                            Power
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li> <a href="" data-bind="click:"> <i class="icon-li icon-repeat"></i> Reboot </a> </li>
-                            <li> <a href="#" data-bind="" > <i class="icon-li icon-off"></i> Shutdown </a></li>
-                        </ul>
-                    </div>
-                    
-                </div>
-
-            </div>       
-
-            <div data-bind="with:$root.comp.computer" class="span10"> 
-                <table class="table table-striped">
-                    <tbody>
-                        <tr>
-                            <td> <strong> Computer Name: </strong>  </td>
-                            <td data-bind ="text: name"> </td> 
-                        </tr>
-                        <tr>
-                            <td> <strong> UID: </strong> </td>
-                            <td data-bind="text: uid"> </td>
-                        </tr>
-                        <tr>
-                            <td> <strong> Serial Number: </strong> </td>
-                            <td data-bind="text:serialNumber"> </td>
-                        </tr>
-                        <tr>
-                            <td> <strong> Mac Address(es): </strong> </td>
-                            <td data-bind="text:mac"> </td>                            
-                        </tr>
-                        <tr>
-                            <td> <strong> IP Address: </strong> </td>
-                            <td data-bind="text:ipAddress"> </td>
-                        </tr>
-                        <tr>
-                            <td> <strong> OS: </strong> </td>
-                            <td data-bind="text:os"></td>
-                        </tr>
-                        <tr>
-                            <td> <strong> OS Version: </strong> </td>
-                            <td data-bind="text:osVersion"> </td>
-                        </tr>
-                        <tr>
-                            <td> <strong> Manufacturer: </strong> </td>
-                            <td data-bind="text: manufacturer"> </td>
-                        </tr>
-                        <tr>
-                            <td> <strong> Model: </strong> </td>
-                            <td data-bind="text: model"> </td>
-                        </tr>
-                        <tr>
-                            <td> <strong> Last Seen: </strong> </td>
-                            <td data-bind="text: lastSeen"> </td>
-                        </tr>
-                        <tr>
-                            <td> <strong> Current User: </strong> </td>
-                            <td data-bind="text: currentUser"> </td>
-                        </tr>                        
-                    </tbody>                                        
-                </table>   
-
-                <!-- Modal -->
-                <div id="compModal" class="modal hide fade" tabindex="-1" 
-                     role="dialog" aria-labelledby="compModalLabel" aria-hidden="true" data-bind="with: $root.imageModel">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="compModalLabel">Cloning Options</h3>
-                    </div>
-                    <div class="modal-body">
-                        <div class="alert">                        
-                            <strong>Warning!</strong> This will reboot the machine even if a user is currently logged in. Please proceed with caution
-                        </div>
-                        <form class="form-horizontal">
-                            <div class="control-group">
-                                <label class="control-label" for="imageChoice">Image</label>
-                                <div class="controls">
-                                    <select data-bind="options:images,value: selectedImage, optionsCaption: 'Choose Image...'">                                        
-                                    </select>                                    
-                                </div>
-                            </div>                                                       
-                        </form> 
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                        <button class="btn btn-primary" data-bind="css: activeCss(),click:$root.startClone">Clone Me!</button>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
 
     </body>
 </html>

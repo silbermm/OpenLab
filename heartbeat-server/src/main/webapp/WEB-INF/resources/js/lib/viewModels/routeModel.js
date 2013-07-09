@@ -12,10 +12,10 @@ define(["knockout", "jquery", "models/navigation", "models/breadcrumb"], functio
         
         self.removeFromBreadcrumbTrail = function(name){
             $.each(self.currentBreadcrumbs(), function(item){
-                if(item.name == name){
+                if(item.name === name){
                     self.currentBreadcrumbs.remove(item);                    
                 }
-            })
+            });
             self.currentBreadcrumbs.remove(name);
         };
         
@@ -25,16 +25,22 @@ define(["knockout", "jquery", "models/navigation", "models/breadcrumb"], functio
         
         self.chosenNavId = ko.observable("Inventory");                           
         
+        self.currentActiveNav = ko.observable("Inventory");
+        
         self.isInventory = ko.computed(function() {
-            return (self.chosenNavId() == "Inventory");
+            return (self.chosenNavId() === "Inventory");
         }, this);
         
         self.isMachine = ko.computed(function() {
-           return (self.chosenNavId() == "Machine"); 
+           return (self.chosenNavId() === "Machine"); 
+        });
+        
+        self.isGroup = ko.computed(function() {
+           return (self.chosenNavId() === "Group"); 
         });
         
         self.isSettings = ko.computed(function() {
-            return (self.chosenNavId() == "Settings");
+            return (self.chosenNavId() === "Settings");
         }, this);
         
         self.currentBreadcrumbs = ko.observableArray();        

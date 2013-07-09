@@ -228,3 +228,15 @@ WIDGET
     left:3px;    
 }
 
+
+
+/* fix some jquery-ui oddities */
+.ui-widget-content {
+    background: none;
+    border: none;
+}
+/*******************************/
+
+#machine-list li {
+    z-index: 100;
+}

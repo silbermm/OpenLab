@@ -10,8 +10,12 @@ define(["knockout", "models/machine"], function(ko, Machine) {
         var mappedMachines = $.map(data.machines, function(m) {
             return new Machine(m);
         });
+        
         self.machines(mappedMachines);
         self.expanded = ko.observable(false);
+        
+        self.hover = ko.observable(false);
+        
         self.currentClass = ko.computed(function() {
             if (self.expanded()) {
                 return "icon-caret-down";
@@ -25,7 +29,14 @@ define(["knockout", "models/machine"], function(ko, Machine) {
             }
         });
         self.linkId = ko.computed(function() {
-            return "groupId-" + self.groupId;
+            return "groupId-" + self.groupId();
+        });
+        
+        self.folderIcon = ko.computed(function() {
+            if(self.hover()){
+                return "icon-folder-open";
+            }
+            return "icon-folder-close";
         });
     };
 

@@ -3,6 +3,8 @@ package edu.uc.labs.heartbeat.web;
 
 
 import edu.uc.labs.heartbeat.domain.ClientMachine;
+import edu.uc.labs.heartbeat.exceptions.GenericDataException;
+import edu.uc.labs.heartbeat.models.Failure;
 import edu.uc.labs.heartbeat.models.Machine;
 import edu.uc.labs.heartbeat.models.MachineGroup;
 import edu.uc.labs.heartbeat.service.HeartbeatService;
@@ -67,10 +69,23 @@ public class HeartbeatController {
     public void acceptUuid(@PathVariable String uuid){
         heartbeatService.updateMachineRecord(uuid);
     }
+    
+    @RequestMapping(value="move/machine/{uuid}/to/{groupId}", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public void changeMachineGroup(@PathVariable String uuid, @PathVariable long groupId){
+        heartbeatService.moveMachine(uuid, groupId);
+        log.info("Moved machine " + uuid + " to " + groupId);
+    }
 
     @RequestMapping(value="", method = RequestMethod.GET)
     public String homePage(Model model){
         return "index";
+    }
+    
+    @ExceptionHandler(GenericDataException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public @ResponseBody Failure handleGenericDataException(GenericDataException e){
+        return new Failure(e.getMessage());
     }
    
     @Autowired

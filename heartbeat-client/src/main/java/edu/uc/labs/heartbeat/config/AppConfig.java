@@ -44,7 +44,7 @@ public class AppConfig implements SchedulingConfigurer {
     public Config config() {
         return ConfigFactory.load().withFallback(ConfigFactory.systemProperties());
     }
-
+        
     @Bean
     public ResourceBundleMessageSource resourceBundle() {
         ResourceBundleMessageSource resource = new ResourceBundleMessageSource();
