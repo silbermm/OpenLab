@@ -47,7 +47,7 @@ define(["knockout", "models/machine", "models/machineGroup", "jquery", "jquery.b
                         },
                     });
                     $.each(g.machines(), function(i, m) {
-                        self.makeCompDraggable( m.sidebarId());
+                        self.makeCompDraggable( "sidebar-comp-" + m.uid() );
                     });
                 });
             });
@@ -72,7 +72,7 @@ define(["knockout", "models/machine", "models/machineGroup", "jquery", "jquery.b
                 }
                 ;
                 $.each(oldGroup.machines(), function(i, m) {
-                    if (m && m.sidebarId() === mid) {
+                    if (m && "sidebar-comp-" + m.uid() === mid) {
                         $machine = m;
                         $oldGroup = oldGroup;
                     }
@@ -86,8 +86,8 @@ define(["knockout", "models/machine", "models/machineGroup", "jquery", "jquery.b
                 $oldGroup.machines.remove($machine);
                 $newGroup.machines.push($machine);
                 $newGroup.expanded(true);
-                $("#" + $machine.sidebarId()).effect("highlight", {}, 500);
-                self.makeCompDraggable( $machine.sidebarId());                                
+                $("#sidebar-comp-" + $machine.uid()).effect("highlight", {}, 500);
+                self.makeCompDraggable( "sidebar-comp-" + $machine.uid());                                
             }).error(function(jqXHR){
                 console.log(jqXHR.responseText.message);
             });

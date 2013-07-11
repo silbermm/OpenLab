@@ -12,18 +12,33 @@ define(["knockout"], function(ko) {
         self.manufacturer = ko.observable(data.manufacturer);
         self.model = ko.observable(data.model);
         self.lastSeen = ko.observable(data.lastSeen);
-        self.partitions = ko.observableArray();
+        self.facility = ko.observable();
+        self.partition1 = ko.observable();
+        self.partition2 = ko.observable();
+        self.partition3 = ko.observable();
+        self.partition4 = ko.observable();
         
+        if (data.partition1) {
+            self.partition1(data.partition1);
+        }
+        if (data.partition2) {
+            self.partition2(data.partition2);
+        }
+        if (data.partition3) {
+            self.partition3(data.partition3);
+        }
+        if (data.partition4) {
+            self.partition4(data.partition4);
+        }        
+        if(data.facility){
+            self.facility(data.facility);
+        }
         if (data.group) {
             self.group = ko.observable(data.group.groupId);
             self.groupName = ko.observable(data.group.name);
         }
         self.currentUser = ko.observable(data.currentUser);
-
-        self.sidebarId = ko.computed(function() {
-            return "sidebar-comp-" + self.uid();
-        });
-
+       
         self.clonePullId = ko.computed(function() {
             return "clone-pull-" + self.uid();
         });
@@ -49,11 +64,11 @@ define(["knockout"], function(ko) {
         self.machineLinkId = ko.computed(function() {
             return "machine-link-" + self.uid();
         });
-        
+
         self.showComputer = function() {
             location.hash = "machine/" + self.uid();
         };
-        
+
         self.currentOS = function() {
             // return the correct icon for the current os
             if (/^m/i.test(self.os())) {

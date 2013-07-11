@@ -23,6 +23,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/")
 public class HeartbeatController {
+        
 
     final static Logger log = LoggerFactory.getLogger(HeartbeatController.class);
 
@@ -79,7 +80,7 @@ public class HeartbeatController {
 
     @RequestMapping(value="", method = RequestMethod.GET)
     public String homePage(Model model){
-        return "index";
+        return "html/index";
     }
     
     @ExceptionHandler(GenericDataException.class)

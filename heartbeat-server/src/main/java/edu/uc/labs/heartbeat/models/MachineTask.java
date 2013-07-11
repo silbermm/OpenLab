@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "labs_currentTasks")
-public class WebTask {
+public class MachineTask {
     
     private Long id;
     private String name;

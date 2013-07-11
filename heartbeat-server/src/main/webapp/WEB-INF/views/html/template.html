@@ -53,7 +53,7 @@
                         </a> 	
                     </li>
                     <ul class="nav nav-list" id="machine-list" data-bind="foreach: machines,css: hiddenClass()">
-                        <li class='ui-widget-content' data-bind="attr: {id: sidebarId()}">                                
+                        <li class='ui-widget-content' data-bind="attr: {id: $root.comp.sidebarId($data)}">                                
                             <a href="#" data-bind="attr:{id: machineLinkId()}" >
                                 <i class="icon-circle" data-bind="css: isLoggedIn()"> </i>
                                 <span data-bind="text:name,click:showComputer"> </span>                                                                             

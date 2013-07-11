@@ -9,12 +9,12 @@ import edu.uc.labs.heartbeat.dao.MachineGroupDao;
 import edu.uc.labs.heartbeat.dao.MachineGroupDaoImpl;
 import edu.uc.labs.heartbeat.dao.RemoteImagingDao;
 import edu.uc.labs.heartbeat.dao.RemoteImagingDaoImpl;
-import edu.uc.labs.heartbeat.dao.WebTaskDao;
-import edu.uc.labs.heartbeat.dao.WebTaskDaoImpl;
+import edu.uc.labs.heartbeat.dao.MachineTaskDao;
+import edu.uc.labs.heartbeat.dao.MachineTaskDaoImpl;
 import edu.uc.labs.heartbeat.service.ClonezillaService;
 import edu.uc.labs.heartbeat.service.HeartbeatService;
 import edu.uc.labs.heartbeat.service.RabbitService;
-import edu.uc.labs.heartbeat.service.WebTaskService;
+import edu.uc.labs.heartbeat.service.MachineTaskService;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,8 +78,8 @@ public class WebappConfig {
     }
     
     @Bean
-    public WebTaskDao webTaskDao(){
-        WebTaskDao task = new WebTaskDaoImpl(sessionFactory());
+    public MachineTaskDao webTaskDao(){
+        MachineTaskDao task = new MachineTaskDaoImpl(sessionFactory());
         return task;
     }
 
@@ -103,8 +103,8 @@ public class WebappConfig {
     }
     
     @Bean
-    public WebTaskService webTaskService(){
-        return new WebTaskService();
+    public MachineTaskService webTaskService(){
+        return new MachineTaskService();
     }
 
     private Properties getHibernateProperties(){

@@ -18,6 +18,8 @@ define(["knockout", "jquery", "jquery.bootstrap"], function(ko, $) {
                   return image;
               });              
               self.images(mappedImages);
+          }).fail(function(jqXHR){
+             console.log("Unable to display images... THERE ARE NONE!") 
           });
         };  
                 

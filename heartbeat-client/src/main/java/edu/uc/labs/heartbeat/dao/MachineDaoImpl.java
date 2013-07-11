@@ -43,6 +43,7 @@ public class MachineDaoImpl implements MachineDao {
     }
 
     public ClientMachine getMachineInfo() {
+        log.debug("Attempting to get machine info...");
         ClientMachine m = new ClientMachine();
         m.setOs(System.getProperty("os.name"));
         m.setOsVersion(System.getProperty("os.version"));
@@ -78,7 +79,6 @@ public class MachineDaoImpl implements MachineDao {
         File savedInfo = new File(HeartbeatPropertiesLoader.getFilename(config));
         try {
             Properties props = new Properties();
-            //props.load(new FileInputStream(savedInfo));
             props.setProperty("uuid", m.getUuid());
             props.setProperty("serialnumber", m.getSerialNumber());
             props.setProperty("macaddresses", m.getMac());
@@ -137,29 +137,36 @@ public class MachineDaoImpl implements MachineDao {
         }
     }
 
-    private void getPartitions(ClientMachine m) {        
-        if (config.getString("partition.file") != null) {
-            File f = new File(config.getString("partition.file"));
-            if (f.exists()) {
-                Config p = ConfigFactory.parseFile(f);
-                //Object c = p.getObject("parts");
-                for (int i = 1; i < 5; i++) {
-                    if (p.hasPath("parts." + i)) {
-                        if(i==1) { m.setPartition1(p.getString("parts.1")); }
-                        if(i==2) { m.setPartition2(p.getString("parts.2")); }
-                        if(i==3) { m.setPartition3(p.getString("parts.3")); }
-                        if(i==4) { m.setPartition4(p.getString("parts.4")); }                        
+    private void getPartitions(ClientMachine m) {
+        if (config.hasPath("partition")) {
+            if (config.hasPath("partition.file")) {
+                File f = new File(config.getString("partition.file"));
+                if (f.exists()) {
+                    Config p = ConfigFactory.parseFile(f);
+                    //Object c = p.getObject("parts");
+                    for (int i = 1; i < 5; i++) {
+                        if (p.hasPath("parts." + i)) {
+                            if (i == 1) {
+                                m.setPartition1(p.getString("parts.1"));
+                            }
+                            if (i == 2) {
+                                m.setPartition2(p.getString("parts.2"));
+                            }
+                            if (i == 3) {
+                                m.setPartition3(p.getString("parts.3"));
+                            }
+                            if (i == 4) {
+                                m.setPartition4(p.getString("parts.4"));
+                            }
+                        }
                     }
                 }
             }
-        }        
-    }
-    
-    private String getFacility(){
-        if(config.hasPath("FACILITY")){
-            return config.getString("FACILITY");
         }
-        return null;
+    }
+
+    private String getFacility() {                
+        return System.getenv("facility");                            
     }
 
     /**
