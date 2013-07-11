@@ -16,13 +16,8 @@ define(["knockout", "jquery",
         self.comp = new singleMachineModel();
         self.taskModel = new taskViewModel();
         self.pageTitle = ko.observable("Page Title");
-
-
-
+                
         self.startClone = function() {
-            //var t = new Task(null, "Clone Task", "Cloning " + self.comp.computer().name(), "Starting", 0);            
-            //self.taskModel.createTask(t);
-
             var imageTask = new remoteImageTask(self.comp.computer().uid(),
                     self.comp.computer().serialNumber(),
                     self.comp.computer().mac(),
@@ -38,17 +33,13 @@ define(["knockout", "jquery",
                 contentType: "application/json",
                 dataType: "json",
             }).done(function(data) {
-                t.status("In Progress");
+                
             }).fail(function(jqXHR, textStatus, exObj) {
-                var msg = jQuery.parseJSON(jqXHR.responseText);
-                t.status("Failed: " + msg.message);
-                t.currentPercentage(100);
+                
             }).always(function(data) {
 
             });
-        };
-
-     
+        };     
     };
     return masterViewModel;
 });

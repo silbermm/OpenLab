@@ -2,8 +2,8 @@ package edu.uc.labs.heartbeat.web;
 
 import edu.uc.labs.heartbeat.exceptions.GenericDataException;
 import edu.uc.labs.heartbeat.models.Failure;
-import edu.uc.labs.heartbeat.models.WebTask;
-import edu.uc.labs.heartbeat.service.WebTaskService;
+import edu.uc.labs.heartbeat.models.MachineTask;
+import edu.uc.labs.heartbeat.service.MachineTaskService;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,22 +25,22 @@ public class TaskController {
     
 
     @RequestMapping(method = RequestMethod.POST, value = "create")
-    public void createWebTask(@RequestBody WebTask task){
+    public void createWebTask(@RequestBody MachineTask task){
         webTaskService.create(task);
     }
     
     @RequestMapping(method = RequestMethod.PUT, value = "update")
-    public void updateWebTask(@RequestBody WebTask task){
+    public void updateWebTask(@RequestBody MachineTask task){
         webTaskService.update(task);
     }
     
     @RequestMapping(method = RequestMethod.GET, value = "show/all")
-    public @ResponseBody List<WebTask> getAll(){
+    public @ResponseBody List<MachineTask> getAll(){
         return webTaskService.getAll();
     }
     
     @RequestMapping(method = RequestMethod.DELETE, value = "delete")
-    public void deleteWebTask(@RequestBody WebTask task){
+    public void deleteWebTask(@RequestBody MachineTask task){
         webTaskService.delete(task);
     }
     
@@ -52,5 +52,5 @@ public class TaskController {
     
     
     
-    @Autowired WebTaskService webTaskService;
+    @Autowired MachineTaskService webTaskService;
 }

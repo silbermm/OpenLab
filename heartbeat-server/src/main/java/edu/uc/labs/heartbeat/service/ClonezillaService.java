@@ -69,12 +69,28 @@ public class ClonezillaService {
      }
      }
      */
-    
-    public boolean setupRemoteImaging(RemoteImageTask task){
-        try { 
+    public RemoteImageTask isTaskPending(String serial, String mac, String ip, int minutes) {
+        try {
+            remoteImagingDao.deleteTasksByMinutes(minutes);
+            RemoteImageTask rt = remoteImagingDao.getTaskBySerialAndMac(serial, mac);
+            if (rt == null) {
+                return null;
+            }
+            return rt;
+        } catch (RuntimeException e) {
+            log.error(e.getMessage());
+            throw new ImageTaskException(e.getMessage());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new ImageTaskException(e.getMessage());
+        }
+    }
+
+    public boolean setupRemoteImaging(RemoteImageTask task) {
+        try {
             log.info("Attempting to create the task in the database: ");
             remoteImagingDao.create(task);
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             log.error(e.getMessage());
             throw new GenericDataException(e.getMessage());
         } catch (Exception e) {
@@ -83,32 +99,26 @@ public class ClonezillaService {
         }
         return true;
     }
-    
+
     public String[] getImages() {
         log.info("Trying to get images from " + config.getString("clonezilla.imageHome"));
         String location = null;
         try {
             location = config.getString("clonezilla.imageHome");
             return imageDao.getImages(location);
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             log.error(e.getMessage());
             throw new ImageListingException(e.getMessage());
-        } catch (Exception e){
+        } catch (Exception e) {
             log.error(e.getMessage());
             throw new ImageListingException(e.getMessage());
         }
     }
-
-    /*public boolean startRestoreSession(CloneJson cloneData) throws SessionException {
-        drblDao.startSession(cloneData);
-        return true;
-    }*/
-    //@Autowired private SettingsDao settingsDao;
-    //@Autowired private MulticastDao multicastDao;
-    @Autowired private ImageDao imageDao;   
-    @Autowired private Config config;
-    @Autowired private RemoteImagingDao remoteImagingDao;
-    //@Autowired private DrblDao drblDao;
-    
+    @Autowired
+    private ImageDao imageDao;
+    @Autowired
+    private Config config;
+    @Autowired
+    private RemoteImagingDao remoteImagingDao;
     final private Logger log = LoggerFactory.getLogger(ClonezillaService.class);
 }

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" id="topHtml">
-    <head th:include="template::head"></head>
+    <head th:include="html/template::head"></head>
     <body>
-        <div th:include="template::navbar"></div>
+        <div th:include="html/template::navbar"></div>
         <ul class="breadcrumb" data-bind="with: routes">
             <!-- ko foreach : currentBreadcrumbs -->        
             <li>
@@ -11,8 +11,8 @@
             <!-- /ko -->
         </ul>
 
-        <div th:include="template::group-sidebar" data-bind="if: $root.routes.isInventory"> </div>
-        
+        <div th:include="html/template::group-sidebar" data-bind="if: $root.routes.isInventory"> </div>
+
         <!-- The Overall Groups view on the Inventory page -->
         <div data-bind="if: $root.routes.isInventory">
             <div data-bind="with: $root.computerGroups">
@@ -65,7 +65,7 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li> <a href="#" data-bind=""> <i class="icon-li icon-repeat"></i> Reboot </a> </li>
+                            <li> <a href="" data-bind="click: $root.comp.prepareReboot"> <i class="icon-li icon-repeat"></i> Reboot </a> </li>
                             <li> <a href="#" data-bind="" > <i class="icon-li icon-off"></i> Shutdown </a></li>
                         </ul>
                     </div>
@@ -120,7 +120,10 @@
                         </tr>                        
                     </tbody>                                        
                 </table>   
+
+
                 <!-- Modals -->
+
                 <div id="compModal" class="modal hide fade" tabindex="-1" 
                      role="dialog" aria-labelledby="compModalLabel" aria-hidden="true" data-bind="with: $root.imageModel">
                     <div class="modal-header">
@@ -129,7 +132,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="alert">                        
-                            <strong>Warning!</strong> This will reboot the machine even if a user is currently logged in. Please proceed with caution
+                            <strong>Warning!</strong> This will reboot the machine (even if a user is currently logged in) and attempt to clone it. Please proceed with caution
                         </div>
                         <form class="form-horizontal">
                             <div class="control-group">
@@ -146,7 +149,61 @@
                         <button class="btn btn-primary" data-bind="css: activeCss(),click:$root.startClone">Clone Me!</button>
                     </div>
                 </div>
+
+                <!-- reboot modal -->
+                <div id="rebootChoiceModal" class="modal hide fade" tabindex="-1" 
+                     role="dialog" aria-labelledby="rebootModalLabel" aria-hidden="true" data-bind="with: $root.comp">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="rebootModalLabel">Reboot Options</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert">                        
+                            <strong>Warning!</strong> This will reboot the machine even if a user is currently logged in. Please proceed with caution
+                        </div>
+                        <form class="form-horizontal">
+                            <div class="control-group">
+                                <label class="control-label" for="imageChoice">Image</label>
+                                <div class="controls">
+                                    <select data-bind="options:osOptions,value:rebootOs,optionsText:'name',optionsValue:'name',optionsCaption:'Choose an OS...'">                                        
+                                    </select>                                    
+                                </div>
+                            </div>                                                       
+                        </form> 
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <button class="btn btn-primary" data-bind="css: activeCss(),click:reboot">Reboot!</button>
+                    </div>
+                </div>
+                <!-- /reboot modal -->
+
+                <!-- reboot (no options) modal -->
+                <div id="rebootNoChoiceModal" class="modal hide fade" tabindex="-1" 
+                     role="dialog" aria-labelledby="rebootModalLabel" aria-hidden="true" data-bind="with: $root.comp">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="rebootModalLabel">Reboot Options</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert">                        
+                            <strong>Warning!</strong> This will reboot the machine even if a user is currently logged in. Please proceed with caution
+                        </div>                         
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <button class="btn btn-primary" data-bind="click:reboot">Reboot!</button>
+                    </div>
+                </div>
+                <!-- /reboot (no options) modal -->
+
+
+                <!-- /Modals -->
+
             </div>
+
+
+
         </div>
         <!-- End Machine View -->
 

@@ -37,9 +37,10 @@ public class RabbitService {
 
     public CommandResult startRemoteClone(Machine m) {
         Command cmd = new Command();
-        cmd.setCmd("/Volumes/zilla/setBoot.pl");
+        
+        cmd.setCmd("setBoot.pl");
         cmd.addArg("-r");
-        cmd.addArg("Leg");
+        cmd.addArg("Win");
         cmd.addArg("1");
         CommandResult response = (CommandResult) heartbeatTemplate.convertSendAndReceive("machine.cmd", m.getUid() + "-cmd", cmd, new MessagePostProcessor() {
             @Override
@@ -53,9 +54,19 @@ public class RabbitService {
 
     public CommandResult reboot(Machine m, String os) {
         Command cmd = new Command();
-        
-        
-        
+        if(m.getOs().startsWith("Win")){
+            cmd.setCmd("cmd.exe");
+            cmd.addArg("/c");
+            cmd.addArg("setBoot.pl");
+            cmd.addArg("-r");
+            cmd.addArg(os);
+            cmd.addArg("1");            
+        } else {
+            cmd.setCmd("setBoot.pl");
+            cmd.addArg("-r");
+            cmd.addArg(os);
+            cmd.addArg("1");
+        }                
         CommandResult response = (CommandResult) heartbeatTemplate.convertSendAndReceive("machine.cmd", m.getUid() + "-cmd", cmd, new MessagePostProcessor() {
             @Override
             public Message postProcessMessage(Message msg) throws AmqpException {
@@ -65,6 +76,8 @@ public class RabbitService {
         });
         return response;
     }
+    
+    
     private static final Logger log = Logger.getLogger(RabbitService.class);
     @Autowired
     private AmqpTemplate heartbeatTemplate;

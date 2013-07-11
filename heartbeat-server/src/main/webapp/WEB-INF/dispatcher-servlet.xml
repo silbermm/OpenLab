@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:aop="http://www.springframework.org/schema/aop" 
-	xmlns:tx="http://www.springframework.org/schema/tx"
-  xmlns:context="http://www.springframework.org/schema/context"
-  xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc 
 											http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd 
 											http://www.springframework.org/schema/beans 
 											http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
@@ -18,15 +18,16 @@
        								http://www.springframework.org/schema/context/spring-context-3.2.xsd">
     <context:component-scan base-package="edu.uc.labs.heartbeat.web" />
     <mvc:annotation-driven>
-		<mvc:message-converters>
+        <mvc:message-converters>
             <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                 <property name="objectMapper">
                     <bean class="edu.uc.labs.heartbeat.utils.HibernateAwareObjectMapper" />
                 </property>
             </bean>
-		</mvc:message-converters>
+        </mvc:message-converters>
     </mvc:annotation-driven>
-    <mvc:view-controller path="/" view-name="index" />
+    
+    <mvc:view-controller path="/ipxe" view-name="ipxe.jsp" />
 
     <mvc:interceptors>
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
@@ -43,20 +44,29 @@
         <property name="cacheSeconds" value="0" />
     </bean>
 
-		<bean id="templateResolver" 
-					class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+    <bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
         <property name="prefix" value="/WEB-INF/views/" />
         <property name="suffix" value=".html" />
         <property name="templateMode" value="HTML5" />
+        <property name="order" value="1" />
     </bean>
 
-    <bean id="templateEngine"
-          class="org.thymeleaf.spring3.SpringTemplateEngine">
-        <property name="templateResolver" ref="templateResolver" />
+    <bean id="templateEngine" class="org.thymeleaf.spring3.SpringTemplateEngine">
+        <property name="templateResolver" ref="templateResolver" />       
     </bean>
     
     <bean class="org.thymeleaf.spring3.view.ThymeleafViewResolver">
         <property name="templateEngine" ref="templateEngine" />
+        <property name="viewNames" value="html/*" />
+        <property name="order" value="1" />
+    </bean>
+    
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+        <property name="viewNames" value="jsp/*" />
+        <property name="prefix" value="/WEB-INF/views/" />
+        <property name="suffix" value=".jsp" />
+        <property name="order" value="0" />
     </bean>
 
 </beans>
