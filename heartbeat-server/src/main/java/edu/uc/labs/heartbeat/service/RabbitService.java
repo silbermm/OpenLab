@@ -36,12 +36,20 @@ public class RabbitService {
     }
 
     public CommandResult startRemoteClone(Machine m) {
-        Command cmd = new Command();
-        
-        cmd.setCmd("setBoot.pl");
-        cmd.addArg("-r");
-        cmd.addArg("Win");
-        cmd.addArg("1");
+        Command cmd = new Command();  
+        if(m.getOs().startsWith("Win")){
+            cmd.setCmd("cmd.exe");
+            cmd.addArg("/c");
+            cmd.addArg("setBoot.pl");
+            cmd.addArg("-r");
+            cmd.addArg("Leg");
+            cmd.addArg("1");
+        } else {
+            cmd.setCmd("setBoot.pl");
+            cmd.addArg("-r");
+            cmd.addArg("Leg");
+            cmd.addArg("1");
+        }
         CommandResult response = (CommandResult) heartbeatTemplate.convertSendAndReceive("machine.cmd", m.getUid() + "-cmd", cmd, new MessagePostProcessor() {
             @Override
             public Message postProcessMessage(Message msg) throws AmqpException {

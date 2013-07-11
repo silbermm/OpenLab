@@ -69,20 +69,25 @@ public class ClonezillaService {
      }
      }
      */
-    public RemoteImageTask isTaskPending(String serial, String mac, String ip, int minutes) {
+    public RemoteImageTask isTaskPending(String serial, String mac, String ip) {
+        RemoteImageTask rt = null;
         try {
-            remoteImagingDao.deleteTasksByMinutes(minutes);
-            RemoteImageTask rt = remoteImagingDao.getTaskBySerialAndMac(serial, mac);
+            remoteImagingDao.expireTasksOlderThan(config.getInt("clonezilla.expireImageTask"));
+            rt = remoteImagingDao.getTaskBySerialAndMac(serial, mac);
             if (rt == null) {
                 return null;
             }
             return rt;
         } catch (RuntimeException e) {
             log.error(e.getMessage());
-            throw new ImageTaskException(e.getMessage());
+            ImageTaskException ie =  new ImageTaskException(e.getMessage());
+            ie.setRemoteImageTask(rt);
+            throw ie;
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new ImageTaskException(e.getMessage());
+            ImageTaskException ie =  new ImageTaskException(e.getMessage());
+            ie.setRemoteImageTask(rt);
+            throw ie;
         }
     }
 

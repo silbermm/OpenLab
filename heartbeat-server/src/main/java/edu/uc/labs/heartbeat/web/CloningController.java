@@ -15,22 +15,41 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class CloningController {
-    
-    @RequestMapping(value="/ipxe", method = RequestMethod.GET, produces="text/plain")
+
+    /**
+     * This method returns an ipxe script that the ipxe client will use to print
+     * the menu or automatically start the clone
+     *
+     * @param serial
+     * @param mac
+     * @param ip
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/ipxe", method = RequestMethod.GET, produces = "text/plain")
     @ResponseStatus(HttpStatus.OK)
-    public ModelAndView getIpxe(@RequestParam(value = "serial", required=false) String serial, @RequestParam(value="mac", required=false) String mac, @RequestParam(value="ip",required=false) String ip, @RequestParam(value="model",required=false) String model){                        
-        ModelAndView m = new ModelAndView("jsp/ipxe");
-        m.addObject("serial", serial);
-        m.addObject("mac", mac);
-        m.addObject("ip", ip);
-        m.addObject("model", model);
-        return m;
+    public ModelAndView getIpxe(@RequestParam(value = "serial", required = false) String serial, @RequestParam(value = "mac", required = false) String mac, @RequestParam(value = "ip", required = false) String ip, @RequestParam(value = "model", required = false) String model) {
+        RemoteImageTask rt = clonezillaService.isTaskPending(serial, mac, ip);
+        if (rt != null) {
+            // there is a pending task...
+            ModelAndView m = new ModelAndView("jsp/ipxe");
+            m.addObject("serial", serial);
+            m.addObject("mac", mac);
+            m.addObject("ip", ip);
+            m.addObject("model", model);
+            m.addObject("image", rt.getImageName());
+            return m;
+        } else {
+            ModelAndView m = new ModelAndView("jsp/ipxe-menu");
+            m.addObject("images", clonezillaService.getImages());
+            return m;
+        }
+
     }
 
     @RequestMapping(value = "/show/images", method = RequestMethod.GET)
@@ -99,6 +118,19 @@ public class CloningController {
     public @ResponseBody
     String handleImageListingException() {
         return "unable to find images";
+    }
+
+    @ExceptionHandler(ImageTaskException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public ModelAndView handleImageTaskException(ImageTaskException e) {
+        log.error("Got an error while trying to clone a machine... ");
+        if (e.getRemoteImageTask() != null) {
+            log.error("machine I was trying to clone was: " + e.getRemoteImageTask().getUuid());
+        }
+        // TODO: should we just try to reboot into an OS?
+        ModelAndView m = new ModelAndView("jsp/ipxe-menu");
+        m.addObject("images", clonezillaService.getImages());
+        return m;
     }
 
     @ExceptionHandler(IllegalStateException.class)

@@ -5,5 +5,5 @@ import edu.uc.labs.heartbeat.models.*;
 public interface RemoteImagingDao extends Dao<RemoteImageTask> {
     
     RemoteImageTask getTaskBySerialAndMac(String serial, String mac);
-    void deleteTasksByMinutes(int minutes);    
+    void expireTasksOlderThan(int minutes);    
 }
