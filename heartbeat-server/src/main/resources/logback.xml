@@ -7,8 +7,23 @@
     </layout>
   </appender>
   
-  <logger name="edu.uc.labs.heartbeat" level="DEBUG"/>
-  
+  <logger name="edu.uc.labs.heartbeat" level="ERROR"/>
+
+  <logger name="org.thymeleaf" level="ERROR" />
+
+	<logger name="org.hibernate" level="ERROR" />
+
+ 	<logger name="org.springframework">
+ 		<level value="ERROR" />
+	</logger>	 
+
+	<root level="error">
+    <appender-ref ref="STDOUT" />
+  </root>
+
+	<root level="error">
+		<appender-ref ref="STDOUT" />
+	</root>
 
   <root level="debug">
     <appender-ref ref="STDOUT" />

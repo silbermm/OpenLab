@@ -14,6 +14,7 @@
   <url>http://maven.apache.org</url>
 	<properties>
 		<spring.version>3.2.2.RELEASE</spring.version>
+		<slf4j.version>1.5.8</slf4j.version>
 	</properties>
 	<dependencies>	
 		<dependency>
@@ -158,10 +159,25 @@
 	  <groupId>javax.servlet</groupId>
 	  <artifactId>jstl</artifactId>
 	  <version>1.1.2</version>
-	 </dependency>
+	</dependency>
+	<dependency>
+		  <groupId>org.slf4j</groupId>
+		  <artifactId>slf4j-api</artifactId>
+		  <version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+		 <groupId>log4j</groupId>
+		 <artifactId>log4j</artifactId>
+		 <version>1.2.16</version>
+		</dependency>
+			<dependency>
+		    <groupId>org.slf4j</groupId>
+		    <artifactId>jcl-over-slf4j</artifactId>
+		    <version>${slf4j.version}</version>
+			</dependency>
 	</dependencies>
   <build>
-		<finalName>heartbeat-server</finalName>
+		<finalName>heartbeat</finalName>
 		<plugins>
       <!--source level should be 1.6 (which is not Maven default) for java EE 6 projects, so let's change it -->
       <plugin>
@@ -188,7 +204,7 @@
 				<configuration>
 					<url>http://labs.uc.edu:8080/manager/text</url>
 					<server>LabsTomcat</server>
-					<path>/heartbeat-server</path>
+					<path>/heartbeat</path>
 					<update>true</update>
 				</configuration>	
 				<version>2.0</version>
