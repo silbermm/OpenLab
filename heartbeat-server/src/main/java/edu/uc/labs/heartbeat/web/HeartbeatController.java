@@ -1,7 +1,5 @@
 package edu.uc.labs.heartbeat.web;
 
-
-
 import edu.uc.labs.heartbeat.domain.ClientMachine;
 import edu.uc.labs.heartbeat.exceptions.GenericDataException;
 import edu.uc.labs.heartbeat.models.Failure;
@@ -76,6 +74,12 @@ public class HeartbeatController {
     public void changeMachineGroup(@PathVariable String uuid, @PathVariable long groupId){
         heartbeatService.moveMachine(uuid, groupId);
         log.info("Moved machine " + uuid + " to " + groupId);
+    }
+    
+    @RequestMapping(value="show/default-os/for/{serialNumber}", method = RequestMethod.GET)
+    public @ResponseBody String getDefaultOs(@PathVariable String serialNumber){        
+        Machine m = heartbeatService.getMachineBySerial(serialNumber);
+        return m.getDefaultOs();
     }
 
     @RequestMapping(value="", method = RequestMethod.GET)

@@ -1,6 +1,8 @@
 package edu.uc.labs.heartbeat.config;
 
 import com.typesafe.config.Config;
+import edu.uc.labs.heartbeat.dao.AuthorityDao;
+import edu.uc.labs.heartbeat.dao.AuthorityDaoImpl;
 import edu.uc.labs.heartbeat.dao.ImageDao;
 import edu.uc.labs.heartbeat.dao.ImageDaoImpl;
 import edu.uc.labs.heartbeat.dao.MachineDao;
@@ -11,10 +13,13 @@ import edu.uc.labs.heartbeat.dao.RemoteImagingDao;
 import edu.uc.labs.heartbeat.dao.RemoteImagingDaoImpl;
 import edu.uc.labs.heartbeat.dao.MachineTaskDao;
 import edu.uc.labs.heartbeat.dao.MachineTaskDaoImpl;
+import edu.uc.labs.heartbeat.dao.WebUserDao;
+import edu.uc.labs.heartbeat.dao.WebUserDaoImpl;
 import edu.uc.labs.heartbeat.service.ClonezillaService;
 import edu.uc.labs.heartbeat.service.HeartbeatService;
 import edu.uc.labs.heartbeat.service.RabbitService;
 import edu.uc.labs.heartbeat.service.MachineTaskService;
+import edu.uc.labs.heartbeat.service.WebUserService;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,16 +34,16 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.util.Properties;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.scheduling.annotation.Async;
 
 @Configuration
 @Async
 @EnableTransactionManagement
+/*@ImportResource(value = {"/WEB-INF/spring-security.xml"})*/
 @Import(PropertyPlaceholdersConfig.class)
 public class WebappConfig {
-
     final private Logger log = LoggerFactory.getLogger(WebappConfig.class);
-
     @Bean
     public SessionFactory sessionFactory(){
         LocalSessionFactoryBuilder sf = new LocalSessionFactoryBuilder(dataSource).scanPackages("edu.uc.labs.heartbeat.models");
@@ -78,6 +83,18 @@ public class WebappConfig {
     }
     
     @Bean
+    public WebUserDao webUserDao(){
+        WebUserDao webUserDao = new WebUserDaoImpl(sessionFactory());
+        return webUserDao;
+    }
+    
+    @Bean
+    public AuthorityDao authorityDao(){
+        AuthorityDao authorityDao = new AuthorityDaoImpl(sessionFactory());
+        return authorityDao;
+    }
+    
+    @Bean
     public MachineTaskDao webTaskDao(){
         MachineTaskDao task = new MachineTaskDaoImpl(sessionFactory());
         return task;
@@ -105,6 +122,11 @@ public class WebappConfig {
     @Bean
     public MachineTaskService webTaskService(){
         return new MachineTaskService();
+    }
+    
+    @Bean(name="webUserService")
+    public WebUserService webUserService(){        
+        return new WebUserService();
     }
 
     private Properties getHibernateProperties(){

@@ -30,6 +30,7 @@ public class Machine implements Serializable {
     private String partition3;
     private String partition4;
     private String facility;
+		private String defaultOs;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -196,7 +197,16 @@ public class Machine implements Serializable {
         this.facility = facility;
     }
     
-    
+		@Column(nullable = true)	
+		public String getDefaultOs(){
+			return this.defaultOs;
+		}
+
+		public void setDefaultOs(String defaultOs){
+			this.defaultOs = defaultOs;
+		}
+
+
     @Override
     public boolean equals(Object other) {
         if (this == other) {

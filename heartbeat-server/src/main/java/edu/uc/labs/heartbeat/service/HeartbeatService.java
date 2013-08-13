@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +36,16 @@ public class HeartbeatService {
 
     public Machine getMachineById(Long id) {
         return machineDao.get(id);
+    }
+
+    public Machine getMachineBySerial(String serial) {
+        try {
+            return machineDao.findBySerialNumber(serial);
+        } catch (RuntimeException ex) {
+            throw new GenericDataException(ex.getMessage());
+        } catch (Exception ex){
+            throw new GenericDataException(ex.getMessage());
+        }        
     }
 
     public List<MachineGroup> getAllMachineGroups() {
