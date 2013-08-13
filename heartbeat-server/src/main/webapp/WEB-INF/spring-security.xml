@@ -1,0 +1,59 @@
+<beans:beans
+    xmlns:beans="http://www.springframework.org/schema/beans" 
+    xmlns:sec="http://www.springframework.org/schema/security"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:http="http://www.springframework.org/schema/security"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd           
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+           http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+            
+    <beans:bean name="webAppConfig" class="edu.uc.labs.heartbeat.config.WebappConfig" />
+    
+    <sec:http pattern="/css/**" security="none" />
+    
+
+    <sec:http entry-point-ref="samlEntryPoint" access-decision-manager-ref="affirmativeBased">        
+        <sec:custom-filter ref="preauthenticationFilter" position="PRE_AUTH_FILTER" />
+        <sec:logout invalidate-session="true" logout-success-url="https://labs.uc.edu/Shibboleth.sso/Logout" logout-url="/logout" />
+        <sec:intercept-url pattern="https://labs.uc.edu/Shibboleth.sso/Login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <sec:intercept-url pattern="/admin" access="ROLE_ADMIN" />
+        <sec:intercept-url pattern="/**" access="ROLE_USER" />        
+    </sec:http>
+
+
+    <sec:authentication-manager alias="authenticationManager">
+        <sec:authentication-provider ref="samlAuthenticationProvider" />
+    </sec:authentication-manager>
+
+    <beans:bean id="samlEntryPoint" class="edu.uc.labs.heartbeat.security.SamlEntryPoint">
+        <beans:property name="domainLogin" value="https://labs.uc.edu/Shibboleth.sso/Login" />                    
+    </beans:bean>
+    
+    <beans:bean id="preauthenticationFilter" class="org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter">
+        <beans:property name="principalRequestHeader" value="cn" />
+        <beans:property name="authenticationManager" ref="authenticationManager" />        
+    </beans:bean>
+
+    <beans:bean id="samlAuthenticationProvider" class="org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider">
+        <beans:property name="preAuthenticatedUserDetailsService" ref="samlUserDetailsService" />
+    </beans:bean>
+    
+    <beans:bean id="samlUserDetailsService" class="edu.uc.labs.heartbeat.security.SamlUserDetailsService">
+        <beans:property name="webUserService" ref="webUserService" />
+    </beans:bean>
+        
+    <sec:global-method-security pre-post-annotations="enabled" />
+
+    <beans:bean class="org.springframework.security.access.vote.AffirmativeBased" id="affirmativeBased">
+        <beans:property name="decisionVoters">
+            <beans:list>
+                <beans:ref bean="roleVoter"/>
+                <beans:ref bean="authenticatedVoter"/>
+            </beans:list>
+        </beans:property>
+    </beans:bean>
+
+    <beans:bean class=" org.springframework.security.access.vote.RoleVoter" id="roleVoter"/>
+    <beans:bean class="org.springframework.security.access.vote.AuthenticatedVoter" id="authenticatedVoter"/>    
+</beans:beans>
