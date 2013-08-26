@@ -15,6 +15,7 @@ public class Machine implements Serializable {
     private long id;
     private String uid;
     private String name;
+    private String macName;
     private String serialNumber;
     private String mac;
     private String ipAddress;
@@ -30,7 +31,7 @@ public class Machine implements Serializable {
     private String partition3;
     private String partition4;
     private String facility;
-		private String defaultOs;
+    private String defaultOs;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,7 +52,7 @@ public class Machine implements Serializable {
         this.uid = uid;
     }
 
-    @Column(name = "Machine")
+    @Column(name = "Machine", nullable=true)
     public String getName() {
         return name;
     }
@@ -156,7 +157,7 @@ public class Machine implements Serializable {
     public String getPartition1() {
         return partition1;
     }
-    
+
     public void setPartition1(String partition1) {
         this.partition1 = partition1;
     }
@@ -196,17 +197,25 @@ public class Machine implements Serializable {
     public void setFacility(String facility) {
         this.facility = facility;
     }
+
+    @Column(nullable = true)
+    public String getDefaultOs() {
+        return this.defaultOs;
+    }
+
+    public void setDefaultOs(String defaultOs) {
+        this.defaultOs = defaultOs;
+    }
+
+    @Column(name="OSXName", nullable = true)
+    public String getMacName() {
+        return macName;
+    }
+
+    public void setMacName(String macName) {
+        this.macName = macName;
+    }
     
-		@Column(nullable = true)	
-		public String getDefaultOs(){
-			return this.defaultOs;
-		}
-
-		public void setDefaultOs(String defaultOs){
-			this.defaultOs = defaultOs;
-		}
-
-
     @Override
     public boolean equals(Object other) {
         if (this == other) {
@@ -254,5 +263,4 @@ public class Machine implements Serializable {
         sb.append("\tFacility").append(this.getFacility()).append("\n");
         return sb.toString();
     }
-
 }

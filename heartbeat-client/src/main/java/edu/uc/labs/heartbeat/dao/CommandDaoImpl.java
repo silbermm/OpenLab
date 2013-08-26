@@ -16,7 +16,7 @@ public class CommandDaoImpl implements CommandDao {
     public CommandDaoImpl(Config config) {
         this.config = config;
     }
-
+    
     @Override
     public CommandResult run(Command c) {
 
@@ -25,9 +25,12 @@ public class CommandDaoImpl implements CommandDao {
         try {
             File f = new File(config.getString("heartbeat.scriptsdir") + "/" + cmd);
             if (f.exists()) {
+                log.debug("The command file " + f.getAbsolutePath() + " exists...");
                 // First try to execute a script/cmd in the scripts directory
                 cmd = config.getString("heartbeat.scriptsdir") + "/" + c.getCmd();
+                log.debug("Going to run " + f.getAbsolutePath());
             }
+            
             ByteArrayOutputStream stdout = new ByteArrayOutputStream();
             PumpStreamHandler psh = new PumpStreamHandler(stdout);
             CommandLine cmdLine = CommandLine.parse(cmd);
@@ -41,6 +44,7 @@ public class CommandDaoImpl implements CommandDao {
             cmdResult.setExitCode(returnval);
             return cmdResult;
         } catch (ExecuteException e) {
+            log.error("Unable to run the command! " + e.getMessage());
             cmdResult.setMessage(e.getMessage());
             cmdResult.setExitCode(-1);
             return cmdResult;

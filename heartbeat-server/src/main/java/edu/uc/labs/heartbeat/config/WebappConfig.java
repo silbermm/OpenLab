@@ -19,7 +19,7 @@ import edu.uc.labs.heartbeat.service.ClonezillaService;
 import edu.uc.labs.heartbeat.service.HeartbeatService;
 import edu.uc.labs.heartbeat.service.RabbitService;
 import edu.uc.labs.heartbeat.service.MachineTaskService;
-import edu.uc.labs.heartbeat.service.WebUserService;
+import edu.uc.labs.heartbeat.service.AccountService;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ import org.springframework.scheduling.annotation.Async;
 @Configuration
 @Async
 @EnableTransactionManagement
-/*@ImportResource(value = {"/WEB-INF/spring-security.xml"})*/
+@ImportResource(value = {"/WEB-INF/spring-security.xml"})
 @Import(PropertyPlaceholdersConfig.class)
 public class WebappConfig {
     final private Logger log = LoggerFactory.getLogger(WebappConfig.class);
@@ -125,8 +125,8 @@ public class WebappConfig {
     }
     
     @Bean(name="webUserService")
-    public WebUserService webUserService(){        
-        return new WebUserService();
+    public AccountService webUserService(){        
+        return new AccountService();
     }
 
     private Properties getHibernateProperties(){

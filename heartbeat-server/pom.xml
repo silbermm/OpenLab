@@ -127,8 +127,9 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>4.10</version>
             <scope>test</scope>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -195,6 +196,11 @@
             <artifactId>spring-security-config</artifactId>
             <version>3.1.2.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-ldap</artifactId>
+            <version>3.1.4.RELEASE</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>heartbeat</finalName>
@@ -224,7 +230,7 @@
                 <configuration>
                     <url>http://labs.uc.edu:8080/manager</url>
                     <server>LabsTomcat</server>
-                    <path>/heartbeat-dev</path>
+                    <path>/heartbeat</path>
                     <update>true</update>
                 </configuration>	
             </plugin>	

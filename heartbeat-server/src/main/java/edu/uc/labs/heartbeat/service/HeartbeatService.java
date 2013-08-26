@@ -75,6 +75,10 @@ public class HeartbeatService {
             throw new GenericDataException(e.getMessage());
         }
     }
+    
+    public void deleteMachine(Machine m){
+        machineDao.delete(m);        
+    }
 
     @Transactional(readOnly = false)
     public boolean updateMachine(ClientMachine cm, String ipaddress) {
@@ -89,9 +93,13 @@ public class HeartbeatService {
                 m.setModel(cm.getModel());
                 m.setOsVersion(cm.getOsVersion());
                 m.setOs(cm.getOs());
+                if(cm.getOs().startsWith("Mac")){
+                    m.setMacName(cm.getName());
+                } else {
+                    m.setName(cm.getName());
+                }
                 m.setMac(cm.getMac());
                 m.setCurrentUser(cm.getCurrentUser());
-                m.setName(cm.getName());
                 m.setPartition1(cm.getPartition1());
                 m.setPartition2(cm.getPartition2());
                 m.setPartition3(cm.getPartition3());
@@ -102,14 +110,20 @@ public class HeartbeatService {
             } else {
                 // This is a new machine
                 Machine m = new Machine();
+                MachineGroup mg = machineGroupDao.getGroupByShortName("unknown");
                 m.setIpAddress(ipaddress);
                 m.setCurrentUser(cm.getCurrentUser());
                 m.setMac(cm.getMac());
                 m.setManufacturer(cm.getManufacturer());
                 m.setModel(cm.getModel());
                 m.setSerialNumber(cm.getSerialNumber());
-                m.setName(cm.getName());
                 m.setOs(cm.getOs());
+                if(cm.getOs().startsWith("Mac")){
+                    m.setMacName(cm.getName());
+                } else {
+                    m.setName(cm.getName());
+                }
+                m.setGroup(mg);
                 m.setOsVersion(cm.getOsVersion());
                 m.setUid(cm.getUuid());
                 m.setPartition1(cm.getPartition1());

@@ -230,7 +230,6 @@ public class MachineDaoImpl implements MachineDao {
                 s = "none";
             }
             serialNumber = s;
-
         } else if (System.getProperty("os.name").startsWith("Linux")) {
             String s = null;
             try {
@@ -250,7 +249,6 @@ public class MachineDaoImpl implements MachineDao {
                 s = "none";
             }
             serialNumber = s;
-
         }
         if (serialNumber.equals(null) || serialNumber.equals("")) {
             serialNumber = "none";

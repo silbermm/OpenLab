@@ -10,6 +10,11 @@ public class AuthorityDaoImpl extends AbstractDao<Authority> implements Authorit
     public AuthorityDaoImpl(SessionFactory sf){
         this.setSessionFactory(sf);
     }
+
+    @Override
+    public Authority findByName(String name) {
+        return (Authority)getSession().createQuery("from Authority where authority=:name").setString("name", name).uniqueResult();
+    }
     
     
 }

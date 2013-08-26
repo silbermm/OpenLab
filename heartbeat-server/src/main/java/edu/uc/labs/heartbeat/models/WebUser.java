@@ -3,6 +3,7 @@ package edu.uc.labs.heartbeat.models;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,12 +14,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "heartbeat_users")
 public class WebUser implements Serializable {
 
     private Long userId;
     private String cn;
+    private boolean enabled = true;
     private Set<Authority> authorites = new HashSet<Authority>(0);
 
     @Id
@@ -41,8 +45,17 @@ public class WebUser implements Serializable {
         this.cn = cn;
     }
     
+    @Column
+    public boolean getEnabled() {
+    	return this.enabled;
+    }
+    
+    public void setEnabled(boolean enabled) {
+    	this.enabled = enabled;
+    }
+    
     @ManyToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-    @JoinTable(name= "user_authorites", 
+    @JoinTable(name= "heartbeat_user_authorites", 
             joinColumns={
                 @JoinColumn(name="user_id")}, 
             inverseJoinColumns = {
