@@ -94,7 +94,7 @@ public class HeartbeatController {
     @PreAuthorize("permitAll()")
     @RequestMapping(value="", method = RequestMethod.GET)
     public String homePage(Model model){
-        return "html/index";
+        return "jsp/index";
     }
     
     @PreAuthorize("permitAll()")
