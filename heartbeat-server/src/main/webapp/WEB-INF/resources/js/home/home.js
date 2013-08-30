@@ -1,19 +1,20 @@
+'use strict';
 angular.module('heartbeat.home', [
     'ui.state',
-    'titleService',  
-])
-.config(function config($stateProvider){
-    $stateProvider.state('home',{
-        url: 'home',
+    'titleService',
+    'restangular',
+]).config(function config($stateProvider) {
+    $stateProvider.state('home', {
+        url: '/home',
         views: {
-            "main" : {
-                controller : 'HomeCtrl',
-                templateUrl : 'home/home.tpl.html'
+            "main": {
+                controller: "HomeCtrl",
+                templateUrl: 'resources/js/home/home.tpl.html'
             }
         }
-    });
-})
-.controller('HomeCtrl', function HomeController($scope, titleService) {
-    titleService.setTitle("Home");
+    })
+}).controller('HomeCtrl', function HomeController($scope, titleService, Restangular) {
+    
+
 })
 

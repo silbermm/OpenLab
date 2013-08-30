@@ -30,54 +30,50 @@ public class HeartbeatController {
     final static Logger log = LoggerFactory.getLogger(HeartbeatController.class);
 
     @PreAuthorize("permitAll()")
-    @RequestMapping(value="create", method = RequestMethod.POST)
+    @RequestMapping(value="machine/create", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void acceptMachineInfo(@RequestBody ClientMachine clientMachine, HttpServletRequest request){       
         boolean success = heartbeatService.updateMachine(clientMachine, request.getRemoteAddr());        
     }
 
-    /*@RequestMapping(value="create/group", method = RequestMethod.POST)
+    @RequestMapping(value="group", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void createGroup(@RequestBody MachineGroup machineGroup){
-    }*/
+      
+    }
 
     @PreAuthorize("permitAll()")
-    @RequestMapping(value="show/machines", method = RequestMethod.GET)
+    @RequestMapping(value="machine/all", method = RequestMethod.GET)
     public @ResponseBody List<Machine> getAllMachines(){
         return heartbeatService.getAllMachines();
     }
 
     @PreAuthorize(value = "")
-    @RequestMapping(value="show/machine/uuid/{uuid}", method = RequestMethod.GET)
+    @RequestMapping(value="machine/{id}", method = RequestMethod.GET)
     public @ResponseBody
-    Machine getMachineByUuid(@PathVariable String uuid){
-        return heartbeatService.getMachineByUuid(uuid);
-    }
-
-    @RequestMapping(value="show/machine/id/{id}", method = RequestMethod.GET)
-    public @ResponseBody Machine getMachineById(@PathVariable Long id){
+    Machine getMachineByUuid(@PathVariable Long id){
         return heartbeatService.getMachineById(id);
     }
 
     @PreAuthorize("permitAll()")
-    @RequestMapping(value = "show/groups", method = RequestMethod.GET)
+    @RequestMapping(value = "group/all", method = RequestMethod.GET)
     public @ResponseBody List<MachineGroup> getGroups(){
         return heartbeatService.getAllMachineGroups();
     }        
     
-    @RequestMapping(value = "show/group/id/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "group/{id}", method = RequestMethod.GET)
     public @ResponseBody MachineGroup getGroupById(@PathVariable Long id){
         return heartbeatService.getGroupById(id);
     }
 
     @PreAuthorize("permitAll()")
-    @RequestMapping(value="update/machine/uuid/{uuid}", method = RequestMethod.PUT)
+    @RequestMapping(value="machine/{uuid}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void acceptUuid(@PathVariable String uuid){
         heartbeatService.updateMachineRecord(uuid);
     }
     
-    @RequestMapping(value="move/machine/{uuid}/to/{groupId}", method = RequestMethod.PUT)
+    @RequestMapping(value="machine/{uuid}/to/{groupId}", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void changeMachineGroup(@PathVariable String uuid, @PathVariable long groupId){
         heartbeatService.moveMachine(uuid, groupId);
