@@ -2,9 +2,12 @@
 angular.module('heartbeat.groups', [
     'ui.state',
     'titleService',
+    'searchService',
     'restangular',
-]).config(function config($stateProvider) {
+    'ngGrid'
+]).config(function config($stateProvider, $urlRouterProvider) {
     $stateProvider.state('groups', {
+        abstract:true,
         url: '/groups/:id',
         views: {
             "main": {
@@ -13,12 +16,23 @@ angular.module('heartbeat.groups', [
             }
         }
     })
-}).controller('GroupsCtrl', function GroupsController($scope, titleService, Restangular, $stateParams) {
+    .state('groups.tableview', {
+        url: '/table',
+        templateUrl: 'resources/js/groups/groups.tableview.tpl.html',        
+    })
+}).controller('GroupsCtrl', function GroupsController($scope, titleService, searchService, Restangular, $stateParams) {
     var groups = Restangular.one('heartbeat/group', $stateParams.id);
     $scope.group = groups.getList();    
-    titleService.setTitle($stateParams.id);
+    $scope.currentGroup = $stateParams.id;
+    titleService.setTitle($stateParams.id);        
     
+    $scope.getUseClass = function(machine){
+        if(machine.currentUser == "null" || machine.currentUser == "" || machine.currentUser == 0){
+            return "mac-available";
+        } else {
+            return "mac-being-used";
+        }
+    }
     
-
 })
 

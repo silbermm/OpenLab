@@ -1,6 +1,14 @@
+<div class="row-fluid">
+    <header>
+        <div class="pull-right">
+            <ul class="nav nav-pills">
+                <li ui-route="/groups/{{currentGroup}}/table" ng-class="{active:$uiRoute}"><a href="#/groups/{{currentGroup}}/table"> <i class="icon-list"></i> Table View</a></li>
+                <li ui-route="/groups/{{currentGroup}}/grid" ng-class="{active:$uiRoute}"> <a href="#/groups/{{currentGroup}}/grid"><i class="icon-th"></i> Grid View</a></li>                
+            </ul>
+        </div>
+    </header>
+</div>
 
-<ul>
-    <li ng-repeat="machine in group.machines">
-        {{ machine.name }}
-    </li>
-</ul>
+<div id="main-content-right" class="row-fluid">
+    <div ui-view></div>
+</div>

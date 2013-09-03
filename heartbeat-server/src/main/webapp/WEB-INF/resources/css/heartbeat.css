@@ -9,7 +9,7 @@ body > nav {
     background: #e1e7ec;
     border-right: 1px solid #606d78;
     position: absolute;
-    top: 40px;
+    top: 46px;
     left: 0;
     bottom: 0;
     width: 220px;    
@@ -247,6 +247,40 @@ body .dashboard a {
     color: #468847;
 }
 
+#ui-view-main {
+    position:relative;
+    left: 290px;
+}
+
+#ui-view-main header {
+    height: 39px;
+    /* background: url(./images/breadcrumb.png); */
+    border-bottom: 1px solid #606d78;    
+}
+
+#ui-view-main header {
+    /*position: absolute;  
+    top: 0;
+    left: 0;
+    right: 0;
+    */
+}
+
+/*style.css*/
+.gridStyle {
+    border: 1px solid rgb(212,212,212);
+    width: 400px; 
+    height: 300px
+}   
+
+.mac-available {
+    color: greenyellow;    
+}
+
+.mac-being-used {
+    color: yellow;
+}
+
 /***************
 WIDGET
 ****************/
@@ -435,8 +469,10 @@ WIDGET
 
 @media (max-width: 979px) { 
     body > nav {
+        /*
         position: relative;
         top: -20px;
+        */
     }
 }
 
@@ -447,9 +483,16 @@ WIDGET
 }
 
 @media (min-width: 979px) {
+    /*
     #ui-view-main {
         position: relative;
         top: 46px;
         left: 260px;
     }
+
+    #main-content-right {
+        position: relative;
+        top: 60px;
+    }
+    */
 }

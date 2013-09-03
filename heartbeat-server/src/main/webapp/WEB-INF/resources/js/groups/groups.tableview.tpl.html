@@ -1,0 +1,32 @@
+<table class="table table-condensed" style="width:100%">
+    <thead>
+        <tr> 
+            <th> </th>
+            <th> Name </th>
+            <th> OS </th>
+            <th> Version </th>
+            <th> Serial Number </th>
+            <th> Current User </th>
+            <th> IP Address </th>
+            <th> Manufacturer / Model </th>
+            <th> Last Seen </th>
+            <th> </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="machine in group.machines"> 
+            <td> <i class="icon-circle" ng-class="getUseClass(machine)" > </i> </td>
+            <td ng-if="machine.os=='Windows 7'"> {{machine.name }}</td>
+            <td ng-if="machine.os!='Windows 7'"> {{machine.macName }}</td>
+            <td ng-if="machine.os=='Windows 7'"> <i class="icon-windows"></i></td>
+            <td ng-if="machine.os=='Mac OS X'"> <i class="icon-apple"></i> </td>
+            <td> {{machine.osVersion}} </td>
+            <td> {{machine.serialNumber}} </td>
+            <td> {{machine.currentUser}} </td>
+            <td> {{machine.ipAddress}} </td>
+            <td> {{machine.manufacturer}} / {{machine.model}} </td>
+            <td> {{machine.lastSeen | date:'short'}} </td>
+            <td> </td>
+        </tr>
+    </tbody>
+</table>

@@ -2,6 +2,7 @@
 angular.module('heartbeat', [
     "ui.state", 
     "ui.route",
+    "ngGrid",
     "ui.bootstrap",
     "heartbeat.home",
     "heartbeat.computer",
@@ -12,13 +13,13 @@ angular.module('heartbeat', [
     $urlRouterProvider.otherwise("/home");        
 })
 .run(function run(titleService){
-    titleService.setSuffix(' | Heartbeat');
+    titleService.setSuffix(' | Heartbeat');    
 })
-.controller('AppCtrl', function AppCtrl($scope, $location, titleService, Restangular){
+.controller('AppCtrl', function AppCtrl($scope, $location, titleService, searchService, Restangular){
     titleService.setTitle("HelloWorld");
     var groups = Restangular.one('heartbeat/group', 'all');
-    $scope.groups = groups.getList();
-    
+    $scope.groups = groups.getList();    
+    $scope.searchPlaceholder = searchService.getPlaceholder();
     $scope.optionsItems = [
         {"name" : "filter",
          "display" : "Add a filter"
