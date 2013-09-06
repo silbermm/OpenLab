@@ -7,7 +7,7 @@
     </layout>
   </appender>
   
-  <logger name="edu.uc.labs.heartbeat" level="ERROR"/>
+  <logger name="edu.uc.labs.heartbeat" level="INFO"/>
 
   <logger name="org.thymeleaf" level="ERROR" />
 

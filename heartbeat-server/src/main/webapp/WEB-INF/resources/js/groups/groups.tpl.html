@@ -1,5 +1,25 @@
 <div class="row-fluid">
     <header>
+        <div class="pull-left">
+            <div class="btn-group">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="icon-tasks"></i> Actions
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li ng-class="{disabled: !isMachineSelected()}">
+                        <a ng-click="openMoveDialog(machineSelected)" ><i class="icon-fixed-width icon-move"></i>Move</a>
+                    </li>                   
+                    <li ng-class="{disabled: !isMachineSelected()}">
+                        <a ><i class="icon-fixed-width icon-off"></i>Power</a>
+                    </li>
+                    <li ng-class="{disabled: !isMachineSelected()}">
+                        <a ng-click="deleteSelected(machineSelected)"><i class="icon-fixed-width icon-trash"></i>Delete</a>  
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
         <div class="pull-right">
             <ul class="nav nav-pills">
                 <li ui-route="/groups/{{currentGroup}}/table" ng-class="{active:$uiRoute}"><a href="#/groups/{{currentGroup}}/table"> <i class="icon-list"></i> Table View</a></li>

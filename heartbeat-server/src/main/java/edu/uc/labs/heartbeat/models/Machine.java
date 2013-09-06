@@ -134,7 +134,7 @@ public class Machine implements Serializable {
         this.lastSeen = lastSeen;
     }
 
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
     @JoinColumn(name = "group_id")
     public MachineGroup getGroup() {
         return group;

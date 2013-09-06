@@ -135,7 +135,7 @@ body .dashboard a {
     right: 6px;
 }
 
-.dropdown-menu {
+.groups-dropdown-menu {
     left: -140px;
 }
 
@@ -274,11 +274,14 @@ body .dashboard a {
 }   
 
 .mac-available {
-    color: greenyellow;    
+    color: #5cd444;    
 }
 
 .mac-being-used {
-    color: yellow;
+    color: #3a87ad;
+}
+.larger-font {
+    font-size: 20px;
 }
 
 /***************
@@ -454,7 +457,9 @@ WIDGET
     left:3px;    
 }
 
-
+.machine-table th a {
+    cursor:pointer;
+}
 
 /* fix some jquery-ui oddities */
 .ui-widget-content {
@@ -482,17 +487,37 @@ WIDGET
     }
 }
 
-@media (min-width: 979px) {
-    /*
+@media (min-width: 979px) {    
     #ui-view-main {
-        position: relative;
-        top: 46px;
-        left: 260px;
+        position: absolute;
+        left: 290px;
+        top: 60px;
+        bottom: 0;
+        right:10px;
     }
 
+
     #main-content-right {
-        position: relative;
-        top: 60px;
+        overflow-y: scroll;
+        position: absolute;
+        bottom: 0;
+        top: 39px;
     }
-    */
+
+    #main-content-right::-webkit-scrollbar {
+        width: 6px;
+        background-color: #F5F5F5;
+    }
+
+    #main-content-right::-webkit-scrollbar-thumb {
+        background-color: #000000;
+    }
+
+    #main-content-right::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        background-color: #F5F5F5;
+    }
+    
+    
+
 }

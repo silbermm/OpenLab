@@ -8,18 +8,18 @@ import java.util.Set;
 
 @Entity
 @Table(name = "machine_groups")
-@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@group_id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@group_id")
 public class MachineGroup implements Serializable {
 
     private long groupId;
     private String name;
     private String description;
     private Set<Machine> machines;
-		private double xCoordinate;
-		private double yCoordinate;
+    private double xCoordinate;
+    private double yCoordinate;
 
     @Id
-		@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_id", nullable = false, unique = true)
     public long getGroupId() {
         return groupId;
@@ -47,30 +47,12 @@ public class MachineGroup implements Serializable {
         this.description = description;
     }
 
-		@Column(name = "xCoordinate")
-		public void setXCoordinate(double xCoordinate){
-			this.xCoordinate = xCoordinate;
-		}
-
-		public double getXCoordinate(){
-			return this.xCoordinate;
-		}
-		
-		@Column(name = "yCoordinate")
-		public void setYCoordinate(double yCoordinate){
-			this.yCoordinate = yCoordinate;
-		}
-
-		public double getYCoordinate(){
-			return this.yCoordinate;
-		}
-
-		@OneToMany(mappedBy="group",cascade={CascadeType.ALL})	
-    public Set<Machine> getMachines(){
+    @OneToMany(mappedBy = "group", cascade = {CascadeType.PERSIST})
+    public Set<Machine> getMachines() {
         return this.machines;
     }
 
-    public void setMachines(Set<Machine> machines){
+    public void setMachines(Set<Machine> machines) {
         this.machines = machines;
     }
 }

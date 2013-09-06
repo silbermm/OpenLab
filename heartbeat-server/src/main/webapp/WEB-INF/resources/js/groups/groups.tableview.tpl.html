@@ -1,28 +1,37 @@
-<table class="table table-condensed" style="width:100%">
+<table class="table table-condensed machine-table" style="width:100%">
     <thead>
         <tr> 
-            <th> </th>
-            <th> Name </th>
+            <th> <input type="checkbox" ng-click="selectAllMachines(selectAll, group.machines)" ng-model='selectAll'> </th>            
+            <th> 
+                <a ng-click="predicate='name'; reverse=!reverse"> Name </a> 
+                <i ng-class="getClassForSortIcon(reverse)" ng-if="predicate == 'name'" ></i> 
+            </th>
             <th> OS </th>
-            <th> Version </th>
-            <th> Serial Number </th>
             <th> Current User </th>
+            <th> Version </th>
+            <th> Serial Number </th>            
             <th> IP Address </th>
             <th> Manufacturer / Model </th>
-            <th> Last Seen </th>
+            <th> 
+                <a ng-click="predicate='lastSeen'; reverse=!reverse"> Last Seen </a> 
+                <i ng-class="getClassForSortIcon(reverse)" ng-if="predicate == 'lastSeen'"></i> 
+            </th>
             <th> </th>
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="machine in group.machines"> 
-            <td> <i class="icon-circle" ng-class="getUseClass(machine)" > </i> </td>
-            <td ng-if="machine.os=='Windows 7'"> {{machine.name }}</td>
+        <tr ng-repeat="machine in machines | filter:search | orderBy:predicate:reverse"> 
+            <td> <input type="checkbox" ng-model="machineSelected[machine.id]" 
+                        id="{{machine.id}}" value="{{machine.id}}">
+            </td>                        
+            <td ng-if="machine.os=='Windows 7'"> {{machine.name }}</td>            
             <td ng-if="machine.os!='Windows 7'"> {{machine.macName }}</td>
-            <td ng-if="machine.os=='Windows 7'"> <i class="icon-windows"></i></td>
-            <td ng-if="machine.os=='Mac OS X'"> <i class="icon-apple"></i> </td>
+            <td ng-if="machine.os=='Windows 7'"> <i class="icon-windows larger-font" ng-class="getUseClass(machine)"></i></td>
+            <td ng-if="machine.os=='Mac OS X'"> <i class="icon-apple larger-font" ng-class="getUseClass(machine)"></i> </td>
+            <td> {{machine.currentUser}} </td>
             <td> {{machine.osVersion}} </td>
             <td> {{machine.serialNumber}} </td>
-            <td> {{machine.currentUser}} </td>
+            
             <td> {{machine.ipAddress}} </td>
             <td> {{machine.manufacturer}} / {{machine.model}} </td>
             <td> {{machine.lastSeen | date:'short'}} </td>

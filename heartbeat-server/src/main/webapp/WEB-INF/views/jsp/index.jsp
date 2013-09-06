@@ -48,7 +48,7 @@
                             </li>
                         </ul>
                         <form class="navbar-search pull-right" id="search-form">
-                            <input type="text" class="search-query" id='search' placeholder="" />
+                            <input type="text" class="search-query" ng-model="search" id='search' placeholder="Search" />
                         </form>
                     </div>                
             </div>
@@ -65,7 +65,7 @@
                     <span class='loader'>Loading</span>
                     <div class="options dropdown">
                         <a dropdown-toggle> <i class="icon-cog"></i> </a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu groups-dropdown-menu">
                             <li ng-repeat="choice in optionsItems">
                                 <a>{{choice.display}}</a>
                             </li>
@@ -75,6 +75,6 @@
             </ul>
         </nav>
 
-        <div class="span9" id="ui-view-main" ui-view="main"> </div>
+        <div class id="ui-view-main" ui-view="main"> </div>
     </body>
 </html>

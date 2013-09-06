@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional(readOnly = true)
@@ -47,6 +48,17 @@ public class HeartbeatService {
             throw new GenericDataException(ex.getMessage());
         }        
     }
+    
+    public Set<Machine> getMachinesInGroup(Long groupId){
+        try {
+            MachineGroup mg = machineGroupDao.get(groupId);
+            return machineDao.findByGroup(mg);
+        } catch (RuntimeException ex){
+            throw new GenericDataException(ex.getMessage());
+        } catch (Exception ex){
+            throw new GenericDataException(ex.getMessage());
+        }
+    }
 
     public List<MachineGroup> getAllMachineGroups() {
         List<MachineGroup> groups = machineGroupDao.getAll();
@@ -76,8 +88,10 @@ public class HeartbeatService {
         }
     }
     
+    @Transactional(readOnly = false)
     public void deleteMachine(Machine m){
-        machineDao.delete(m);        
+        log.info("calling delete from the dao");
+        machineDao.delete(m);                
     }
 
     @Transactional(readOnly = false)
