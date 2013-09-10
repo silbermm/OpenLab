@@ -22,12 +22,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.rememberme.CookieTheftException;
+import org.springframework.ui.ModelMap;
 
 @Controller
 @RequestMapping(value = "/")
 public class HeartbeatController {
 
     final static Logger log = LoggerFactory.getLogger(HeartbeatController.class);
+    
+    
+    @RequestMapping(value = "login", method = RequestMethod.GET)    
+    public String login(@RequestParam(value = "error", required = false) String error, ModelMap model){
+        if(error != null && error.equals("authFailed")){
+            model.addAttribute("error", "true");
+        }
+        return "jsp/login";
+    }
 
     @PreAuthorize("permitAll()")
     @RequestMapping(value = "machine/create", method = RequestMethod.POST)
@@ -102,6 +113,12 @@ public class HeartbeatController {
         heartbeatService.moveMachine(uuid, groupId);
         log.info("Moved machine " + uuid + " to " + groupId);
     }
+    
+    @RequestMapping(value = "machine/{id}/to/{groupId}", method = RequestMethod.PUT)
+    public void moveMachine(@PathVariable long id, @PathVariable long groupId){
+        heartbeatService.moveMachine(id, groupId);
+        log.info("Moved machine " + id + " to " + groupId);
+    }
 
     @PreAuthorize("permitAll()")
     @RequestMapping(value = "show/default-os/for/{serialNumber}", method = RequestMethod.GET)
@@ -110,8 +127,7 @@ public class HeartbeatController {
         Machine m = heartbeatService.getMachineBySerial(serialNumber);
         return m.getDefaultOs();
     }
-
-    @PreAuthorize("permitAll()")
+    
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String homePage(Model model) {
         return "jsp/index";
@@ -141,6 +157,14 @@ public class HeartbeatController {
     Failure handleAuthFaiureFailure(AccessDeniedException ae) {
         return new Failure("Access Denied");
     }
+    
+    @ExceptionHandler(CookieTheftException.class)
+    public String handleCookieTheft(Model m){        
+        m.addAttribute("error", "Its possible someone stole your cookie");
+        return "redirect:jsp/login";
+    }
+    
+    
     @Autowired
     HeartbeatService heartbeatService;
 }

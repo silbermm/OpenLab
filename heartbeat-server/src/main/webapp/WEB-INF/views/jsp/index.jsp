@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html ng-app="heartbeat" ng-controller="AppCtrl">
     <head>
@@ -26,7 +27,8 @@
         <script type="text/javascript" src="<c:url value='/resources/js/services/searchService.js' />"></script>
         <script type="text/javascript" src="<c:url value='/resources/js/home/home.js' />"></script>        
         <script type="text/javascript" src="<c:url value='/resources/js/computer/computer.js' />"></script>  
-        <script type="text/javascript" src="<c:url value='/resources/js/groups/groups.js' />"></script>  
+        <script type="text/javascript" src="<c:url value='/resources/js/groups/groups.js' />"></script>
+        <script type="text/javascript" src="<c:url value='/resources/js/settings/settings.js' />"></script>
     </head>
     <body>    
         <div class="navbar">
@@ -40,41 +42,34 @@
                     <a class="brand" ui-route="/home">Heartbeat</a>
                     <div class="nav-collapse collapse">
                         <ul class="nav">
-                            <li ui-route="/home" ng-class="{active:$uiRoute}">
+                            <li ui-route="/home" ng-class="{active: $state.includes('home')}">
                                 <a href="#/home"> <i class="icon-home"></i> Home </a>
                             </li>
-                            <li ui-route="/settings" ng-class="{active:$uiRoute}" >
+                            <security:authorize access="hasRole('ROLE_ADMINISTRATOR')"> 
+                            <li ui-route="/settings" ng-class="{active: $state.includes('settings')}" >
                                 <a href="#/settings"> <i class="icon-gears"></i> Settings </a>
-                            </li>
+                            </li>                            
+                            </security:authorize>
                         </ul>
-                        <form class="navbar-search pull-right" id="search-form">
-                            <input type="text" class="search-query" ng-model="search" id='search' placeholder="Search" />
-                        </form>
+                        <ul class="nav pull-right">
+                            <security:authorize access="isAnonymous()"> 
+                                <li>
+                                    <a href="<c:url value='/login' />"> <i class="icon-lock"></i> Login </a>
+                                </li>
+                             </security:authorize> 
+                             <security:authorize access="isAuthenticated()"> 
+                                 <li> 
+                                     <a> Logged in as: <security:authentication property="principal.username" /> </a>                                  
+                                 </li>
+                                 <li>
+                                     <a href="<c:url value="/j_spring_security_logout" />"> <i class="icon-lock"></i> Logout </a>
+                                 </li>
+                             </security:authorize>
+                        </ul>
+                        
                     </div>                
             </div>
-        </div>       
-
-        <nav id="group-sidebar" class="span3">
-            <h4 class="dashboard">
-                <a href="#"> <i class="icon-home"></i> Dashboard </a>                 
-            </h4> 
-            <ul class="groups" >
-                <li class="closed" ng-repeat="group in groups" ui-route='/groups/{{group.groupId}}/' ng-class="{active:$uiRoute}">
-                    <span class="toggle"><i class="icon-caret-right"></i></span>
-                    <h4 class="groupName"> <a href="#/groups/{{group.groupId}}/table" > {{ group.name }} </a> </h4> 
-                    <span class='loader'>Loading</span>
-                    <div class="options dropdown">
-                        <a dropdown-toggle> <i class="icon-cog"></i> </a>
-                        <ul class="dropdown-menu groups-dropdown-menu">
-                            <li ng-repeat="choice in optionsItems">
-                                <a>{{choice.display}}</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
-        </nav>
-
-        <div class id="ui-view-main" ui-view="main"> </div>
+        </div>      
+        <div ui-view="main"> </div>
     </body>
 </html>

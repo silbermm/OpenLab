@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 @Transactional(readOnly = true)
@@ -82,6 +83,20 @@ public class HeartbeatService {
             m.setGroup(group);
             machineDao.update(m);
         } catch (RuntimeException e) {
+            throw new GenericDataException(e.getMessage());
+        } catch (Exception e) {
+            throw new GenericDataException(e.getMessage());
+        }
+    }
+    
+    @Transactional(readOnly = false)
+    public void moveMachine(long machineId, long groupId){
+        try {
+            Machine m = machineDao.get(machineId);
+            MachineGroup group = machineGroupDao.get(groupId);
+            m.setGroup(group);
+            machineDao.update(m);
+        } catch (RuntimeException e){
             throw new GenericDataException(e.getMessage());
         } catch (Exception e) {
             throw new GenericDataException(e.getMessage());
@@ -173,8 +188,10 @@ public class HeartbeatService {
     public void setMachineGroupDao(MachineGroupDao machineGroupDao) {
         this.machineGroupDao = machineGroupDao;
     }
+    
     final static Logger log = LoggerFactory.getLogger(HeartbeatService.class);
-    private Config config;
-    private MachineDao machineDao;
-    private MachineGroupDao machineGroupDao;
+    
+    @Autowired Config config;
+    @Autowired MachineDao machineDao;
+    @Autowired MachineGroupDao machineGroupDao;
 }

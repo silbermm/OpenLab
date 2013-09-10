@@ -30,9 +30,7 @@ public class ActiveDirectoryUserContextMapper implements
 	public UserDetails mapUserFromContext(DirContextOperations ctx,
 			String username, Collection<? extends GrantedAuthority> authorities) {
 		Set<Authority> defaultAuthorities = new HashSet<Authority>();
-
 		Set<GrantedAuthority> finalAuthorities = new HashSet<GrantedAuthority>();
-
 		WebUser webUser = webUserService.getUserByUsername(username);
 		Authority authority = webUserService.findAuthorityByName("domain_user");
 		defaultAuthorities.add(authority);
@@ -50,7 +48,11 @@ public class ActiveDirectoryUserContextMapper implements
 		for (Authority auth : aSet) {
 			String role = auth.getAuthority();
 			role = role.toUpperCase();
-			finalAuthorities.add(new SimpleGrantedAuthority(rolePrefix + role));
+                        if(role.startsWith("ROLE_")){
+                            finalAuthorities.add(new SimpleGrantedAuthority(role));
+                        } else {
+                            finalAuthorities.add(new SimpleGrantedAuthority(rolePrefix + role));
+                        }
 		}
 		finalAuthorities.addAll(authorities);
 		

@@ -8,22 +8,27 @@ import org.springframework.stereotype.Repository;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Repository
 public class MachineDaoImpl extends AbstractDao<Machine> implements MachineDao {
 
-    public MachineDaoImpl(SessionFactory sessionFactory) {
-        this.setSessionFactory(sessionFactory);
+    @Autowired
+    public MachineDaoImpl(SessionFactory sf) {
+        this.setSessionFactory(sf);
+        this.sf = sf;
     }
 
     @Override
     public Machine findBySerialNumber(String serialNumber) {
-        return (Machine) getSession().createQuery("from Machine where serviceTag = :serviceTag").setString("serviceTag", serialNumber).uniqueResult();
+        Machine m = (Machine) sf.getCurrentSession().createQuery("from Machine where serviceTag = :serviceTag").setString("serviceTag", serialNumber).uniqueResult();
+        return m;
     }
 
     @Override
     public Machine findByUuid(String uuid) {
-        return (Machine) getSession().createQuery("from Machine where uid = :uuid").setString("uuid", uuid).uniqueResult();
+        Machine m = (Machine) sf.getCurrentSession().createQuery("from Machine where uid = :uuid").setString("uuid", uuid).uniqueResult();        
+        return m;
     }
 
     @Override
@@ -34,7 +39,9 @@ public class MachineDaoImpl extends AbstractDao<Machine> implements MachineDao {
 
     @Override
     public Set<Machine> findByGroup(MachineGroup group) {
-        List<Machine> machines = (List<Machine>) getSession().createQuery("from Machine where group_id = :groupid").setLong("groupid", group.getGroupId()).list();
+        List<Machine> machines = (List<Machine>) sf.getCurrentSession().createQuery("from Machine where group_id = :groupid").setLong("groupid", group.getGroupId()).list();
         return new HashSet<Machine>(machines);
     }
+    
+    private SessionFactory sf;
 }

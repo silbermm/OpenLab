@@ -26,42 +26,42 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RequestMapping(value="/accounts/")
 public class AccountController {
     
-    @PreAuthorize("hasRole(ROLE_ADMINISTRATOR)")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
     @RequestMapping(value="create", method=RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void createAccount(@RequestBody WebUser user){
         accountService.createWebUser(user);
     }
     
-    @PreAuthorize("hasRole(ROLE_ADMINISTRATOR)")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
     @RequestMapping(value="delete/{id}", method=RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void deleteAccount(@PathVariable long id){
         accountService.deleteWebUser(id);
     }
     
-    @PreAuthorize("hasRole(ROLE_ADMINISTRATOR)")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
     @RequestMapping(value="update", method=RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void updateAccount(@RequestBody WebUser user){
         accountService.updateWebUser(user);
     }
     
-    @PreAuthorize("hasRole(ROLE_ADMINISTRATOR)")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
     @RequestMapping(value="show/users", method=RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody List<WebUser> showAllWebUsers(){
         return accountService.getAllWebUsers();
     }
     
-    @PreAuthorize("hasRole(ROLE_ADMINISTRATOR)")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
     @RequestMapping(value="show/users/with/role/{role}", method=RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody List<WebUser> showWebUsersWithRole(@PathVariable long role){
         return accountService.getWebUsersWith(role);
     }
     
-    @PreAuthorize("hasRole(ROLE_ADMINISTRATOR")
+    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
     @RequestMapping(value="show/roles", method=RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public List<Authority> showAllRoles(){

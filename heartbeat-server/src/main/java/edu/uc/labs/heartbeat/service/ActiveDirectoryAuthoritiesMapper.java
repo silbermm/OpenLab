@@ -24,7 +24,12 @@ public class ActiveDirectoryAuthoritiesMapper implements
 		for (GrantedAuthority auth : arg0) {
 			String role = auth.getAuthority();
 			role = role.toUpperCase();
-			authorities.add(new SimpleGrantedAuthority(rolePrefix + role));
+                        if(role.startsWith("ROLE_")){
+                            authorities.add(new SimpleGrantedAuthority(role));
+                        }else {
+                            authorities.add(new SimpleGrantedAuthority(rolePrefix + role));
+                        }
+			
 		}
 		authorities.add(defaultRole);
 		return authorities;

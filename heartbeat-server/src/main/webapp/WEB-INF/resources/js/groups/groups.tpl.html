@@ -1,3 +1,31 @@
+<nav id="group-sidebar" class="span3"> 
+  <form class="" id="search-form">
+        <input type="text" class="search-query" ng-model="search" id='search' placeholder="Search" />
+    </form>
+    <h4 class="dashboard">
+        <a href="#"> <i class="icon-home"></i> Dashboard </a>                 
+        
+    </h4> 
+    <ul class="groups" ng-model="chosenGroup">
+        <li class="closed" ng-repeat="group in groups" ng-class="{active:$state.params.id == group.groupId}">
+            <span class="toggle"><i class="icon-caret-right"></i></span>
+            <h4 class="groupName"> 
+                <a href="#/groups/{{group.groupId}}/table"> {{ group.name }} </a> 
+            </h4> 
+            <span class='loader'>Loading</span>
+            <div class="options dropdown">
+                <a dropdown-toggle> <i class="icon-cog"></i> </a>
+                <ul class="dropdown-menu groups-dropdown-menu">
+                    <li ng-repeat="choice in optionsItems">
+                        <a>{{choice.display}}</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</nav>
+
+<div id="ui-view-main">
 <div class="row-fluid">
     <header>
         <div class="pull-left">
@@ -31,4 +59,6 @@
 
 <div id="main-content-right" class="row-fluid">
     <div ui-view></div>
+</div>
+    
 </div>

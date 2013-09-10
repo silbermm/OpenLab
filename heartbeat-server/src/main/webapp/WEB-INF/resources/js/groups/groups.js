@@ -13,7 +13,7 @@ angular.module('heartbeat.groups', [
             "main": {
                 controller: "GroupsCtrl",
                 templateUrl: 'resources/js/groups/groups.tpl.html'
-            }
+            }            
         }
     }).state('groups.tableview', {
         url: '/table',
@@ -22,10 +22,9 @@ angular.module('heartbeat.groups', [
         url: '/grid',
         templateUrl: 'resources/js/groups/groups.gridview.tpl.html',
     })
-}).controller('GroupsCtrl', function GroupsController($scope, titleService, $dialog, $stateParams, $http) {
+}).controller('GroupsCtrl', function GroupsController($scope, titleService, $dialog, $stateParams, $state,  $http) {
     
     $scope.currentGroup = $stateParams.id;
-
     $http.get('group/' + $stateParams.id).success(function(data, status, headers, config) {
         $scope.group = data;
         $scope.machines = data.machines;
@@ -33,7 +32,20 @@ angular.module('heartbeat.groups', [
     }).error(function(data, status, headers, config) {
         console.log(data);
     });
-
+    $http({method: 'GET', url: 'group/all', cache: true}).success(function(data, status, headers,config){
+        $scope.groups = data;
+    }).error(function(data, status, headers,config){
+        console.log(data);
+    })    
+    
+    
+    
+    $scope.optionsItems = [
+        {"name" : "filter",
+         "display" : "Add a filter"
+        }        
+    ];
+    
     $scope.predicate = 'name';
     $scope.reverse = false;
 
@@ -48,12 +60,21 @@ angular.module('heartbeat.groups', [
     $scope.openMoveDialog = function(selectedMachines) {
         var d = $dialog.dialog($scope.moveModalOpts);
         d.open().then(function(group) {
-            // Need to search for the correct group...            
-            console.log(group.groupId + " - " + $scope.currentGroup);
+            // Need to search for the correct group...                        
             if (group && group.groupId != $scope.currentGroup){
-                alert('dialog closed with result: ' + group.name);
+                //alert('dialog closed with result: ' + group.name);
+                actOnSelected(selectedMachines, function(machine){
+                   console.log(machine);
+                   $http.put("machine/" + machine.uuid + "/to/" + group.groupId).
+                   success(function(data,status,headers,config){    
+                        console.log("Moved " + machine.name + " to " + group.name);
+                   })
+                   .error(function(data, status, headers, config){
+                        console.log(data);
+                   });
+                });
             } else {
-                alert('nothing to do');
+                console.log("user aborted...");
             }
         });
     }
@@ -130,13 +151,8 @@ angular.module('heartbeat.groups', [
         for (var i = 0; i < keys.length; i++) {
             var k = keys[i];
             if (selection[k]) {
-                callback(k);
-                for (var j = 0; j < $scope.machines.length; j++) {
-                    if ($scope.machines[j].id == k) {
-                        $scope.machines.splice(j, 1);
-                    }
-                }
-                delete selected[k];
+                callback(k);                
+                delete selection[k];
             }
         }
     }

@@ -7,25 +7,22 @@ angular.module('heartbeat', [
     "heartbeat.home",
     "heartbeat.computer",
     "heartbeat.groups",
+    "heartbeat.settings",
     "restangular"
 ])
-.config( function myAppConfig($stateProvider, $urlRouterProvider) {    
-    $urlRouterProvider.otherwise("/home");        
+.config( function myAppConfig($stateProvider, $urlRouterProvider) {      
+    //$urlRouterProvider.otherwise("/home");        
 })
-.run(function run(titleService){
-    titleService.setSuffix(' | Heartbeat');    
+.run(function run(titleService, $rootScope, $state, $stateParams){
+    $rootScope.$state = $state;    
+    $rootScope.$stateParams = $stateParams;
+    titleService.setSuffix(' | Heartbeat');   
+    $state.transitionTo("home");
+    console.log($stateParams);
 })
 .controller('AppCtrl', function AppCtrl($scope, $location, titleService, Restangular){
-    titleService.setTitle("HelloWorld");
-    var groups = Restangular.one('heartbeat/group', 'all');
-    $scope.groups = groups.getList();        
-    
-    $scope.optionsItems = [
-        {"name" : "filter",
-         "display" : "Add a filter"
-        }        
-    ];    
-        
+    titleService.setTitle("Home");   
+    //$scope.state = $state;
 });
 
 
