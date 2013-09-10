@@ -16,7 +16,7 @@
 											http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
        								http://www.springframework.org/schema/context
        								http://www.springframework.org/schema/context/spring-context-3.2.xsd">
-    <mvc:view-controller path="/ipxe" view-name="ipxe.jsp" />
+    <!-- <mvc:view-controller path="/ipxe" view-name="ipxe.jsp" /> -->
 
     <!-- <mvc:interceptors>
         <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
@@ -25,12 +25,13 @@
 
     <!-- <mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" /> -->
     
-
+    <!--
     <bean id="messageSource"
           class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
         <property name="basename" value="/WEB-INF/messages/messages" />
         <property name="cacheSeconds" value="0" />
     </bean>
+    -->
 
     <bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
         <property name="prefix" value="/WEB-INF/views/" />
@@ -49,6 +50,7 @@
         <property name="order" value="1" />
     </bean>
     
+    <!--
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
         <property name="viewNames" value="jsp/*" />
@@ -56,5 +58,5 @@
         <property name="suffix" value=".jsp" />
         <property name="order" value="0" />
     </bean>
-
+    -->
 </beans>
