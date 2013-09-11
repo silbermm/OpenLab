@@ -10,15 +10,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = {PropertyPlaceholdersConfig.class, WebappConfig.class, RabbitConfig.class, DataDevConfig.class})
-@ActiveProfiles("dev")
+@ContextConfiguration(classes = {WebappConfig.class, RabbitConfig.class})
 public class TestCreateMachine {
     
     ClientMachine m = new ClientMachine();

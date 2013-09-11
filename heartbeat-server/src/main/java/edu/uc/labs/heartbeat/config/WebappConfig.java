@@ -16,6 +16,7 @@ import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.util.Properties;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.ComponentScan;
@@ -82,7 +83,7 @@ public class WebappConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public SessionFactory sessionFactory() {
-        LocalSessionFactoryBuilder sf = new LocalSessionFactoryBuilder(dataSource).scanPackages("edu.uc.labs.heartbeat.models");
+        LocalSessionFactoryBuilder sf = new LocalSessionFactoryBuilder(dataSource()).scanPackages("edu.uc.labs.heartbeat.models");
         sf.addProperties(getHibernateProperties());
         return sf.buildSessionFactory();
     }
@@ -104,6 +105,17 @@ public class WebappConfig extends WebMvcConfigurerAdapter {
     public AccountService webUserService() {
         return new AccountService();
     }
+    
+    @Bean(destroyMethod="close")
+    public DataSource dataSource() {
+        BasicDataSource basicDataSource = new BasicDataSource();
+        basicDataSource.setDriverClassName(config().getString("db.dev.driverClass"));
+        basicDataSource.setUrl(config().getString("db.dev.url"));
+        basicDataSource.setUsername(config().getString("db.dev.username"));
+        basicDataSource.setPassword(config().getString("db.dev.password"));
+        basicDataSource.setMaxWait(config().getLong("db.dev.maxwait"));
+        return basicDataSource;
+    }
 
     private Properties getHibernateProperties() {
         Properties p = new Properties();
@@ -113,8 +125,7 @@ public class WebappConfig extends WebMvcConfigurerAdapter {
         p.setProperty("hibernate.hbm2ddl.auto", config().getString("hibernate.hbm2ddl.auto"));
         return p;
     }
-    @Autowired
-    DataSource dataSource;
+
     @Autowired
     AmqpTemplate heartbeatTemplate;
 }

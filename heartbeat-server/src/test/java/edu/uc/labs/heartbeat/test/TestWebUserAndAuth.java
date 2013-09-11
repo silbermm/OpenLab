@@ -4,8 +4,7 @@
  */
 package edu.uc.labs.heartbeat.test;
 
-import edu.uc.labs.heartbeat.config.DataDevConfig;
-import edu.uc.labs.heartbeat.config.PropertyPlaceholdersConfig;
+
 import edu.uc.labs.heartbeat.config.RabbitConfig;
 import edu.uc.labs.heartbeat.config.WebappConfig;
 import edu.uc.labs.heartbeat.models.WebUser;
@@ -15,7 +14,6 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -23,8 +21,7 @@ import org.springframework.util.Assert;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
-@ContextConfiguration(classes = {PropertyPlaceholdersConfig.class, WebappConfig.class, RabbitConfig.class, DataDevConfig.class})
-@ActiveProfiles("dev")
+@ContextConfiguration(classes = { WebappConfig.class, RabbitConfig.class})
 public class TestWebUserAndAuth {
  
     private static final Logger log = Logger.getLogger(TestWebUserAndAuth.class);

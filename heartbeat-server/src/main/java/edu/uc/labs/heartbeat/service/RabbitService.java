@@ -9,6 +9,7 @@ import edu.uc.labs.heartbeat.models.Machine;
 import edu.uc.labs.heartbeat.utils.HeartbeatUtil;
 import org.apache.log4j.Logger;
 import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
@@ -85,10 +86,16 @@ public class RabbitService {
         return response;
     }
     
+    //public List<String> getAllQueues(){
+        
+    //3}
+    
     
     private static final Logger log = Logger.getLogger(RabbitService.class);
     @Autowired
     private AmqpTemplate heartbeatTemplate;
+    @Autowired AmqpAdmin amqpAdmin;
     @Autowired
     private Config config;
+    
 }
