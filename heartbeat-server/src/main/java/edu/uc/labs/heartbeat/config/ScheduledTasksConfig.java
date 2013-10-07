@@ -1,5 +1,7 @@
 package edu.uc.labs.heartbeat.config;
 
+import edu.uc.labs.heartbeat.tasks.RabbitCleanupTask;
+import edu.uc.labs.heartbeat.tasks.ScheduledTask;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -19,6 +21,11 @@ public class ScheduledTasksConfig implements SchedulingConfigurer {
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
         taskRegistrar.setScheduler(taskScheduler());
+        taskRegistrar.addFixedDelayTask(new Runnable() {
+            public void run() {
+                rabbitCleanup().run();
+            }
+        },10000);
     }
 
     @Bean(destroyMethod = "shutdown")
@@ -34,5 +41,10 @@ public class ScheduledTasksConfig implements SchedulingConfigurer {
         t.setQueueCapacity(3);
         t.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         return t;
+    }
+    
+    @Bean
+    public ScheduledTask rabbitCleanup(){
+        return new RabbitCleanupTask();
     }
 }

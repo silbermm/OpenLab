@@ -2,6 +2,13 @@ package edu.uc.labs.heartbeat.config;
 
 import com.typesafe.config.Config;
 import edu.uc.labs.heartbeat.domain.ClientMachine;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -13,6 +20,9 @@ import org.springframework.amqp.support.converter.JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+
+import org.springframework.web.client.RestTemplate;
 
 /**
  *
@@ -51,7 +61,19 @@ public class RabbitConfig {
         RabbitTemplate r = new RabbitTemplate(connectionFactory());
         r.setMessageConverter(heartbeatMessageConverter());
         return r;
-    }       
-        
-    @Autowired Config config;
+    }
+
+    @Bean
+    public HttpClient rabbitHttpClient() {                        
+        CredentialsProvider credsProvider = new BasicCredentialsProvider();
+        credsProvider.setCredentials(
+                new AuthScope(config.getString("rabbit.host"), 15672),
+                new UsernamePasswordCredentials(config.getString("rabbit.username"), config.getString("rabbit.password")));
+        CloseableHttpClient httpclient = HttpClients.custom()
+                .setDefaultCredentialsProvider(credsProvider).build();                                
+        return httpclient;        
+    }
+    
+    @Autowired
+    Config config;
 }

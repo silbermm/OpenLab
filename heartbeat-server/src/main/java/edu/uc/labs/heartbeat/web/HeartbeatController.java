@@ -37,7 +37,7 @@ public class HeartbeatController {
         if(error != null && error.equals("authFailed")){
             model.addAttribute("error", "true");
         }
-        return "jsp/login";
+        return "login";
     }
 
     @PreAuthorize("permitAll()")
@@ -130,7 +130,7 @@ public class HeartbeatController {
     
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String homePage(Model model) {
-        return "jsp/index";
+        return "index";
     }
 
     @PreAuthorize("permitAll()")
@@ -161,7 +161,7 @@ public class HeartbeatController {
     @ExceptionHandler(CookieTheftException.class)
     public String handleCookieTheft(Model m){        
         m.addAttribute("error", "Its possible someone stole your cookie");
-        return "redirect:jsp/login";
+        return "redirect:login";
     }
     
     

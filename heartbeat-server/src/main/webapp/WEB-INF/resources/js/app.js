@@ -8,7 +8,6 @@ angular.module('heartbeat', [
     "heartbeat.computer",
     "heartbeat.groups",
     "heartbeat.settings",
-    "restangular"
 ])
 .config( function myAppConfig($stateProvider, $urlRouterProvider) {      
     //$urlRouterProvider.otherwise("/home");        
@@ -17,10 +16,9 @@ angular.module('heartbeat', [
     $rootScope.$state = $state;    
     $rootScope.$stateParams = $stateParams;
     titleService.setSuffix(' | Heartbeat');   
-    $state.transitionTo("home");
-    console.log($stateParams);
+    $state.transitionTo("home");    
 })
-.controller('AppCtrl', function AppCtrl($scope, $location, titleService, Restangular){
+.controller('AppCtrl', function AppCtrl($scope, $location, titleService){
     titleService.setTitle("Home");   
     //$scope.state = $state;
 });

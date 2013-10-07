@@ -14,7 +14,7 @@
 	<logger name="org.hibernate" level="ERROR" />
 
  	<logger name="org.springframework">
- 		<level value="ERROR" />
+            <level value="ERROR" />
 	</logger>	 
 
 	<root level="error">
