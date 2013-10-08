@@ -55,7 +55,7 @@ public class HeartbeatController {
     }
 
     @PreAuthorize("permitAll()")
-    @RequestMapping(value="update/machine/{uuid}", method=RequestMethod.PUT)
+    @RequestMapping(value="update/machine/uuid/{uuid}", method=RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void updateMachine(@PathVariable String uuid, HttpServletRequest request){        
         heartbeatService.updateMachineRecord(uuid);
