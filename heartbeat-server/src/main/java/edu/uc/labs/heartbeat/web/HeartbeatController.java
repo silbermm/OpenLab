@@ -41,6 +41,13 @@ public class HeartbeatController {
     }
 
     @PreAuthorize("permitAll()")
+    @RequestMapping(value="create", method=RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void createComputer(@RequestBody ClientMachine clientMachine, HttpServletRequest request){
+        boolean success = heartbeatService.updateMachine(clientMachine, request.getRemoteAddr());
+    }
+    
+    @PreAuthorize("permitAll()")
     @RequestMapping(value = "machine/create", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void acceptMachineInfo(@RequestBody ClientMachine clientMachine, HttpServletRequest request) {
