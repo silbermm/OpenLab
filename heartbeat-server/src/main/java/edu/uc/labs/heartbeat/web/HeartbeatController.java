@@ -54,6 +54,14 @@ public class HeartbeatController {
         boolean success = heartbeatService.updateMachine(clientMachine, request.getRemoteAddr());
     }
 
+    @PreAuthorize("permitAll()")
+    @RequestMapping(value="update/machine/{uuid}", method=RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public void updateMachine(@PathVariable String uuid, HttpServletRequest request){        
+        heartbeatService.updateMachineRecord(uuid);
+    }
+    
+    
     @RequestMapping(value = "group", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void createGroup(@RequestBody MachineGroup machineGroup) {
