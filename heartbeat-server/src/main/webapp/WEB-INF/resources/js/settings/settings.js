@@ -2,7 +2,6 @@
 angular.module('heartbeat.settings', [
     'ui.state',
     'titleService',
-    'restangular',
     'ngGrid',
     'ui.bootstrap'
 ]).config(function config($stateProvider, $urlRouterProvider) {

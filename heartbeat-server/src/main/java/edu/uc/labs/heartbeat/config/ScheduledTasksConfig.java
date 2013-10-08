@@ -20,12 +20,12 @@ public class ScheduledTasksConfig implements SchedulingConfigurer {
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-        taskRegistrar.setScheduler(taskScheduler());
-        taskRegistrar.addFixedDelayTask(new Runnable() {
+        taskRegistrar.setScheduler(taskScheduler());        
+        taskRegistrar.addCronTask(new Runnable() {
             public void run() {
                 rabbitCleanup().run();
             }
-        },10000);
+        },"0 00 07 * * ?");
     }
 
     @Bean(destroyMethod = "shutdown")
@@ -47,4 +47,5 @@ public class ScheduledTasksConfig implements SchedulingConfigurer {
     public ScheduledTask rabbitCleanup(){
         return new RabbitCleanupTask();
     }
+
 }

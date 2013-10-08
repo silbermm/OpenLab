@@ -2,10 +2,13 @@ package edu.uc.labs.heartbeat.config;
 
 import com.typesafe.config.Config;
 import edu.uc.labs.heartbeat.domain.ClientMachine;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -20,9 +23,6 @@ import org.springframework.amqp.support.converter.JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-
-import org.springframework.web.client.RestTemplate;
 
 /**
  *
@@ -72,6 +72,18 @@ public class RabbitConfig {
         CloseableHttpClient httpclient = HttpClients.custom()
                 .setDefaultCredentialsProvider(credsProvider).build();                                
         return httpclient;        
+    }
+    
+    @Bean
+    public HttpGet httpGet() {
+        String vhost;
+        try {
+            vhost = URLEncoder.encode(config.getString("rabbit.vhost"), "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            vhost = config.getString("rabbit.vhost");
+        }
+        HttpGet httpget = new HttpGet("http://" + config.getString("rabbit.host") + ":" + config.getString("rabbit.mgmtport") + "/api/queues/" + vhost);;
+        return httpget;
     }
     
     @Autowired

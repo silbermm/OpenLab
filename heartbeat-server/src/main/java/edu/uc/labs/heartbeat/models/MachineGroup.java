@@ -15,8 +15,6 @@ public class MachineGroup implements Serializable {
     private String name;
     private String description;
     private Set<Machine> machines;
-    private double xCoordinate;
-    private double yCoordinate;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

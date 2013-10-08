@@ -44,6 +44,8 @@ public class TaskController {
         webTaskService.delete(task);
     }
     
+    
+    
     @ExceptionHandler(GenericDataException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public @ResponseBody Failure handleDataException(GenericDataException e){

@@ -253,7 +253,7 @@
                 <configuration>
                     <url>http://labs.uc.edu:8080/manager</url>
                     <server>LabsTomcat</server>
-                    <path>/heartbeat</path>
+                    <path>/heartbeat-dev</path>
                     <update>true</update>
                 </configuration>	
             </plugin>	

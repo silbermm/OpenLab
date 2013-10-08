@@ -2,7 +2,6 @@
 angular.module('heartbeat.home', [
     'ui.state',
     'titleService',
-    'restangular',
 ]).config(function config($stateProvider) {
     $stateProvider.state('home', {
         url: '/home',
@@ -13,7 +12,7 @@ angular.module('heartbeat.home', [
             }
         }
     })
-}).controller('HomeCtrl', function HomeController($scope, titleService, Restangular) {
+}).controller('HomeCtrl', function HomeController($scope, titleService) {
     
 
 })

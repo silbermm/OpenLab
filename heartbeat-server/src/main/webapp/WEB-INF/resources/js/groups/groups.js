@@ -2,7 +2,6 @@
 angular.module('heartbeat.groups', [
     'ui.state',
     'titleService',
-    'restangular',
     'ngGrid',
     'ui.bootstrap'
 ]).config(function config($stateProvider, $urlRouterProvider) {
@@ -13,7 +12,7 @@ angular.module('heartbeat.groups', [
             "main": {
                 controller: "GroupsCtrl",
                 templateUrl: 'resources/js/groups/groups.tpl.html'
-            }            
+            }
         }
     }).state('groups.tableview', {
         url: '/table',
@@ -22,8 +21,9 @@ angular.module('heartbeat.groups', [
         url: '/grid',
         templateUrl: 'resources/js/groups/groups.gridview.tpl.html',
     })
-}).controller('GroupsCtrl', function GroupsController($scope, titleService, $dialog, $stateParams, $state,  $http) {    
+}).controller('GroupsCtrl', function GroupsController($scope, titleService, $modal, $stateParams, $state, $http, $log) {
     $scope.currentGroup = $stateParams.id;
+
     $http.get('group/' + $stateParams.id).success(function(data, status, headers, config) {
         $scope.group = data;
         $scope.machines = data.machines;
@@ -31,54 +31,68 @@ angular.module('heartbeat.groups', [
     }).error(function(data, status, headers, config) {
         console.log(data);
     });
-    $http({method: 'GET', url: 'group/all', cache: true}).success(function(data, status, headers,config){
+
+    $http({method: 'GET', url: 'group/all', cache: true}).success(function(data, status, headers, config) {
         $scope.groups = data;
-    }).error(function(data, status, headers,config){
+    }).error(function(data, status, headers, config) {
         console.log(data);
-    })    
-    
-    
-    
+    });
+
     $scope.optionsItems = [
-        {"name" : "filter",
-         "display" : "Add a filter"
-        }        
+        {"name": "filter",
+            "display": "Add a filter"
+        }
     ];
-    
+
     $scope.predicate = 'name';
     $scope.reverse = false;
 
-    $scope.moveModalOpts = {
-        backdrop: true,
-        keyboard: true,
-        backdropClick: false,
-        templateUrl: 'resources/js/groups/groups.movemodal.tpl.html',
-        controller: 'ModalCtrl'
-    };
-
     $scope.openMoveDialog = function(selectedMachines) {
-        var d = $dialog.dialog($scope.moveModalOpts);
-        d.open().then(function(group) {
-            // Need to search for the correct group...                        
-            if (group && group.groupId != $scope.currentGroup){
-                //alert('dialog closed with result: ' + group.name);
-                actOnSelected(selectedMachines, function(machine){
-                   console.log(machine);
-                   $http.put("machine/" + machine.uuid + "/to/" + group.groupId).
-                   success(function(data,status,headers,config){    
-                        console.log("Moved " + machine.name + " to " + group.name);
-                   })
-                   .error(function(data, status, headers, config){
-                        console.log(data);
-                   });
-                });
-            } else {
-                console.log("user aborted...");
+        var modalInstance = $modal.open({
+            templateUrl: 'moveModal.html',
+            controller: 'ModalInstanceCtrl',
+            resolve: {
+                items: function() {
+                    return {
+                        machines: selectedMachines,
+                        from: $scope.currentGroup,
+                        to: null,
+                        all: $scope.groups,
+                    }
+                }
             }
         });
+
+        modalInstance.result.then(function(obj) {            
+            $log.info(obj.machines);
+            $log.info(obj.from);
+            $log.info(obj.to);
+            if (obj.to && obj.to.groupId !== $scope.currentGroup) {
+                actOnSelected(obj.machines, function(machine) {                    
+                    $log.debug(machine);
+                    $http.put("machine/id/" + machine + "/to/" + obj.to.groupId).success(function(data, status, headers, config) {
+                        // now remove the computer from the $scope.machines array                        
+                        angular.forEach($scope.machines, function(val,key){
+                            $log.debug( "does " + machine + " === " + val.id + " ??");
+                            if(machine === val.id){
+                                $log.info(" YES ");
+                                $scope.machines.splice(key,1);   
+                            }
+                        });
+                        
+                    }).error(function(data, status, headers, config) {
+                        $log.error("having trouble updating the machine")
+                        $log.error(data);
+                    });
+                });
+            }
+            ;
+        }, function() {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+
     }
     
-
     $scope.machineSelected = {};
 
     $scope.getUseClass = function(machine) {
@@ -150,25 +164,22 @@ angular.module('heartbeat.groups', [
         for (var i = 0; i < keys.length; i++) {
             var k = keys[i];
             if (selection[k]) {
-                callback(k);                
+                callback(k);
                 delete selection[k];
             }
         }
     }
+}).controller('ModalInstanceCtrl', function ModalInstanceController($scope, $modalInstance, items) {
 
-}).controller("ModalCtrl", function ModalController($scope, $http, dialog){
-    $scope.apply = function(group) {
-        dialog.close(group);
+    $scope.obj = items;
+   
+    $scope.ok = function() {
+        $modalInstance.close($scope.obj);
     };
-    
-    $scope.cancel = function(group) {
-        dialog.close(false);
-    }
-    
-    $http.get('group/all').success(function(data, status, headers, config){
-       $scope.allGroups = data; 
-    }).error(function(data, status, headers, config){
-        console.log(data);
-    });
+    $scope.cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
+
 })
+        ;
 

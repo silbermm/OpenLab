@@ -114,7 +114,8 @@ public class HeartbeatController {
         log.info("Moved machine " + uuid + " to " + groupId);
     }
     
-    @RequestMapping(value = "machine/{id}/to/{groupId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "machine/id/{id}/to/{groupId}", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
     public void moveMachine(@PathVariable long id, @PathVariable long groupId){
         heartbeatService.moveMachine(id, groupId);
         log.info("Moved machine " + id + " to " + groupId);
@@ -142,8 +143,8 @@ public class HeartbeatController {
             auths.add(g.getAuthority());
         }
         return auths;
-    }
-
+    }        
+    
     @ExceptionHandler(GenericDataException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public @ResponseBody

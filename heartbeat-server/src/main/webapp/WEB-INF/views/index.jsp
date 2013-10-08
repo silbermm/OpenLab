@@ -16,12 +16,11 @@
         <script type="text/javascript" src="<c:url value='/resources/js/vender/angular.min.js'/>"></script>        
         <script type="text/javascript" src="<c:url value='/resources/js/vender/bootstrap.min.js'/>"></script>
         <script type="text/javascript" src="<c:url value='/resources/js/vender/angular-resource.min.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/ui-bootstrap-0.5.0.min.js' />"></script>
+        <script type="text/javascript" src="<c:url value='/resources/js/vender/ui-bootstrap-tpls-0.6.0.min.js' />"></script>
         <script type="text/javascript" src="<c:url value='/resources/js/vender/ng-grid.min.js' />"></script>
         <script type="text/javascript" src="<c:url value='/resources/js/vender/ui-route.js' />"></script>
         <script type="text/javascript" src="<c:url value='/resources/js/vender/ui-utils.min.js' />"></script>
         <script type="text/javascript" src="<c:url value='/resources/js/vender/underscore.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/restangular.min.js' />"></script>
         <script type="text/javascript" src="<c:url value='/resources/js/app.js' />"></script>        
         <script type="text/javascript" src="<c:url value='/resources/js/services/titleService.js' />"></script>
         <script type="text/javascript" src="<c:url value='/resources/js/services/searchService.js' />"></script>

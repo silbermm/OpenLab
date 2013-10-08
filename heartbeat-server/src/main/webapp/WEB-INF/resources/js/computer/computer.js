@@ -2,7 +2,6 @@
 angular.module('heartbeat.computer', [
     'ui.state',
     'titleService',
-    'restangular',
 ]).config(function config($stateProvider) {
     $stateProvider.state('computer', {
         url: '/computer/:id',
@@ -13,7 +12,7 @@ angular.module('heartbeat.computer', [
             }
         }
     })
-}).controller('ComputerCtrl', function ComputerController($scope, titleService, Restangular, $stateParams) {
+}).controller('ComputerCtrl', function ComputerController($scope, titleService, $stateParams) {
     titleService.setTitle($stateParams.id);
     $scope.computerid = $stateParams.id;
     

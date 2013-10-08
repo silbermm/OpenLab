@@ -62,3 +62,25 @@
 </div>
     
 </div>
+
+<script type="text/ng-template" id="moveModal.html">
+        <div class="modal-header">
+        <h3>Move Computers</h3>
+        </div>
+        <div class="modal-body">
+        <p> Where would you like to move the computer(s) too? </p>
+        <form class="form-horizontal css-form"> 
+        <div class="control-group">
+        <label class="control-label" for="groupSelect">All Groups: </label>
+        <div class="controls">
+            <select ng-model="obj.to" ng-options="g.name for g in obj.all"></select>
+        </div>
+        </div>        
+        </form>  
+        <p> {{ obj.from }} : {{ obj.to }} </p> 
+        </div>
+        <div class="modal-footer">
+        <button class="btn btn-primary" ng-disabled="form.$invalid" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
