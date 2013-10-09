@@ -25,17 +25,29 @@ angular.module('heartbeat.groups', [
     $scope.currentGroup = $stateParams.id;
 
     $http.get('group/' + $stateParams.id).success(function(data, status, headers, config) {
-        $scope.group = data;
-        $scope.machines = data.machines;
-        titleService.setTitle(data.name);
+        if($stateParams.id === 'all'){
+            $scope.group = "all";            
+            for(var i=0;i<data.length;i++){
+                if(i===0){
+                    $scope.machines = data[i].machines;                
+                }else {
+                    $scope.machines = $scope.machines.concat(data[i].machines);
+                }                    
+            }           
+            titleService.setTitle('All Machines');
+        } else {
+            $scope.group = data;
+            $scope.machines = data.machines;
+            titleService.setTitle(data.name);
+        }        
     }).error(function(data, status, headers, config) {
-        console.log(data);
+        $log.error(data);
     });
 
     $http({method: 'GET', url: 'group/all', cache: true}).success(function(data, status, headers, config) {
         $scope.groups = data;
     }).error(function(data, status, headers, config) {
-        console.log(data);
+        $log.error(data);
     });
 
     $scope.optionsItems = [
@@ -70,16 +82,13 @@ angular.module('heartbeat.groups', [
             if (obj.to && obj.to.groupId !== $scope.currentGroup) {
                 actOnSelected(obj.machines, function(machine) {                    
                     $log.debug(machine);
-                    $http.put("machine/id/" + machine + "/to/" + obj.to.groupId).success(function(data, status, headers, config) {
-                        // now remove the computer from the $scope.machines array                        
-                        angular.forEach($scope.machines, function(val,key){
-                            $log.debug( "does " + machine + " === " + val.id + " ??");
-                            if(machine === val.id){
+                    $http.put("machine/id/" + machine + "/to/" + obj.to.groupId).success(function(data, status, headers, config) {                                                                                                                      
+                        angular.forEach($scope.machines, function(val,key){                           
+                            if(machine == val.id){
                                 $log.info(" YES ");
                                 $scope.machines.splice(key,1);   
                             }
-                        });
-                        
+                        });                        
                     }).error(function(data, status, headers, config) {
                         $log.error("having trouble updating the machine")
                         $log.error(data);

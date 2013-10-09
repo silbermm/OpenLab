@@ -1,12 +1,27 @@
 <nav id="group-sidebar" class="span3"> 
-  <form class="" id="search-form">
+    <form class="" id="search-form">
         <input type="text" class="search-query" ng-model="search" id='search' placeholder="Search" />
     </form>
     <h4 class="dashboard">
         <a href="#"> <i class="icon-home"></i> Dashboard </a>                 
-        
+
     </h4> 
     <ul class="groups" ng-model="chosenGroup">
+        <li class="closed" ui-route='/groups/all/:view' ng-class="{active:$state.params.id == 'all'}" >
+            <span class='toggle'><i class='icon-caret-right'></i></span>
+            <h4 class="groupName">
+                <a href="#/groups/all/table"> All </a>
+            </h4>
+            <span class='loader'>Loading</span>
+            <div class="options dropdown">
+                <a dropdown-toggle> <i class="icon-filter"></i> </a>
+                <ul class="dropdown-menu groups-dropdown-menu">
+                    <li ng-repeat="choice in optionsItems">
+                        <a> {{choice.display}}</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
         <li class="closed" ng-repeat="group in groups" ng-class="{active:$state.params.id == group.groupId}">
             <span class="toggle"><i class="icon-caret-right"></i></span>
             <h4 class="groupName"> 
@@ -14,7 +29,7 @@
             </h4> 
             <span class='loader'>Loading</span>
             <div class="options dropdown">
-                <a dropdown-toggle> <i class="icon-cog"></i> </a>
+                <a dropdown-toggle> <i class="icon-filter"></i> </a>
                 <ul class="dropdown-menu groups-dropdown-menu">
                     <li ng-repeat="choice in optionsItems">
                         <a>{{choice.display}}</a>
@@ -23,64 +38,69 @@
             </div>
         </li>
     </ul>
+    
+    <ul class="inline grp-controls"> 
+        <li> test </li>
+        <li> test </li>
+    </ul>
+    
 </nav>
 
 <div id="ui-view-main">
-<div class="row-fluid">
-    <header>
-        <div class="pull-left">
-            <div class="btn-group">
-                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="icon-tasks"></i> Actions
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li ng-class="{disabled: !isMachineSelected()}">
-                        <a ng-click="openMoveDialog(machineSelected)" ><i class="icon-fixed-width icon-move"></i>Move</a>
-                    </li>                   
-                    <li ng-class="{disabled: !isMachineSelected()}">
-                        <a ><i class="icon-fixed-width icon-off"></i>Power</a>
-                    </li>
-                    <li ng-class="{disabled: !isMachineSelected()}">
-                        <a ng-click="deleteSelected(machineSelected)"><i class="icon-fixed-width icon-trash"></i>Delete</a>  
-                    </li>
+    <div class="row-fluid">
+        <header>
+            <div class="pull-left">
+                <div class="btn-group">
+                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="icon-tasks"></i> Actions
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-class="{disabled: !isMachineSelected()}">
+                            <a ng-click="openMoveDialog(machineSelected)" ><i class="icon-fixed-width icon-move"></i>Move</a>
+                        </li>                   
+                        <li ng-class="{disabled: !isMachineSelected()}">
+                            <a ><i class="icon-fixed-width icon-off"></i>Power</a>
+                        </li>
+                        <li ng-class="{disabled: !isMachineSelected()}">
+                            <a ng-click="deleteSelected(machineSelected)"><i class="icon-fixed-width icon-trash"></i>Delete</a>  
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pull-right">
+                <ul class="nav nav-pills">
+                    <li ui-route="/groups/{{currentGroup}}/table" ng-class="{active:$uiRoute}"><a href="#/groups/{{currentGroup}}/table"> <i class="icon-list"></i> Table View</a></li>
+                    <li ui-route="/groups/{{currentGroup}}/grid" ng-class="{active:$uiRoute}"> <a href="#/groups/{{currentGroup}}/grid"><i class="icon-th"></i> Grid View</a></li>                
                 </ul>
             </div>
-        </div>
-        
-        <div class="pull-right">
-            <ul class="nav nav-pills">
-                <li ui-route="/groups/{{currentGroup}}/table" ng-class="{active:$uiRoute}"><a href="#/groups/{{currentGroup}}/table"> <i class="icon-list"></i> Table View</a></li>
-                <li ui-route="/groups/{{currentGroup}}/grid" ng-class="{active:$uiRoute}"> <a href="#/groups/{{currentGroup}}/grid"><i class="icon-th"></i> Grid View</a></li>                
-            </ul>
-        </div>
-    </header>
-</div>
+        </header>
+    </div>
 
-<div id="main-content-right" class="row-fluid">
-    <div ui-view></div>
-</div>
-    
+    <div id="main-content-right" class="row-fluid">
+        <div ui-view></div>
+    </div>
+
 </div>
 
 <script type="text/ng-template" id="moveModal.html">
-        <div class="modal-header">
-        <h3>Move Computers</h3>
-        </div>
-        <div class="modal-body">
-        <p> Where would you like to move the computer(s) too? </p>
-        <form class="form-horizontal css-form"> 
-        <div class="control-group">
-        <label class="control-label" for="groupSelect">All Groups: </label>
-        <div class="controls">
-            <select ng-model="obj.to" ng-options="g.name for g in obj.all"></select>
-        </div>
-        </div>        
-        </form>  
-        <p> {{ obj.from }} : {{ obj.to }} </p> 
-        </div>
-        <div class="modal-footer">
-        <button class="btn btn-primary" ng-disabled="form.$invalid" ng-click="ok()">OK</button>
-        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-        </div>
-    </script>
+    <div class="modal-header">
+    <h3>Move Computers</h3>
+    </div>
+    <div class="modal-body">
+    <p> Where would you like to move the computer(s) too? </p>
+    <form class="form-horizontal css-form"> 
+    <div class="control-group">
+    <label class="control-label" for="groupSelect">All Groups: </label>
+    <div class="controls">
+    <select ng-model="obj.to" ng-options="g.name for g in obj.all"></select>
+    </div>
+    </div>        
+    </form>      
+    </div>
+    <div class="modal-footer">
+    <button class="btn btn-primary" ng-disabled="form.$invalid" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
