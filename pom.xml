@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>edu.uc.labs</groupId>
     <version>1.0.5</version>
-    <artifactId>heartbeat</artifactId>
+		<artifactId>openlab</artifactId>
     <packaging>pom</packaging>
     <modules>
-			<module>heartbeat-lib</module>
-			<module>heartbeat-client</module>
-			<module>heartbeat-server</module>
+			<module>openlab-lib</module>
+			<module>openlab-client</module>
+			<module>openlab-server</module>
     </modules>
     <dependencies>
         <dependency>

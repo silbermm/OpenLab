@@ -2,15 +2,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>edu.uc.labs</groupId>
-    <artifactId>heartbeat-lib</artifactId>
+    <artifactId>openlab-lib</artifactId>
     <version>1.0.5</version>
     <packaging>jar</packaging>
 	  <parent>
       <groupId>edu.uc.labs</groupId>
-    	<artifactId>heartbeat</artifactId>
+    	<artifactId>openlab</artifactId>
     	<version>1.0.5</version>
   	</parent>		
-		<name>heartbeat-lib</name>
+		<name>openlab-lib</name>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

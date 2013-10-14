@@ -2,11 +2,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>edu.uc.labs</groupId>
-    <artifactId>heartbeat-server</artifactId>
+    <artifactId>openlab-server</artifactId>
     <packaging>war</packaging>
     <parent>
         <groupId>edu.uc.labs</groupId>
-        <artifactId>heartbeat</artifactId>
+        <artifactId>openlab</artifactId>
         <version>1.0.5</version>
     </parent>
     <version>1.0</version>
@@ -149,7 +149,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>heartbeat-lib</artifactId>
+            <artifactId>openlab-lib</artifactId>
             <version>1.0.5</version>
         </dependency>
         <dependency>
@@ -226,7 +226,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>heartbeat</finalName>
+        <finalName>openlab</finalName>
         <plugins>
             <!--source level should be 1.6 (which is not Maven default) for java EE 6 projects, so let's change it -->
             <plugin>
