@@ -1,4 +1,4 @@
-heartbeat
+OpenLab
 =========
 
-Client/Server application for monitoring machines on a network
+Client/Server stack to manage computer labs 
