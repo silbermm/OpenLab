@@ -3,7 +3,8 @@ angular.module('heartbeat.groups', [
     'ui.state',
     'titleService',
     'ngGrid',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'angular-growl',
 ]).config(function config($stateProvider, $urlRouterProvider) {
     $stateProvider.state('groups', {
         abstract: true,
@@ -21,27 +22,26 @@ angular.module('heartbeat.groups', [
         url: '/grid',
         templateUrl: 'resources/js/groups/groups.gridview.tpl.html',
     })
-}).controller('GroupsCtrl', function GroupsController($scope, titleService, $modal, $stateParams, $state, $http, $log) {
+}).controller('GroupsCtrl', function GroupsController($scope, titleService, $modal, $stateParams, $state, $http, $log, growl) {
     $scope.currentGroup = $stateParams.id;
-
     $http.get('group/' + $stateParams.id).success(function(data, status, headers, config) {
-        if($stateParams.id === 'all'){
-            $scope.group = "all";            
-            for(var i=0;i<data.length;i++){
-                if(i===0){
-                    $scope.machines = data[i].machines;                
-                }else {
+        if ($stateParams.id === 'all') {
+            $scope.group = "all";
+            for (var i = 0; i < data.length; i++) {
+                if (i === 0) {
+                    $scope.machines = data[i].machines;
+                } else {
                     $scope.machines = $scope.machines.concat(data[i].machines);
-                }                    
-            }           
+                }
+            }
             titleService.setTitle('All Machines');
         } else {
             $scope.group = data;
             $scope.machines = data.machines;
             titleService.setTitle(data.name);
-        }        
+        }
     }).error(function(data, status, headers, config) {
-        $log.error(data);
+        growl.addErrorMessage("Unable to get the Machines in the " + $stateParams.id + " group. " + data.error);
     });
 
     $http({method: 'GET', url: 'group/all', cache: true}).success(function(data, status, headers, config) {
@@ -74,21 +74,17 @@ angular.module('heartbeat.groups', [
                 }
             }
         });
-
-        modalInstance.result.then(function(obj) {            
-            $log.info(obj.machines);
-            $log.info(obj.from);
-            $log.info(obj.to);
+        modalInstance.result.then(function(obj) {
             if (obj.to && obj.to.groupId !== $scope.currentGroup) {
-                actOnSelected(obj.machines, function(machine) {                    
+                actOnSelected(obj.machines, function(machine) {
                     $log.debug(machine);
-                    $http.put("machine/id/" + machine + "/to/" + obj.to.groupId).success(function(data, status, headers, config) {                                                                                                                      
-                        angular.forEach($scope.machines, function(val,key){                           
-                            if(machine == val.id){
+                    $http.put("machine/id/" + machine + "/to/" + obj.to.groupId).success(function(data, status, headers, config) {
+                        angular.forEach($scope.machines, function(val, key) {
+                            if (machine == val.id) {
                                 $log.info(" YES ");
-                                $scope.machines.splice(key,1);   
+                                $scope.machines.splice(key, 1);
                             }
-                        });                        
+                        });
                     }).error(function(data, status, headers, config) {
                         $log.error("having trouble updating the machine")
                         $log.error(data);
@@ -99,13 +95,95 @@ angular.module('heartbeat.groups', [
         }, function() {
             $log.info('Modal dismissed at: ' + new Date());
         });
-
     }
-    
+
+    $scope.openNewGroupDialog = function() {
+        var modalInstance = $modal.open({
+            templateUrl: 'addGroupModal.html',
+            controller: 'GroupModalCtrl',
+            resolve: {
+                items: function() {
+                    return {
+                        name: null,
+                        description: null
+                    }
+                }
+            }
+        });
+
+        modalInstance.result.then(function(group) {
+            $http.post("group/", group).success(function(data, status, headers, config) {
+                group.groupId = data.created;
+                $scope.groups.push(group);
+                growl.addSuccessMessage("The group " + group.name + " was created successfully");
+            }).error(function(data, status, headers, config) {
+                growl.addErrorMessage("Something went horrible wrong! " + data.error);
+            });
+        }, function() {
+            $log.info('Modal dimissed at: ' + new Date());
+        });
+    }
+
+    $scope.openEditGroupDialog = function(currentGroupName) {
+        $log.debug($scope.group);
+        if ($scope.group === 'all') {
+            // do nothing
+        } else {
+            var modalInstance = $modal.open({
+                templateUrl: 'editGroupModal.html',
+                controller: 'GroupModalCtrl',
+                resolve: {
+                    items: function() {
+                        return {
+                            'group': $scope.group,
+                            'oldGroup': $scope.group.name,
+                        }
+                    }
+                }
+            });
+            modalInstance.result.then(function(items) {
+                $log.debug("current group name = " + $scope.group.name);
+                $log.debug("old group name = " + items.oldGroup);
+                $http.put("group/", items.group).success(function(data, status, headers, config) {
+                    angular.forEach($scope.groups, function(val, key) {
+                        if ($scope.groups[key].name === items.oldGroup) {
+                            $scope.groups[key] = items.group;
+                            return;
+                        }
+                    });
+                    $log.debug("now group name = " + $scope.group.name);
+                    growl.addSuccessMessage("The group " + items.group.name + " was updated successfully");
+                }).error(function(data, status, headers, config) {
+                    growl.addErrorMessage("Something went horrible wrong! " + data.error);
+                });
+            }, function() {
+                $log.info('Modal dimissed at: ' + new Date());
+            });
+        }
+    }
+
+    $scope.openDeleteGroupDialog = function() {
+        var modalInstance = $modal.open({
+            templateUrl: 'resources/js/groups/groups.deletemodal.tpl.html',
+            controller: 'GroupModalCtrl',
+            resolve: {
+                items: function() {
+                    return { group : $scope.group, oldGroup: null };                       
+                }
+            }
+        });
+        
+        modalInstance.result.then(function(items) {
+            
+        }, function() {
+            
+        });
+    }
+
     $scope.machineSelected = {};
 
     $scope.getUseClass = function(machine) {
-        if (machine.currentUser == "null" || machine.currentUser == "" || machine.currentUser == 0) {
+        if (machine.currentUser === "null" || machine.currentUser === "" || machine.currentUser == 0 || machine.currentUser === 'None') {
             return "mac-available";
         } else {
             return "mac-being-used";
@@ -179,16 +257,24 @@ angular.module('heartbeat.groups', [
         }
     }
 }).controller('ModalInstanceCtrl', function ModalInstanceController($scope, $modalInstance, items) {
-
     $scope.obj = items;
-   
     $scope.ok = function() {
         $modalInstance.close($scope.obj);
     };
     $scope.cancel = function() {
         $modalInstance.dismiss('cancel');
     };
+}).controller("GroupModalCtrl", function GroupModalController($scope, $modalInstance, items, $log) {
+    $scope.group = items.group;
+    $scope.oldGroup = items.oldGroup;
 
+    $scope.ok = function() {
+        $log.debug($scope.group, $scope.oldGroup);
+        $modalInstance.close({group: $scope.group, oldGroup: $scope.oldGroup});
+    };
+    $scope.cancel = function() {
+        $modalInstance.dismiss('cancel');
+    };
 })
         ;
 

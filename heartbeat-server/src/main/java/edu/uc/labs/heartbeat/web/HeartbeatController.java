@@ -8,6 +8,7 @@ import edu.uc.labs.heartbeat.models.MachineGroup;
 import edu.uc.labs.heartbeat.service.HeartbeatService;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -61,10 +63,28 @@ public class HeartbeatController {
         heartbeatService.updateMachineRecord(uuid);
     }
     
-    
+    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
     @RequestMapping(value = "group", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void createGroup(@RequestBody MachineGroup machineGroup) {
+    public @ResponseBody Map<String, String> createGroup(@RequestBody MachineGroup machineGroup) {
+        long created = heartbeatService.createGroup(machineGroup);
+        Map cr = new HashMap();
+        cr.put("created", created);
+        return cr;
+    }
+    
+    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+    @RequestMapping(value = "group", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteGroup(@RequestBody MachineGroup machineGroup) {
+        heartbeatService.deleteGroup(machineGroup);
+    }
+    
+    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+    @RequestMapping(value = "group", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public void updateGroup(@RequestBody MachineGroup machineGroup){
+        heartbeatService.updateGroup(machineGroup);
     }
 
     @PreAuthorize("permitAll()")

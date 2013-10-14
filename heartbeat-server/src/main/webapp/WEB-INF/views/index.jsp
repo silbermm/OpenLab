@@ -12,24 +12,11 @@
         <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css" rel="stylesheet" />
         <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet" />
         <link href="<c:url value='/resources/css/heartbeat.css'/>" rel="stylesheet" />
-        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/angular.min.js'/>"></script>        
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/bootstrap.min.js'/>"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/angular-resource.min.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/ui-bootstrap-tpls-0.6.0.min.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/ng-grid.min.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/ui-route.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/ui-utils.min.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/underscore.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/app.js' />"></script>        
-        <script type="text/javascript" src="<c:url value='/resources/js/services/titleService.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/services/searchService.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/home/home.js' />"></script>        
-        <script type="text/javascript" src="<c:url value='/resources/js/computer/computer.js' />"></script>  
-        <script type="text/javascript" src="<c:url value='/resources/js/groups/groups.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/settings/settings.js' />"></script>
+        <link href="<c:url value='/resources/css/angular-growl.min.css'/>" rel="stylesheet" />
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>        
     </head>
-    <body>    
+    <body>
+        <div growl> </div>
         <div class="navbar">
             <div class="navbar-inner">                  
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -70,5 +57,23 @@
             </div>
         </div>      
         <div ui-view="main"> </div>
+        
+        
+        <script type="text/javascript" src="<c:url value='/resources/js/vender/angular.min.js'/>"></script>        
+        <script type="text/javascript" src="<c:url value='/resources/js/vender/bootstrap.min.js'/>"></script>
+        <script type="text/javascript" src="<c:url value='/resources/js/vender/angular-growl.min.js'/>"></script>
+        <script type="text/javascript" src="<c:url value='/resources/js/vender/angular-resource.min.js' />"></script>
+        <script type="text/javascript" src="<c:url value='/resources/js/vender/ui-bootstrap-tpls-0.6.0.min.js' />"></script>
+        <script type="text/javascript" src="<c:url value='/resources/js/vender/ng-grid.min.js' />"></script>
+        <script type="text/javascript" src="<c:url value='/resources/js/vender/ui-route.js' />"></script>
+        <script type="text/javascript" src="<c:url value='/resources/js/vender/ui-utils.min.js' />"></script>
+        <script type="text/javascript" src="<c:url value='/resources/js/vender/underscore.js' />"></script>
+        <script type="text/javascript" src="<c:url value='/resources/js/app.js' />"></script>        
+        <script type="text/javascript" src="<c:url value='/resources/js/services/titleService.js' />"></script>
+        <script type="text/javascript" src="<c:url value='/resources/js/services/searchService.js' />"></script>
+        <script type="text/javascript" src="<c:url value='/resources/js/home/home.js' />"></script>        
+        <script type="text/javascript" src="<c:url value='/resources/js/computer/computer.js' />"></script>  
+        <script type="text/javascript" src="<c:url value='/resources/js/groups/groups.js' />"></script>
+        <script type="text/javascript" src="<c:url value='/resources/js/settings/settings.js' />"></script>
     </body>
 </html>

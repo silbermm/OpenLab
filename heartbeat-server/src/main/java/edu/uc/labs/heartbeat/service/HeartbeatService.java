@@ -45,18 +45,18 @@ public class HeartbeatService {
             return machineDao.findBySerialNumber(serial);
         } catch (RuntimeException ex) {
             throw new GenericDataException(ex.getMessage());
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new GenericDataException(ex.getMessage());
-        }        
+        }
     }
-    
-    public Set<Machine> getMachinesInGroup(Long groupId){
+
+    public Set<Machine> getMachinesInGroup(Long groupId) {
         try {
             MachineGroup mg = machineGroupDao.get(groupId);
             return machineDao.findByGroup(mg);
-        } catch (RuntimeException ex){
+        } catch (RuntimeException ex) {
             throw new GenericDataException(ex.getMessage());
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new GenericDataException(ex.getMessage());
         }
     }
@@ -75,6 +75,41 @@ public class HeartbeatService {
         return g;
     }
 
+    @Transactional(readOnly=false)
+    public long createGroup(MachineGroup m) {
+        try {
+            machineGroupDao.create(m);
+            MachineGroup n = machineGroupDao.getGroupByShortName(m.getName());
+            return n.getGroupId();
+        } catch (RuntimeException e) {
+            throw new GenericDataException(e.getMessage());
+        } catch (Exception e) {
+            throw new GenericDataException(e.getMessage());
+        }
+    }
+    
+    @Transactional(readOnly=false)
+    public void updateGroup(MachineGroup m){
+        try {
+            machineGroupDao.update(m);
+        } catch (RuntimeException e) {
+            throw new GenericDataException(e.getMessage());
+        } catch (Exception e) {
+            throw new GenericDataException(e.getMessage());
+        }
+    }
+    
+    @Transactional(readOnly=false)
+    public void deleteGroup(MachineGroup m){
+        try {
+            machineGroupDao.delete(m);
+        } catch (RuntimeException e) {
+            throw new GenericDataException(e.getMessage());
+        } catch (Exception e) {
+            throw new GenericDataException(e.getMessage());
+        }
+    }
+
     @Transactional(readOnly = false)
     public void moveMachine(String uuid, long toGroupId) {
         try {
@@ -88,25 +123,25 @@ public class HeartbeatService {
             throw new GenericDataException(e.getMessage());
         }
     }
-    
+
     @Transactional(readOnly = false)
-    public void moveMachine(long machineId, long groupId){
+    public void moveMachine(long machineId, long groupId) {
         try {
             Machine m = machineDao.get(machineId);
             MachineGroup group = machineGroupDao.get(groupId);
             m.setGroup(group);
             machineDao.update(m);
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             throw new GenericDataException(e.getMessage());
         } catch (Exception e) {
             throw new GenericDataException(e.getMessage());
         }
     }
-    
+
     @Transactional(readOnly = false)
-    public void deleteMachine(Machine m){
+    public void deleteMachine(Machine m) {
         log.info("calling delete from the dao");
-        machineDao.delete(m);                
+        machineDao.delete(m);
     }
 
     @Transactional(readOnly = false)
@@ -122,7 +157,7 @@ public class HeartbeatService {
                 m.setModel(cm.getModel());
                 m.setOsVersion(cm.getOsVersion());
                 m.setOs(cm.getOs());
-                if(cm.getOs().startsWith("Mac")){
+                if (cm.getOs().startsWith("Mac")) {
                     m.setMacName(cm.getName());
                 } else {
                     m.setName(cm.getName());
@@ -147,7 +182,7 @@ public class HeartbeatService {
                 m.setModel(cm.getModel());
                 m.setSerialNumber(cm.getSerialNumber());
                 m.setOs(cm.getOs());
-                if(cm.getOs().startsWith("Mac")){
+                if (cm.getOs().startsWith("Mac")) {
                     m.setMacName(cm.getName());
                 } else {
                     m.setName(cm.getName());
@@ -188,10 +223,11 @@ public class HeartbeatService {
     public void setMachineGroupDao(MachineGroupDao machineGroupDao) {
         this.machineGroupDao = machineGroupDao;
     }
-    
     final static Logger log = LoggerFactory.getLogger(HeartbeatService.class);
-    
-    @Autowired Config config;
-    @Autowired MachineDao machineDao;
-    @Autowired MachineGroupDao machineGroupDao;
+    @Autowired
+    Config config;
+    @Autowired
+    MachineDao machineDao;
+    @Autowired
+    MachineGroupDao machineGroupDao;
 }

@@ -1,0 +1,23 @@
+<div class="modal-header">
+    <h3>Delete Group {{group.name}} </h3>
+</div>
+<div class="modal-body">    
+    <form name="deleteGroupForm" class="form-horizontal css-form" novalidate> 
+        <div class="control-group">
+            <label class="control-label" for="groupName">Group Name: </label>
+            <div class="controls">
+                <input type="text" ng-model="group.name" id="groupName" required min=1/>  
+            </div>            
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="groupDesc">Group Description: </label>
+            <div class="controls">
+                <input type="text" ng-model="group.description" id="groupDesc" required min=1 >
+            </div>            
+        </div>
+    </form>   
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-disabled="editGroupForm.$invalid" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>

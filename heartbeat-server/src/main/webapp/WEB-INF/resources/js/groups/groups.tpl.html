@@ -1,49 +1,53 @@
 <nav id="group-sidebar" class="span3"> 
-    <form class="" id="search-form">
+    <form class="" id="search-form" style="height:2%">
         <input type="text" class="search-query" ng-model="search" id='search' placeholder="Search" />
     </form>
-    <h4 class="dashboard">
-        <a href="#"> <i class="icon-home"></i> Dashboard </a>                 
-
+    <h4 class="dashboard" style="height:2%">
+        <a href="#"> <i class="icon-home"></i> Groups </a>                 
     </h4> 
-    <ul class="groups" ng-model="chosenGroup">
-        <li class="closed" ui-route='/groups/all/:view' ng-class="{active:$state.params.id == 'all'}" >
-            <span class='toggle'><i class='icon-caret-right'></i></span>
-            <h4 class="groupName">
-                <a href="#/groups/all/table"> All </a>
-            </h4>
-            <span class='loader'>Loading</span>
-            <div class="options dropdown">
-                <a dropdown-toggle> <i class="icon-filter"></i> </a>
-                <ul class="dropdown-menu groups-dropdown-menu">
-                    <li ng-repeat="choice in optionsItems">
-                        <a> {{choice.display}}</a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-        <li class="closed" ng-repeat="group in groups" ng-class="{active:$state.params.id == group.groupId}">
-            <span class="toggle"><i class="icon-caret-right"></i></span>
-            <h4 class="groupName"> 
-                <a href="#/groups/{{group.groupId}}/table"> {{ group.name }} </a> 
-            </h4> 
-            <span class='loader'>Loading</span>
-            <div class="options dropdown">
-                <a dropdown-toggle> <i class="icon-filter"></i> </a>
-                <ul class="dropdown-menu groups-dropdown-menu">
-                    <li ng-repeat="choice in optionsItems">
-                        <a>{{choice.display}}</a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-    </ul>
-    
-    <ul class="inline grp-controls"> 
-        <li> test </li>
-        <li> test </li>
-    </ul>
-    
+    <div id="groups-overflow" >
+        <ul class="groups" ng-model="chosenGroup">
+            <li class="closed" ui-route='/groups/all/:view' ng-class="{active:$state.params.id == 'all'}" >
+                <span class='toggle'><i class='icon-caret-right'></i></span>
+                <h4 class="groupName">
+                    <a href="#/groups/all/table"> All </a>
+                </h4>
+                <span class='loader'>Loading</span>
+                <div class="options dropdown">
+                    <a dropdown-toggle> <i class="icon-filter"></i> </a>
+                    <ul class="dropdown-menu groups-dropdown-menu">
+                        <li ng-repeat="choice in optionsItems">
+                            <a> {{choice.display}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="closed" ng-repeat="group in groups" ng-class="{active:$state.params.id == group.groupId}">
+                <span class="toggle"><i class="icon-caret-right"></i></span>
+                <h4 class="groupName"> 
+                    <a href="#/groups/{{group.groupId}}/table" ng-model="group.name"> {{group.name}} </a> 
+                </h4> 
+                <span class='loader'>Loading</span>
+                <div class="options dropdown">
+                    <a dropdown-toggle> <i class="icon-filter"></i> </a>
+                    <ul class="dropdown-menu groups-dropdown-menu">
+                        <li ng-repeat="choice in optionsItems">
+                            <a>{{choice.display}}</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="grp-controls container">
+        <ul class="inline"> 
+            <li> <a popover-placement="right" popover="Add a new Group" popover-trigger="mouseenter" ng-click='openNewGroupDialog()'> <i class='icon-plus'></i> </a> </li>
+            <li> <a popover-placement="right" popover="Edit selected Group" popover-trigger="mouseenter" ng-click='openEditGroupDialog()'><i class="icon-edit"></i></a> </li>
+            <li> <a popover-placement="right" popover="Remove selected Group" popover-trigger="mouseenter" ><i class="icon-ban-circle"></i> </a></li>
+        </ul>
+    </div>
+
 </nav>
 
 <div id="ui-view-main">
@@ -104,3 +108,55 @@
     <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
     </div>
 </script>
+
+<script type="text/ng-template" id="addGroupModal.html">
+    <div class="modal-header">
+    <h3>Add a Group</h3>
+    </div>
+    <div class="modal-body">    
+    <form name="addGroupForm" class="form-horizontal css-form" novalidate> 
+    <div class="control-group">
+    <label class="control-label" for="groupName">Group Name: </label>
+    <div class="controls">
+    <input type="text" ng-model="group.name" id="groupName" required min=1/>  
+    </div>            
+    </div>
+    <div class="control-group">
+    <label class="control-label" for="groupDesc">Group Description: </label>
+    <div class="controls">
+    <input type="text" ng-model="group.description" id="groupDesc" required min=1 >
+    </div>            
+    </div>
+    </form>   
+    </div>
+    <div class="modal-footer">
+    <button class="btn btn-primary" ng-disabled="addGroupForm.$invalid" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="editGroupModal.html">
+    <div class="modal-header">
+    <h3>Edit Group {{group.name}} </h3>
+    </div>
+    <div class="modal-body">    
+    <form name="editGroupForm" class="form-horizontal css-form" novalidate> 
+    <div class="control-group">
+    <label class="control-label" for="groupName">Group Name: </label>
+    <div class="controls">
+    <input type="text" ng-model="group.name" id="groupName" required min=1/>  
+    </div>            
+    </div>
+    <div class="control-group">
+    <label class="control-label" for="groupDesc">Group Description: </label>
+    <div class="controls">
+    <input type="text" ng-model="group.description" id="groupDesc" required min=1 >
+    </div>            
+    </div>
+    </form>   
+    </div>
+    <div class="modal-footer">
+    <button class="btn btn-primary" ng-disabled="editGroupForm.$invalid" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>    
