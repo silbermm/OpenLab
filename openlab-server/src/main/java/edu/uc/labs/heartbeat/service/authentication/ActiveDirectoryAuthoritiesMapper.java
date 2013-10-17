@@ -1,4 +1,4 @@
-package edu.uc.labs.heartbeat.service;
+package edu.uc.labs.heartbeat.service.authentication;
 
 import java.util.Collection;
 import java.util.HashSet;

@@ -2,7 +2,9 @@ package edu.uc.labs.heartbeat.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
+
 import java.io.Serializable;
 import java.util.Set;
 
@@ -11,9 +13,11 @@ import java.util.Set;
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@group_id")
 public class MachineGroup implements Serializable {
 
-    private long groupId;
+	private static final long serialVersionUID = 60992574665748746L;
+	private long groupId;
     private String name;
     private String description;
+    private Set<Authority> authorities;
     private Set<Machine> machines;
 
     @Id
@@ -53,4 +57,23 @@ public class MachineGroup implements Serializable {
     public void setMachines(Set<Machine> machines) {
         this.machines = machines;
     }
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+    @JoinTable(name= "heartbeat_group_authorities", 
+            joinColumns={
+                @JoinColumn(name="group_id")}, 
+            inverseJoinColumns = {
+                @JoinColumn(name="authorityId")
+        })
+	public Set<Authority> getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(Set<Authority> authorities) {
+		this.authorities = authorities;
+	}
+
+    
+    
+    
 }

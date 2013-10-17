@@ -93,6 +93,7 @@ public class AccountService {
     public void deleteAuthority(Authority a) {
         authDao.delete(a);
     }
+    
     @Autowired
     AuthorityDao authDao;
     @Autowired

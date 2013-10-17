@@ -2,6 +2,7 @@ package edu.uc.labs.heartbeat.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.typesafe.config.Config;
+
 import edu.uc.labs.heartbeat.domain.ClientMachine;
 import edu.uc.labs.heartbeat.domain.Command;
 import edu.uc.labs.heartbeat.domain.CommandResult;
@@ -9,9 +10,11 @@ import edu.uc.labs.heartbeat.exceptions.MachineNotRespondingException;
 import edu.uc.labs.heartbeat.exceptions.RabbitFetchException;
 import edu.uc.labs.heartbeat.models.Machine;
 import edu.uc.labs.heartbeat.utils.HeartbeatUtil;
+
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -19,7 +22,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.util.EntityUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.AmqpTemplate;
@@ -151,21 +155,16 @@ public class RabbitService {
             }
         } catch (RabbitFetchException r) {
             log.error(r.getMessage());
-        } catch (Exception e) {
-            log.error(e.getCause());
+        } catch (Exception e) {       
+            log.error(e.getCause().toString());
             log.error(e.getMessage());
         }
-
     }
-    private static final Logger log = Logger.getLogger(RabbitService.class);
-    @Autowired
-    private AmqpTemplate heartbeatTemplate;
-    @Autowired
-    AmqpAdmin amqpAdmin;
-    @Autowired
-    private Config config;
-    @Autowired
-    HttpClient httpClient;
-    @Autowired
-    HttpGet httpget;
+           
+    private static final Logger log = LoggerFactory.getLogger(RabbitService.class);
+    @Autowired private AmqpTemplate heartbeatTemplate;
+    @Autowired private AmqpAdmin amqpAdmin;
+    @Autowired private Config config;
+    @Autowired HttpClient httpClient;
+    @Autowired HttpGet httpget;
 }

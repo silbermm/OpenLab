@@ -1,6 +1,9 @@
 package edu.uc.labs.heartbeat.dao;
 
+import java.util.List;
+
 import edu.uc.labs.heartbeat.models.Authority;
+
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -16,6 +19,6 @@ public class AuthorityDaoImpl extends AbstractDao<Authority> implements Authorit
     @Override
     public Authority findByName(String name) {        
         return (Authority)getSession().createQuery("from Authority where authority=:name").setString("name", name).uniqueResult();
-    }
+    }	
         
 }

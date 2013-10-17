@@ -1,7 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>edu.uc.labs</groupId>
     <artifactId>openlab-server</artifactId>
     <packaging>war</packaging>
     <parent>
@@ -10,7 +9,7 @@
         <version>1.0.5</version>
     </parent>
     <version>1.0</version>
-    <name>Heartbeat Server</name>
+    <name>OpenLab Server</name>
     <url>http://maven.apache.org</url>
     <properties>
         <spring.version>3.2.4.RELEASE</spring.version>
@@ -185,7 +184,7 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-            <version>3.2.0.CI-SNAPSHOT</version>
+            <version>3.1.4.RELEASE</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -196,7 +195,7 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>3.2.0.CI-SNAPSHOT</version>
+            <version>3.1.4.RELEASE</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -246,18 +245,7 @@
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>tomcat-maven-plugin</artifactId>
-                <configuration>
-                    <url>http://labs.uc.edu:8080/manager</url>
-                    <server>LabsTomcat</server>
-                    <path>/heartbeat-dev</path>
-                    <update>true</update>
-                </configuration>	
             </plugin>	
-
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
@@ -297,23 +285,5 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
-    </build>
-    <repositories>
-        <repository>
-            <id>spring-snapshots</id>
-            <url>http://repo.springsource.org/libs-snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>spring-snapshots</id>
-            <url>http://repo.springsource.org/libs-snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
+    </build>    
 </project>

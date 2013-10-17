@@ -1,4 +1,4 @@
-package edu.uc.labs.heartbeat.service;
+package edu.uc.labs.heartbeat.service.authentication;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -16,15 +16,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import edu.uc.labs.heartbeat.models.Authority;
+import edu.uc.labs.heartbeat.models.Permission;
 import edu.uc.labs.heartbeat.models.WebUser;
+import edu.uc.labs.heartbeat.service.AccountService;
 
 @Service
-@Transactional(readOnly=true)
+@Transactional(readOnly = true)
 public class ActiveDirectoryUserContextMapper implements
 		UserDetailsContextMapper {
 
 	private final String rolePrefix = "ROLE_";
-	
+
 	@Override
 	@Transactional(readOnly = false)
 	public UserDetails mapUserFromContext(DirContextOperations ctx,
@@ -48,15 +50,20 @@ public class ActiveDirectoryUserContextMapper implements
 		for (Authority auth : aSet) {
 			String role = auth.getAuthority();
 			role = role.toUpperCase();
-                        if(role.startsWith("ROLE_")){
-                            finalAuthorities.add(new SimpleGrantedAuthority(role));
-                        } else {
-                            finalAuthorities.add(new SimpleGrantedAuthority(rolePrefix + role));
-                        }
+			if (role.startsWith("ROLE_")) {
+				finalAuthorities.add(new SimpleGrantedAuthority(role));
+			} else {
+				finalAuthorities.add(new SimpleGrantedAuthority(rolePrefix
+						+ role));
+			}
+			for(Permission p : auth.getPermissions() ){
+				finalAuthorities.add(new SimpleGrantedAuthority(p.getPermission()));
+			}
 		}
 		finalAuthorities.addAll(authorities);
-		
-		return new User(username, "", webUser.getEnabled(), true, true, true, finalAuthorities);
+
+		return new User(username, "", webUser.getEnabled(), true, true, true,
+				finalAuthorities);
 	}
 
 	@Override
@@ -64,7 +71,8 @@ public class ActiveDirectoryUserContextMapper implements
 		// TODO Auto-generated method stub
 
 	}
-	
-	@Autowired AccountService webUserService;
+
+	@Autowired
+	AccountService webUserService;
 
 }

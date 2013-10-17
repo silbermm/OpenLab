@@ -21,7 +21,7 @@ angular.module('heartbeat.groups', [
     }).state('groups.gridview', {
         url: '/grid',
         templateUrl: 'resources/js/groups/groups.gridview.tpl.html',
-    })
+    });
 }).controller('GroupsCtrl', function GroupsController($scope, titleService, $modal, $stateParams, $state, $http, $log, growl) {
     $scope.currentGroup = $stateParams.id;
     $http.get('group/' + $stateParams.id).success(function(data, status, headers, config) {

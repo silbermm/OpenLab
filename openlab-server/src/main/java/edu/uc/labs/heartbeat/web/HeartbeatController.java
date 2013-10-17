@@ -1,31 +1,41 @@
 package edu.uc.labs.heartbeat.web;
 
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.rememberme.CookieTheftException;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
 import edu.uc.labs.heartbeat.domain.ClientMachine;
 import edu.uc.labs.heartbeat.exceptions.GenericDataException;
 import edu.uc.labs.heartbeat.models.Failure;
 import edu.uc.labs.heartbeat.models.Machine;
 import edu.uc.labs.heartbeat.models.MachineGroup;
 import edu.uc.labs.heartbeat.service.HeartbeatService;
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.rememberme.CookieTheftException;
-import org.springframework.ui.ModelMap;
 
 @Controller
 @RequestMapping(value = "/")
@@ -73,8 +83,8 @@ public class HeartbeatController {
         return cr;
     }
     
-    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
-    @RequestMapping(value = "group", method = RequestMethod.DELETE)
+    @PreAuthorize("isAuthenticated() and hasPermission(#machineGroup.groupId, 'isGroupAdmin')")
+    @RequestMapping(value="group", method=RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void deleteGroup(@RequestBody MachineGroup machineGroup) {
         heartbeatService.deleteGroup(machineGroup);
@@ -198,8 +208,7 @@ public class HeartbeatController {
     public String handleCookieTheft(Model m){        
         m.addAttribute("error", "Its possible someone stole your cookie");
         return "redirect:login";
-    }
-    
+    }    
     
     @Autowired
     HeartbeatService heartbeatService;

@@ -21,7 +21,7 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 @Configuration
 @EnableTransactionManagement
-@ImportResource(value = {"/WEB-INF/spring-security.xml"})
+@ImportResource(value = {"classpath:/spring-security.xml"})
 @ComponentScan(basePackages = {"edu.uc.labs.heartbeat.web"})
 public class WebappConfig extends WebMvcConfigurerAdapter {
 

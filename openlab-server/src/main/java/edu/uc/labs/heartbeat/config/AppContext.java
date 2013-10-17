@@ -2,6 +2,7 @@ package edu.uc.labs.heartbeat.config;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+
 import edu.uc.labs.heartbeat.dao.ImageDao;
 import edu.uc.labs.heartbeat.dao.ImageDaoImpl;
 import edu.uc.labs.heartbeat.service.AccountService;
@@ -22,64 +23,67 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"edu.uc.labs.heartbeat"})
+@ComponentScan(basePackages = { "edu.uc.labs.heartbeat" })
 public class AppContext {
-    
-    private static final Logger log = LoggerFactory.getLogger(AppContext.class);
-    
-    @Bean
-    public Config config() {
-        return ConfigFactory.load().withFallback(ConfigFactory.systemProperties());
-    }
-    
-    @Bean
-    public SessionFactory sessionFactory() {
-        LocalSessionFactoryBuilder sf = new LocalSessionFactoryBuilder(dataSource()).scanPackages("edu.uc.labs.heartbeat.models");
-        sf.addProperties(getHibernateProperties());
-        return sf.buildSessionFactory();
-    }
 
-    @Bean(name = "transactionManager")
-    public HibernateTransactionManager transactionManager() {
-        HibernateTransactionManager t = new HibernateTransactionManager();
-        t.setSessionFactory(sessionFactory());
-        return t;
-    }
+	private static final Logger log = LoggerFactory.getLogger(AppContext.class);
 
-    
-     @Bean
-    public ImageDao imageDao() {
-        ImageDao imageDao = new ImageDaoImpl();
-        return imageDao;
-    }
+	@Bean
+	public Config config() {
+		return ConfigFactory.load().withFallback(
+				ConfigFactory.systemProperties());
+	}
 
-    @Bean(name = "webUserService")
-    public AccountService webUserService() {
-        return new AccountService();
-    }
-    
-    @Bean(destroyMethod="close")
-    public DataSource dataSource() {
-        BasicDataSource basicDataSource = new BasicDataSource();
-        basicDataSource.setDriverClassName(config().getString("db.dev.driverClass"));
-        basicDataSource.setUrl(config().getString("db.dev.url"));
-        basicDataSource.setUsername(config().getString("db.dev.username"));
-        basicDataSource.setPassword(config().getString("db.dev.password"));
-        basicDataSource.setMaxWait(config().getLong("db.dev.maxwait"));
-        return basicDataSource;
-    }
+	@Bean
+	public SessionFactory sessionFactory() {
+		LocalSessionFactoryBuilder sf = new LocalSessionFactoryBuilder(
+				dataSource()).scanPackages("edu.uc.labs.heartbeat.models");
+		sf.addProperties(getHibernateProperties());
+		return sf.buildSessionFactory();
+	}
 
-    private Properties getHibernateProperties() {
-        Properties p = new Properties();
-        p.setProperty("hibernate.dialect", config().getString("hibernate.dialect"));
-        p.setProperty("hibernate.show_sql", config().getString("hibernate.show_sql"));
-        p.setProperty("hibernate.format_sql", config().getString("hibernate.format_sql"));
-        p.setProperty("hibernate.hbm2ddl.auto", config().getString("hibernate.hbm2ddl.auto"));
-        return p;
-    }
+	@Bean(name = "transactionManager")
+	public HibernateTransactionManager transactionManager() {
+		HibernateTransactionManager t = new HibernateTransactionManager();
+		t.setSessionFactory(sessionFactory());
+		return t;
+	}
 
-    @Autowired
-    AmqpTemplate heartbeatTemplate;
-    
-    
+	@Bean
+	public ImageDao imageDao() {
+		ImageDao imageDao = new ImageDaoImpl();
+		return imageDao;
+	}
+
+	@Bean(name = "webUserService")
+	public AccountService webUserService() {
+		return new AccountService();
+	}	
+
+	@Bean(destroyMethod = "close")
+	public DataSource dataSource() {
+		BasicDataSource basicDataSource = new BasicDataSource();
+		basicDataSource.setDriverClassName(config().getString(
+				"db.dev.driverClass"));
+		basicDataSource.setUrl(config().getString("db.dev.url"));
+		basicDataSource.setUsername(config().getString("db.dev.username"));
+		basicDataSource.setPassword(config().getString("db.dev.password"));
+		basicDataSource.setMaxWait(config().getLong("db.dev.maxwait"));
+		return basicDataSource;
+	}
+
+	private Properties getHibernateProperties() {
+		Properties p = new Properties();
+		p.setProperty("hibernate.dialect",
+				config().getString("hibernate.dialect"));
+		p.setProperty("hibernate.show_sql",
+				config().getString("hibernate.show_sql"));
+		p.setProperty("hibernate.format_sql",
+				config().getString("hibernate.format_sql"));
+		p.setProperty("hibernate.hbm2ddl.auto",
+				config().getString("hibernate.hbm2ddl.auto"));
+		return p;
+	}
+
+	@Autowired AmqpTemplate heartbeatTemplate;
 }

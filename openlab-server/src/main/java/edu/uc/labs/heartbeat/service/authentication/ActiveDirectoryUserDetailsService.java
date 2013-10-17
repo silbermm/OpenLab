@@ -1,4 +1,4 @@
-package edu.uc.labs.heartbeat.service;
+package edu.uc.labs.heartbeat.service.authentication;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,7 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 import edu.uc.labs.heartbeat.models.Authority;
+import edu.uc.labs.heartbeat.models.Permission;
 import edu.uc.labs.heartbeat.models.WebUser;
+import edu.uc.labs.heartbeat.service.AccountService;
 
 @Service
 @Transactional(readOnly = true)
@@ -41,12 +43,18 @@ public class ActiveDirectoryUserDetailsService implements UserDetailsService {
 			webUserService.createWebUser(webUser);
 		}
 
-		Set<Authority> aSet = webUser.getAuthorities();
+		Set<Authority> aSet = webUser.getAuthorities();		
 
 		for (Authority auth : aSet) {
 			String role = auth.getAuthority();
 			role = role.toUpperCase();
 			finalAuthorities.add(new SimpleGrantedAuthority(role));
+			
+			// Also add permissions...
+			Set<Permission> perms = auth.getPermissions();
+			for (Permission p : perms){
+				finalAuthorities.add(new SimpleGrantedAuthority(p.getPermission()));
+			}			
 		}
 		
 		return new User(username, "", webUser.getEnabled(), true, true, true, finalAuthorities);
