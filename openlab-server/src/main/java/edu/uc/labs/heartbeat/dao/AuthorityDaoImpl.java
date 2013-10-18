@@ -19,6 +19,11 @@ public class AuthorityDaoImpl extends AbstractDao<Authority> implements Authorit
     @Override
     public Authority findByName(String name) {        
         return (Authority)getSession().createQuery("from Authority where authority=:name").setString("name", name).uniqueResult();
-    }	
+    }
+
+	@Override
+	public List<Authority> findByUser(String username) {
+		return (List<Authority>)getSession().createQuery("from Authority a join a.webUsers u where u.cn = :username").setString("username", username).list();		
+	}	
         
 }

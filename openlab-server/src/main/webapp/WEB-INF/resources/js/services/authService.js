@@ -14,7 +14,20 @@ angular.module('authService', []).factory('authService', function($log, $http) {
 				return d;
 			});			
 			return promise;
+		},
+		isAdmin : function() {
+			var promise = this.getRoles().then(function(d){
+				if(d.status === 200){
+					var admin = false;
+					angular.forEach(d.data, function(val,idx){						
+						if(val.authority === 'ROLE_ADMINISTRATOR'){ admin = true; }
+					});					
+					return admin;
+				} else {
+					return false;
+				}
+			});
+			return promise;
 		}
 	}
-
 });

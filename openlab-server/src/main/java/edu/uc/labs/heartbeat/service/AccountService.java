@@ -69,6 +69,17 @@ public class AccountService {
     public List<Authority> getAllAuthorities(){
         return authDao.getAll();
     }
+    
+    @Transactional
+    public List<Authority> getAuthoritiesByUser(String username){
+    	try {
+    		return authDao.findByUser(username);
+    	}catch (RuntimeException e){
+    		throw new GenericDataException(e.getMessage());
+    	}catch (Exception e){
+    		throw new GenericDataException(e.getMessage());
+    	}
+    }
 
     @Transactional
     public Authority findAuthorityByName(String name) {

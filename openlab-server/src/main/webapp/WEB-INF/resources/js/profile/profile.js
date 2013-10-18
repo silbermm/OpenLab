@@ -16,6 +16,7 @@ angular.module('heartbeat.profile', [
 }).controller('ProfileCtrl', function ProfileController($scope, titleService, authService, $log) {
 	titleService.setTitle("User Profile");
 	authService.getRoles().then(function(data){
+		$log.debug(data);
 		if(data.status === 200){
 			$scope.roles = data.data;
 		} else {

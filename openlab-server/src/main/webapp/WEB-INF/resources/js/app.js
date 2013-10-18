@@ -13,7 +13,7 @@ angular.module('heartbeat', [
     'authService',
 ])
 .config( function myAppConfig($stateProvider, $urlRouterProvider, growlProvider) {      
-    growlProvider.globalTimeToLive(5000);    
+    growlProvider.globalTimeToLive(8000);    
 })
 .run(function run(titleService, $rootScope, $state, $stateParams){
     $rootScope.$state = $state;    
@@ -23,8 +23,7 @@ angular.module('heartbeat', [
 })
 .controller('AppCtrl', function AppCtrl($scope, $location, titleService, authService){
     titleService.setTitle("Home");       
-    
-    
+        
     authService.isAuthenticated().then(function(data){
     	if(data.status === 200){
     		$scope.isAuthenticated = true;
@@ -32,8 +31,7 @@ angular.module('heartbeat', [
     	} else {
     		$scope.isAuthenticated = false;
     	}
-    });
-           
+    });           
     
 });
 

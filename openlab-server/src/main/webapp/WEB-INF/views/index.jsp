@@ -32,14 +32,14 @@
 			</a> <a class="brand" ui-route="/home">Heartbeat</a>
 			<div class="nav-collapse collapse">
 				<ul class="nav">
-					<li ui-route="/home" ng-class="{active: $state.includes('home')}">
-						<a href="#/home"> <i class="icon-home"></i> Home
+					<li ui-route="/groups" ng-class="{active: $state.includes('groups')}">
+						<a href="#/groups/all/table"> <i class="icon-home"></i> Home
 					</a>
 					</li>
-					<li ui-route="/settings"
+					<li ui-route="/settings/all"
 						ng-class="{active: $state.includes('settings')}"
 						ng-if="isAuthenticated">
-						<a href="#/settings"> <i class="icon-gears"></i> Settings </a></li>
+						<a href="#/settings/all"> <i class="icon-gears"></i> Settings </a></li>
 				</ul>
 				<ul class="nav pull-right">
 					<li ng-if="!isAuthenticated">
@@ -47,7 +47,7 @@
 					</a>
 					</li>
 
-					<li ng-if="isAuthenticated" ui-route="/profile" ng-class="{active: $state.includes('settings')}" >
+					<li ng-if="isAuthenticated" ui-route="/profile" ng-class="{active: $state.includes('profile')}" >
 						<a href="#/profile"> Logged in as: {{username}} </a>
 					</li>
 					

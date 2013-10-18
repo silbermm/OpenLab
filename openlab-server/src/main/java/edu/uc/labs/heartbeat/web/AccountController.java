@@ -1,19 +1,11 @@
 package edu.uc.labs.heartbeat.web;
 
-import edu.uc.labs.heartbeat.exceptions.GenericDataException;
-import edu.uc.labs.heartbeat.exceptions.NoUserException;
-import edu.uc.labs.heartbeat.exceptions.NotAuthenticatedException;
-import edu.uc.labs.heartbeat.exceptions.UserExistsException;
-import edu.uc.labs.heartbeat.models.Authority;
-import edu.uc.labs.heartbeat.models.Failure;
-import edu.uc.labs.heartbeat.models.WebUser;
-import edu.uc.labs.heartbeat.service.AccountService;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -28,6 +20,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import edu.uc.labs.heartbeat.exceptions.GenericDataException;
+import edu.uc.labs.heartbeat.exceptions.NoUserException;
+import edu.uc.labs.heartbeat.exceptions.NotAuthenticatedException;
+import edu.uc.labs.heartbeat.exceptions.UserExistsException;
+import edu.uc.labs.heartbeat.models.Authority;
+import edu.uc.labs.heartbeat.models.Failure;
+import edu.uc.labs.heartbeat.models.WebUser;
+import edu.uc.labs.heartbeat.service.AccountService;
 
 
 @Controller
@@ -59,7 +60,11 @@ public class AccountController {
     @RequestMapping(value="show/users", method=RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody List<WebUser> showAllWebUsers(){
-        return accountService.getAllWebUsers();
+    	List<WebUser> users = accountService.getAllWebUsers();
+    	for(WebUser u : users){
+    		log.debug(u.getCn());
+    	}
+        return users;
     }
     
     @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
@@ -89,13 +94,14 @@ public class AccountController {
     	}
     }
     
-    @PreAuthorize("isAuthenticated()")
+    
+    
+	@PreAuthorize("isAuthenticated()")
     @RequestMapping(value="roles", method=RequestMethod.GET)
     @ResponseStatus(HttpStatus.OK)
-    public @ResponseBody Set<Authority> getUsersRoles(){
-    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    	WebUser user = accountService.getUserByUsername(auth.getName());
-    	return user.getAuthorities();
+    public @ResponseBody List<Authority> getUsersRoles(){
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication(); 	
+    	return (List<Authority>) auth.getAuthorities();   	
     }
     
     @ExceptionHandler(NotAuthenticatedException.class)
@@ -129,5 +135,7 @@ public class AccountController {
     }
     
     @Autowired AccountService accountService;
+    
+    private static final Logger log = LoggerFactory.getLogger(AccountController.class);
     
 }

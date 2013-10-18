@@ -1,1 +1,54 @@
-<h1> Settings Page </h1>
+<nav id="group-sidebar" class="span3">
+
+	<h4 class="dashboard" style="height: 2%">
+		<a> <i class="icon-gears"></i> All Settings
+		</a>
+	</h4>
+	<div id="groups-overflow">
+		<ul class="settings">
+			<li ui-route='/settings/all'
+				ng-class="{active: $state.includes('settings.all')}"><span
+				class='toggle'></span>
+				<h4 class="groupName">
+					<a href="#/settings/all"> All </a>
+				</h4></li>
+			<li ui-route='/settings/users'
+				ng-class="{active: $state.includes('settings.users')}"><span
+				class='toggle'></span>
+				<h4 class="groupName">
+					<a href="#/settings/users"> Users </a>
+				</h4></li>
+		</ul>
+	</div>
+
+</nav>
+
+<div id="ui-view-main" class="settings-ui">
+
+	<div class="row-fluid">
+        <header>
+            <div class="pull-left">
+                <div class="btn-group">
+                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="icon-tasks"></i> Actions
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pull-right">
+                <ul class="nav nav-pills">
+                    
+                </ul>
+            </div>
+        </header>
+    </div>
+
+	<div id="main-content-right" class="row-fluid" style="top: 59px;">
+		<div ui-view></div>
+	</div>
+
+</div>
