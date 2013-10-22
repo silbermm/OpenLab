@@ -8,7 +8,7 @@
 		</layout>
 	</appender>
 
-	<logger name="edu.uc.labs.heartbeat" level="DEBUG" />
+	<logger name="co.silbersoft.openlab" level="DEBUG" />
 
 	<logger name="org.thymeleaf" level="ERROR" />
 

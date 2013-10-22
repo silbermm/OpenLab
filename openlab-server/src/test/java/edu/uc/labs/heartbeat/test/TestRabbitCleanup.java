@@ -1,10 +1,8 @@
 package edu.uc.labs.heartbeat.test;
 
-import edu.uc.labs.heartbeat.config.*;
-import edu.uc.labs.heartbeat.exceptions.RabbitFetchException;
-import edu.uc.labs.heartbeat.service.RabbitService;
 import java.util.LinkedHashMap;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
@@ -13,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+
+import co.silbersoft.openlab.config.*;
+import co.silbersoft.openlab.exceptions.RabbitFetchException;
+import co.silbersoft.openlab.service.RabbitService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
