@@ -5,20 +5,33 @@
 		</a>
 	</h4>
 	<div id="groups-overflow">
-		<ul class="settings">
-			<li ui-route='/settings/all'
-				ng-class="{active: $state.includes('settings.all')}"><span
-				class='toggle'></span>
-				<h4 class="groupName">
-					<a href="#/settings/all"> All </a>
-				</h4></li>
+		<ul class="settings">			
 			<li ui-route='/settings/users'
 				ng-class="{active: $state.includes('settings.users')}"><span
 				class='toggle'></span>
 				<h4 class="groupName">
-					<a href="#/settings/users"> Users </a>
+					<i class="icon-user"> </i><a href="#/settings/users"> USERS </a> </i>
 				</h4></li>
 		</ul>
+		
+		<ul class="settings">			
+			<li ui-route='/settings/roles'
+				ng-class="{active: $state.includes('settings.roles')}"><span
+				class='toggle'></span>
+				<h4 class="groupName">
+					<i class="icon-group"> </i><a href="#/settings/roles"> ROLES </a> </i>
+				</h4></li>
+		</ul>
+		
+		<ul class="settings">			
+			<li ui-route='/settings/'
+				ng-class="{active: $state.includes('settings.permissions')}"><span
+				class='toggle'></span>
+				<h4 class="groupName">
+					<i class="icon-lock"> </i><a href="#/settings/permissions"> PERMISSIONS </a> </i>
+				</h4></li>
+		</ul>
+		
 	</div>
 
 </nav>
@@ -28,15 +41,7 @@
 	<div class="row-fluid">
         <header>
             <div class="pull-left">
-                <div class="btn-group">
-                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="icon-tasks"></i> Actions
-                        <span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu">
-                        
-                    </ul>
-                </div>
+                
             </div>
 
             <div class="pull-right">

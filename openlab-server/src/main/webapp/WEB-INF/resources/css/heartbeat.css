@@ -13,6 +13,7 @@ body {
 	left: 0;
 	bottom: 0;
 	box-sizing: border-box;
+	max-width: 280px;
 }
 
 #groups-overflow::-webkit-scrollbar-track {
@@ -422,7 +423,7 @@ WIDGET
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 	overflow-x: auto;
-	height: 15em;
+	height: auto;
 }
 
 .widget-content li {
@@ -498,6 +499,11 @@ WIDGET
 	background: #FFF;
 }
 
+.widget-header button {
+	margin-top: 5px;
+	margin-right: 15px;
+}
+
 .machine-count {
 	float: right;
 }
@@ -529,6 +535,9 @@ WIDGET
 .machine-table th a {
 	cursor: pointer;
 }
+.roles-table {
+	border: none;
+}
 
 /* fix some jquery-ui oddities */
 .ui-widget-content {
@@ -536,10 +545,18 @@ WIDGET
 	border: none;
 }
 /*******************************/
+.navbar {
+	z-index: 20000;
+	position: relative;
+}
+
 #machine-list li {
 	z-index: 100;
 }
-
+.growl-container{
+	width: 250px;
+	margin: 0px auto;
+}
 @media ( max-width : 979px) {
 	body>nav {
 		/*

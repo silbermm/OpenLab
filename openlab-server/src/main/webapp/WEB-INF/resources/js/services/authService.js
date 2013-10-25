@@ -2,6 +2,8 @@
 
 angular.module('authService', []).factory('authService', function($log, $http) {
 		
+	var adminRole = "ROLE_ADMINISTRATOR";
+	
 	return {
 		getRoles : function(){
 			var promise = $http.get('accounts/roles').then(function(d){
@@ -20,7 +22,9 @@ angular.module('authService', []).factory('authService', function($log, $http) {
 				if(d.status === 200){
 					var admin = false;
 					angular.forEach(d.data, function(val,idx){						
-						if(val.authority === 'ROLE_ADMINISTRATOR'){ admin = true; }
+						if(val.authority === adminRole){ 
+							admin = true; 
+						}
 					});					
 					return admin;
 				} else {

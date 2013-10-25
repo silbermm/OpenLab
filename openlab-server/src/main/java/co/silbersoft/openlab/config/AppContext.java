@@ -66,14 +66,16 @@ public class AppContext {
 	@Bean(destroyMethod = "close")
 	public DataSource dataSource() {
 		BasicDataSource basicDataSource = new BasicDataSource();
-		basicDataSource.setDriverClassName(config().getString(
-				"db.dev.driverClass"));
+		basicDataSource.setDriverClassName(config().getString("db.dev.driverClass"));
 		basicDataSource.setUrl(config().getString("db.dev.url"));
 		basicDataSource.setUsername(config().getString("db.dev.username"));
 		basicDataSource.setPassword(config().getString("db.dev.password"));
 		basicDataSource.setMaxWait(config().getLong("db.dev.maxwait"));
+		basicDataSource.addConnectionProperty("autoReconnect", "true");
 		return basicDataSource;
 	}
+	
+	
 
 	private Properties getHibernateProperties() {
 		Properties p = new Properties();

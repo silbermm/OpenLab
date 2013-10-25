@@ -67,9 +67,8 @@ public class ActiveDirectoryUserContextMapper implements
 	}
 
 	@Override
-	public void mapUserToContext(UserDetails user, DirContextAdapter ctx) {
-		// TODO Auto-generated method stub
-
+	public void mapUserToContext(UserDetails user, DirContextAdapter ctx) {		
+			
 	}
 
 	@Autowired

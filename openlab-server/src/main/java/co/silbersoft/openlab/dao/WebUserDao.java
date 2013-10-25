@@ -11,4 +11,5 @@ public interface WebUserDao extends Dao<WebUser> {
     
     WebUser findUserByName(String username);
     List<WebUser> findUsersInRole(long auth);
+    List<WebUser> findAllEnabled(boolean enabled);
 }

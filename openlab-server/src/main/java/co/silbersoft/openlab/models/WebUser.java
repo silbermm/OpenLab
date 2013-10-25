@@ -24,7 +24,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@user_id")
 public class WebUser implements Serializable {
 
-    private Long userId;
+	private static final long serialVersionUID = -5818802238516156902L;
+	private Long userId;
     private String cn;
     private boolean enabled = true;
     private Set<Authority> authorites = new HashSet<Authority>(0);
@@ -58,7 +59,7 @@ public class WebUser implements Serializable {
     	this.enabled = enabled;
     }
     
-    @ManyToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+    @ManyToMany(cascade=CascadeType.ALL)
     @JoinTable(name= "heartbeat_user_authorites", 
             joinColumns={
                 @JoinColumn(name="user_id")}, 
@@ -71,6 +72,10 @@ public class WebUser implements Serializable {
     
     public void setAuthorities(Set<Authority> authorities){
         this.authorites = authorities;
+    }
+    
+    public void addAuthority(Authority a){
+    	this.authorites.add(a);
     }
     
     

@@ -22,8 +22,7 @@
 	rel="stylesheet" />
 <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 </head>
-<body>
-	<div growl></div>
+<body>	
 	<div class="navbar">
 		<div class="navbar-inner">
 			<a class="btn btn-navbar" data-toggle="collapse"
@@ -39,7 +38,7 @@
 					<li ui-route="/settings/all"
 						ng-class="{active: $state.includes('settings')}"
 						ng-if="isAuthenticated">
-						<a href="#/settings/all"> <i class="icon-gears"></i> Settings </a></li>
+						<a href="#/settings/users"> <i class="icon-gears"></i> Settings </a></li>
 				</ul>
 				<ul class="nav pull-right">
 					<li ng-if="!isAuthenticated">
@@ -61,6 +60,7 @@
 			</div>
 		</div>
 	</div>
+	<div growl class="growl-container"></div>
 	<div ui-view="main"></div>
 
 	<script type="text/javascript" src="<c:url value='/resources/js/vender/angular.min.js'/>"></script>

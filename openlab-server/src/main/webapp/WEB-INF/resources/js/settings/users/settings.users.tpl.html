@@ -1,18 +1,85 @@
+<div class="container"> 
+	<div class="row-fluid">
+  		<div class="widget">
+  			<div class="widget-header">  		  		
+  				<i class="icon-ok" style="color:green"></i>		
+  				<h3> Enabled Users <span class="badge badge-important"> {{users.length}}</span> </h3>	  				
+  				<form class="form-search" style="display:inline">  					
+    				<input type="text" class="search-query" ng-model="searchEnabled" id='searchEnabled' placeholder="Search">    					  					  				
+				</form>		
+				<button class="btn pull-right" ng-click="openAddUserModal()" ><i class="icon-plus"></i> Add User</button>					
+  			</div>
+  			<div class="widget-content">
+  				<table class="widget-table table table-striped">
+  					<thead>
+  						<tr>
+  							<th> UserId </th>
+  							<th> Username </th>
+  							<th> Roles </th>
+  							<th> Actions </th>
+  						</tr>
+  					</thead>
+  					<tbody>
+  						<tr ng-repeat="user in users | filter:searchEnabled">
+  							<td> {{ user.id }} </td> 
+  							<td> {{ user.cn }} </td>
+  							<td>  								
+  								 <ul>
+  								 	<li  ng-repeat="auth in user.authorities" > <a ng-click="openRemoveRoleFromUserModal(auth,user)"> <i class="icon-remove-sign" style="color:red"></i></a>  {{ auth.authority }} </li>
+  								 	<li> <a ng-click="openAddRoleModal(user)"> <i class="icon-plus"></i> Add Role(s) </a> </li>
+  								 </ul>  								
+  							</td>  					  				
+  							<td>
+  								<ul>
+  									<li> <a ng-click="openDisableUserModal(user)"> <i class="icon-ban-circle" ></i> Disable </a> </li>
+  									<li> <a> <i class="icon-remove-sign" style="color:red"></i> Delete </a> </li>  						
+  								</ul>
+  							</td>
+  						</tr>
+  					</tbody>
+  				</table>  				
+  			</div>  			
+  		</div>
+ 	 </div>
+ 	  	  	  	 
+	<div class="row-fluid">
+  		<div class="widget">
+  			<div class="widget-header">  		  		
+  				<i class="icon-ban-circle" style="color:red"></i>		
+  				<h3> Disabled Users <span class="badge badge-important"> {{disabledUsers.length}}</span> </h3>  
+  				<form class="form-search" style="display:inline">  					
+    				<input type="text" class="search-query" ng-model="searchDisabled" id="searchDisabled" placeholder="Search">  					  			
+				</form>				
+  			</div>
+  			<div class="widget-content">
+  				<table class="widget-table table table-striped">
+  					<thead>
+  						<tr>
+  							<th> UserId </th>
+  							<th> Username </th>  							
+  							<th> Actions </th>
+  						</tr>
+  					</thead>
+  					<tbody>
+  						<tr ng-repeat="user in disabledUsers | filter:searchDisabled">
+  							<td> {{ user.id }} </td> 
+  							<td> {{ user.cn }} </td>  					  				
+  							<td>
+  								<ul>
+  									<li> <a ng-click="enableUser(user)"> <i class="icon-ok"></i> Enable </a></li>
+  									<li> <a> <i class="icon-remove-sign" style="color:red"></i> Delete </a> </li>  						
+  								</ul>
+  							</td>
+  						</tr>
+  					</tbody>
+  				</table>
+  			</div>
+  		</div>
+  	</div>
+</div>
 
-<div class="span4">
-  <div class="widget">
-  	<div class="widget-header">
-  		<i class="icon-user"></i>
-  		<h3> Enabled Users </h3>
-  	</div>
-  	<div class="widget-content">
-  		<table class="widget-table table">
-  			<tbody>
-  				<tr ng-repeat="user in users"> 
-  					<td> {{ user.cn }} </td>
-  				</tr>
-  			</tbody>
-  		</table>
-  	</div>
-  </div>
-  </div>
+<div class="span8">
+	
+</div>
+
+

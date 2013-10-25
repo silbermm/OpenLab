@@ -73,7 +73,7 @@ public class HeartbeatController {
         heartbeatService.updateMachineRecord(uuid);
     }
     
-    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @RequestMapping(value = "group", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody Map<String, String> createGroup(@RequestBody MachineGroup machineGroup) {
@@ -90,7 +90,7 @@ public class HeartbeatController {
         heartbeatService.deleteGroup(machineGroup);
     }
     
-    @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @RequestMapping(value = "group", method = RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void updateGroup(@RequestBody MachineGroup machineGroup){

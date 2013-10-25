@@ -11,7 +11,7 @@
 	</context-param>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>edu.uc.labs.heartbeat.config.AppContext</param-value>
+		<param-value>co.silbersoft.openlab.config.AppContext</param-value>
 	</context-param>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -60,7 +60,7 @@
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>
-                edu.uc.labs.heartbeat.config.WebappConfig
+                co.silbersoft.openlab.config.WebappConfig
             </param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>

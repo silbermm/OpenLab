@@ -28,8 +28,7 @@ public class ActiveDirectoryAuthoritiesMapper implements
                             authorities.add(new SimpleGrantedAuthority(role));
                         }else {
                             authorities.add(new SimpleGrantedAuthority(rolePrefix + role));
-                        }
-			
+                        }			
 		}
 		authorities.add(defaultRole);
 		return authorities;

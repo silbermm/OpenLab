@@ -1,0 +1,16 @@
+<div class="modal-header">
+	<h3>Edit {{user.cn}}</h3>
+</div>
+<div class="modal-body">	
+	<p> 
+		Choose one or more Roles to add {{user.cn}} too.
+	</p>
+	<form name="form" class="css-form">
+		<select size=10 multiple ng-multiple="true" ng-model="selectedRoles" ng-options="role.authority for role in allRoles" />
+	</form>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-primary" ng-disabled="form.$invalid"
+		ng-click="ok(selectedRoles)">Ok</button>
+	<button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>

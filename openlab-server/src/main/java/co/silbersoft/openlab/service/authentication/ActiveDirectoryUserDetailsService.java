@@ -48,7 +48,7 @@ public class ActiveDirectoryUserDetailsService implements UserDetailsService {
 		for (Authority auth : aSet) {
 			String role = auth.getAuthority();
 			role = role.toUpperCase();
-			finalAuthorities.add(new SimpleGrantedAuthority(role));
+			finalAuthorities.add(new SimpleGrantedAuthority(rolePrefix + role));
 			
 			// Also add permissions...
 			Set<Permission> perms = auth.getPermissions();

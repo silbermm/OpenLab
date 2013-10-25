@@ -31,5 +31,10 @@ public class WebUserDaoImpl extends AbstractDao<WebUser> implements WebUserDao{
         List<WebUser> users = crit.list();
         return users;
     }
-   
+    
+    @Override
+    public List<WebUser> findAllEnabled(boolean enabled){
+    	return (List<WebUser>) getSession().createQuery("from WebUser where enabled = :enabled").setBoolean("enabled", enabled).list();   	    
+    }
+
 }

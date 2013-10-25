@@ -52,7 +52,7 @@ angular.module('heartbeat.groups', [
 
     $scope.optionsItems = [
         {"name": "filter",
-            "display": "Add a filter"
+         "display": "Add a filter"
         }
     ];
 
