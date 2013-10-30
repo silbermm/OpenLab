@@ -3,13 +3,16 @@ package co.silbersoft.openlab.controllers;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.ldap.NameNotFoundException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -33,6 +37,7 @@ import co.silbersoft.openlab.exceptions.NotAuthenticatedException;
 import co.silbersoft.openlab.exceptions.UserExistsException;
 import co.silbersoft.openlab.models.Authority;
 import co.silbersoft.openlab.models.Failure;
+import co.silbersoft.openlab.models.LdapUser;
 import co.silbersoft.openlab.models.WebUser;
 import co.silbersoft.openlab.service.AccountService;
 
@@ -40,12 +45,13 @@ import co.silbersoft.openlab.service.AccountService;
 @Controller
 @RequestMapping(value="/accounts/")
 public class AccountController {
-    
+        
     @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
     @RequestMapping(value="create", method=RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void createAccount(@RequestBody WebUser user){
-        accountService.createWebUser(user);
+    public void createAccountFromLdapUser(@RequestBody LdapUser user){
+    	WebUser u = convertUser(user);
+    	accountService.createWebUser(u);
     }
     
     @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
@@ -172,6 +178,14 @@ public class AccountController {
 			throw new MethodNotSupportedException("Unable to execute for the method " + action);
 		}
 	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+	@RequestMapping(value="find", method=RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody List<LdapUser> findUser(@RequestParam("query") String query){		
+		return accountService.searchForUser(query);		
+	}
+	
     
     @ExceptionHandler(NotAuthenticatedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -192,7 +206,7 @@ public class AccountController {
     }
     
     @ExceptionHandler(NoUserException.class)
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public @ResponseBody Failure handleUserExistsException(NoUserException e){
         return new Failure(e.getMessage());
     }
@@ -200,6 +214,7 @@ public class AccountController {
     @ExceptionHandler(GenericDataException.class)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody Failure handleUserExistsException(GenericDataException e){
+    	log.debug("Generic Data Exception");
         return new Failure(e.getMessage());
     }
     
@@ -207,6 +222,22 @@ public class AccountController {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public @ResponseBody Failure handleMethodNotSupportedException(MethodNotSupportedException e){
     	return new Failure(e.getMessage());
+    }
+    
+    @ExceptionHandler(NameNotFoundException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public @ResponseBody Failure handleNameNotFoundException(NameNotFoundException e){
+    	return new Failure(e.getMessage());
+    }
+    
+    private WebUser convertUser(LdapUser u){
+    	WebUser user = new WebUser();
+    	user.setCn(u.getCn());
+    	user.setEmail(u.getEmail());
+    	user.setEnabled(true);
+    	Set<Authority> auths = new HashSet<Authority>();
+    	user.setAuthorities(auths);
+    	return user;
     }
     
     @Autowired AccountService accountService;

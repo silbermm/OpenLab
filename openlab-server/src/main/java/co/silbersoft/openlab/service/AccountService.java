@@ -1,22 +1,23 @@
 package co.silbersoft.openlab.service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.core.support.LdapContextSource;
-import org.springframework.ldap.filter.AndFilter;
+import org.springframework.ldap.NameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import co.silbersoft.openlab.dao.AuthorityDao;
+import co.silbersoft.openlab.dao.LdapDao;
 import co.silbersoft.openlab.dao.WebUserDao;
 import co.silbersoft.openlab.exceptions.GenericDataException;
 import co.silbersoft.openlab.exceptions.NoUserException;
 import co.silbersoft.openlab.exceptions.UserExistsException;
 import co.silbersoft.openlab.models.Authority;
+import co.silbersoft.openlab.models.LdapUser;
 import co.silbersoft.openlab.models.WebUser;
 
 @Service
@@ -124,7 +125,17 @@ public class AccountService {
 
 	@Transactional
 	public void deleteWebUser(WebUser w) {
-		webUserDao.delete(w);
+		try {		
+			log.debug("trying to remove all authorities first");
+			for(Authority a : w.getAuthorities()){
+				this.removeAuthFromUser(a.getAuthorityId(), w.getUserId());
+			}	
+			webUserDao.delete(w);		
+		} catch (RuntimeException e) {
+			throw new GenericDataException(e.getMessage());
+		} catch (Exception e){
+			throw new GenericDataException(e.getMessage());
+		}
 	}
 
 	@Transactional
@@ -169,37 +180,62 @@ public class AccountService {
 		}
 	}
 	
+	@Transactional(readOnly=false)
 	public void removeAuthFromUser(long authId, long userId){
 		try {
 			WebUser u = webUserDao.get(userId);
+			log.debug("found user " + u.getCn());
 			Authority a = authDao.get(authId);
+			log.debug("found authority " + a.getAuthority());
 			Set<Authority> userAuths = u.getAuthorities();
+			log.debug("searching user auths for specific authority... ");			
+			Authority toRemove = null;			
 			for(Authority ua : userAuths){
+				log.debug("looking at " + ua.getAuthority());
 				if(ua.getAuthorityId() == a.getAuthorityId()){
-					userAuths.remove(ua);
+					log.debug("found the right one!");
+					toRemove = ua;
 				}
 			}
+			if(toRemove != null) userAuths.remove(toRemove);
 			u.setAuthorities(userAuths);
+			log.debug("updateing user");
 			webUserDao.update(u);
 		}catch (RuntimeException e){
-			throw new GenericDataException(e.getMessage());
+			throw new GenericDataException("something went wrong while removing authorities! " + e.getClass().getCanonicalName() +": " +  e.getMessage());
 		}catch (Exception e){
-			throw new GenericDataException(e.getMessage());
+			throw new GenericDataException("something went wrong while removing authorities! " + e.getClass().getCanonicalName() +": " +  e.getMessage());
 		}
 	}
 	
-	public void searchForUser(String searchTerm){
-		LdapTemplate ldapTemplate = new LdapTemplate(ldapContext);
-		AndFilter filter = new AndFilter();
+	public List<LdapUser> searchForUser(String searchTerm){
+		try {
+			List<LdapUser> found = ldapDao.findByUsername(searchTerm);
+			if(!found.isEmpty()){
+				log.debug("found " + found.size() + " objects like " + searchTerm);
+				return found;
+			} else {
+				log.debug("Did not find any username like " + searchTerm);
+				List<LdapUser> mNumber = ldapDao.findByEmployeeId(searchTerm);
+				if(!mNumber.isEmpty()){
+					log.debug("found " + mNumber.size() + " objects like " + searchTerm);
+					return mNumber;
+				} else {
+					log.debug("unable to find any objects like " + searchTerm);
+					return null;
+				}
+			}				
+		} catch (RuntimeException e){
+			throw new NameNotFoundException(e.getMessage());
+		} catch (Exception e){
+			throw new NameNotFoundException(e.getMessage());
+		}
+		
 	}
 	
 	
-	
-
-	@Autowired
-	AuthorityDao authDao;
-	@Autowired
-	WebUserDao webUserDao;
-	@Autowired
-	LdapContextSource ldapContext;
+	private static final Logger log = LoggerFactory.getLogger(AccountService.class); 
+	@Autowired AuthorityDao authDao;
+	@Autowired WebUserDao webUserDao;
+	@Autowired LdapDao ldapDao;
 }

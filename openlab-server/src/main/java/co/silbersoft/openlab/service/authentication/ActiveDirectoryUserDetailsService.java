@@ -48,13 +48,7 @@ public class ActiveDirectoryUserDetailsService implements UserDetailsService {
 		for (Authority auth : aSet) {
 			String role = auth.getAuthority();
 			role = role.toUpperCase();
-			finalAuthorities.add(new SimpleGrantedAuthority(rolePrefix + role));
-			
-			// Also add permissions...
-			Set<Permission> perms = auth.getPermissions();
-			for (Permission p : perms){
-				finalAuthorities.add(new SimpleGrantedAuthority(p.getPermission()));
-			}			
+			finalAuthorities.add(new SimpleGrantedAuthority(rolePrefix + role));						
 		}
 		
 		return new User(username, "", webUser.getEnabled(), true, true, true, finalAuthorities);

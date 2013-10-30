@@ -16,14 +16,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import co.silbersoft.openlab.models.Authority;
-import co.silbersoft.openlab.models.Permission;
 import co.silbersoft.openlab.models.WebUser;
 import co.silbersoft.openlab.service.AccountService;
 
 @Service
 @Transactional(readOnly = true)
-public class ActiveDirectoryUserContextMapper implements
-		UserDetailsContextMapper {
+public class ActiveDirectoryUserContextMapper implements UserDetailsContextMapper {
 
 	private final String rolePrefix = "ROLE_";
 
@@ -31,6 +29,7 @@ public class ActiveDirectoryUserContextMapper implements
 	@Transactional(readOnly = false)
 	public UserDetails mapUserFromContext(DirContextOperations ctx,
 			String username, Collection<? extends GrantedAuthority> authorities) {
+		
 		Set<Authority> defaultAuthorities = new HashSet<Authority>();
 		Set<GrantedAuthority> finalAuthorities = new HashSet<GrantedAuthority>();
 		WebUser webUser = webUserService.getUserByUsername(username);
@@ -41,12 +40,12 @@ public class ActiveDirectoryUserContextMapper implements
 			webUser = new WebUser();
 			webUser.setCn(username);
 			webUser.setEnabled(true);
-			webUser.setAuthorities(defaultAuthorities);
+			webUser.setDn(ctx.getDn().toString());			
+			webUser.setAuthorities(defaultAuthorities);								
 			webUserService.createWebUser(webUser);
 		}
 
 		Set<Authority> aSet = webUser.getAuthorities();
-
 		for (Authority auth : aSet) {
 			String role = auth.getAuthority();
 			role = role.toUpperCase();
@@ -55,20 +54,15 @@ public class ActiveDirectoryUserContextMapper implements
 			} else {
 				finalAuthorities.add(new SimpleGrantedAuthority(rolePrefix
 						+ role));
-			}
-			for(Permission p : auth.getPermissions() ){
-				finalAuthorities.add(new SimpleGrantedAuthority(p.getPermission()));
-			}
+			}			
 		}
 		finalAuthorities.addAll(authorities);
-
-		return new User(username, "", webUser.getEnabled(), true, true, true,
-				finalAuthorities);
+		return new User(username, "", webUser.getEnabled(), true, true, true,finalAuthorities);
 	}
 
 	@Override
 	public void mapUserToContext(UserDetails user, DirContextAdapter ctx) {		
-			
+		
 	}
 
 	@Autowired

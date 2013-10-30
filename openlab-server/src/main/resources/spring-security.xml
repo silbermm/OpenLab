@@ -19,15 +19,15 @@
 			access="permitAll" />
 	</sec:http>
 
-	<sec:authentication-manager>
+	<sec:authentication-manager alias="authenticationManager">
 		<sec:authentication-provider ref="adAuthenticationProvider">
 		</sec:authentication-provider>
 	</sec:authentication-manager>
 
 	<beans:bean id="adAuthenticationProvider"
 		class="org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAuthenticationProvider">
-		<beans:constructor-arg value="ucloud.uc.edu" />
-		<beans:constructor-arg value="ldaps://ucdceiw11.ucloud.uc.edu:636/" />
+		<beans:constructor-arg value="#{config.getString('ldap.domain')}" />
+		<beans:constructor-arg value="#{config.getString('ldap.url')}" />
 		<beans:property name="authoritiesMapper" ref="grantedAuthoritiesMapper" />
 		<beans:property name="userDetailsContextMapper" ref="userDetailsContextMapper" />
 		<beans:property name="useAuthenticationRequestCredentials"
@@ -51,17 +51,7 @@
 	</beans:bean>
 	
 	<beans:bean id="groupPermission" class="co.silbersoft.openlab.service.authentication.permission.MachineGroupPermission" />
-
-	<beans:bean id="springSecurityAuthenticationSource"
-      class="org.springframework.security.ldap.authentication.SpringSecurityAuthenticationSource" />
-
-	<beans:bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
-      <beans:property name="url" value="ldaps://ucdceiw11.ucloud.uc.edu:636/" />
-      <beans:property name="base" value="ou=UCPeople,ou=Accounts,dc=ucloud,dc=uc,dc=edu" />
-      <beans:property name="authenticationSource" ref="springSecurityAuthenticationSource" />
-   	</beans:bean>
-	
-	<beans:bean id="ldapDao" class="co.silbersoft.openlab.dao.LdapDaoImpl" />   	   	
+	  	   	
 	<beans:bean id="grantedAuthoritiesMapper" class="co.silbersoft.openlab.service.authentication.ActiveDirectoryAuthoritiesMapper" />
 	<beans:bean id="userDetailsContextMapper" class="co.silbersoft.openlab.service.authentication.ActiveDirectoryUserContextMapper" />
 	<beans:bean id="adUserDetailsService" class="co.silbersoft.openlab.service.authentication.ActiveDirectoryUserDetailsService" />

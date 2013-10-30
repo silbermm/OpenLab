@@ -20,11 +20,19 @@ public class LdapUser {
 	}
 	public void setMnumber(String mnumber) {
 		this.mnumber = mnumber;
+	}	
+	public String getEmail() {
+		return email;
 	}
-	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
 	private String fullName;
 	private String mnumber;
 	private String cn;
+	private String email;
 	
 	
 	

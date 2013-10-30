@@ -15,6 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+
+import org.springframework.security.ldap.userdetails.LdapUserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -27,7 +30,9 @@ public class WebUser implements Serializable {
 	private static final long serialVersionUID = -5818802238516156902L;
 	private Long userId;
     private String cn;
-    private boolean enabled = true;
+    private String dn;
+    private String email;
+    private boolean enabled = true;    
     private Set<Authority> authorites = new HashSet<Authority>(0);
 
     @Id
@@ -59,7 +64,24 @@ public class WebUser implements Serializable {
     	this.enabled = enabled;
     }
     
-    @ManyToMany(cascade=CascadeType.ALL)
+    @Column(nullable = true)
+	public String getDn() {
+		return this.dn;		
+	}
+    
+    public void setDn(String dn){
+    	this.dn = dn;
+    }    
+    @Column(nullable=true)
+    public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	@ManyToMany(cascade=CascadeType.ALL)
     @JoinTable(name= "heartbeat_user_authorites", 
             joinColumns={
                 @JoinColumn(name="user_id")}, 
@@ -78,5 +100,8 @@ public class WebUser implements Serializable {
     	this.authorites.add(a);
     }
     
-    
+    public void removeAllAuthorities(){
+    	this.authorites.clear();
+    }
+			          
 }

@@ -53,6 +53,9 @@ angular.module('heartbeat.settings', [
 				$log.debug(data);
 				growl.addErrorMessage("Unable to get disabled users at this time");
 			});			
+		} else if($state.is("settings.roles")){
+			
+			
 		}										
 	});	
 	// Enable User Modal
@@ -78,17 +81,45 @@ angular.module('heartbeat.settings', [
 	$scope.openAddUserModal = function(){
 		var modalInstance = $modal.open({
 			templateUrl: 'resources/js/settings/users/new-user.modal.html',
-	        controller: 'NewUserModalCtrl',
-	        resolve: {
-	        	items: function() {
-	        		return null;
-	        	}
-	        }
+	        controller: 'NewUserModalCtrl',	        
 		});
 		modalInstance.result.then(function(obj){
-			
+			$http.post("accounts/create", obj).success(function(data,status,config,other){
+				$scope.users.push(obj);
+				growl.addSuccessMessage("Successfully added user " + obj.cn );
+			}).error(function(data,status,config,other){
+				growl.addErrorMessage("Unable to add " + obj.cn + ". Please try again later" );
+			});						
 		});
-	}		
+	}
+	$scope.deleteUserModal = function(user){
+		if(user.authorities.length > 0){
+			growl.addErrorMessage("First remove the all roles from the user!");
+			return false;
+		} else {				
+			var modalInstance = $modal.open({
+				templateUrl: 'resources/js/settings/users/delete-user.modal.html',
+	        	controller: 'DeleteUserModalCtrl',
+	        	resolve: {
+	        		items: function() {
+	        			return user;
+	        		}
+	        	}	        
+			});
+			modalInstance.result.then(function(obj){
+				// delete the user...
+				$http.delete("accounts/delete/" + obj.id).success(function(data,status,config,other){
+					angular.forEach($scope.users, function(val, idx){
+						if(val.id == obj.id){
+							$scope.users.splice(idx, 1);
+						}
+					});
+				}).error(function(data,status,config,other){
+					growl.addErrorMessage("Unable to delete " + obj.cn + " at this time. Try again later.");
+				});
+			});
+		}
+	}
 	$scope.openRemoveRoleFromUserModal = function(role, user){	
 		$log.debug(role);
 		$log.debug(user);
@@ -142,11 +173,8 @@ angular.module('heartbeat.settings', [
 				growl.addInfoMessage("Successfully disabled " + user.cn);
 				angular.forEach($scope.users, function(val,idx){
 					$log.debug("does " + val.id + " = " + user.id + "?");
-					if(val.id === user.id){
-						$log.debug("yes - index = " + idx);
+					if(val.id === user.id){						
 						$scope.users.splice(idx, 1);
-					} else {
-						$log.debug("no");
 					}
 				});
 				$scope.disabledUsers.push(user);
@@ -229,11 +257,27 @@ angular.module('heartbeat.settings', [
 	$scope.cancel = function(){
 		$modalInstance.dismiss('cancel');
 	};		
-}).controller('NewUserModalCtrl', function NewUserModalController($scope, $modalInstance, $log, items){
-		
-	$scope.search = function(searchText){
-		
+}).controller('NewUserModalCtrl', function NewUserModalController($scope, $modalInstance, $log, $http){	
+	$scope.search = function(searchText){		
+		$http.get("accounts/find?query=" +  searchText).success(function(data,status,config,other){
+			$scope.adUsers = data;
+		}).error(function(data,status,config,other){
+			
+		});
 	}
-	
+	$scope.ok=function(user){		
+		$modalInstance.close(user);
+	};
+	$scope.cancel = function(){
+		$modalInstance.dismiss('cancel');
+	};	
+}).controller('DeleteUserModalCtrl', function DeleteUserModalController($scope, $modalInstance, $log, $http, items){		
+	$scope.user = items;	
+	$scope.ok=function(){		
+		$modalInstance.close($scope.user);
+	};
+	$scope.cancel = function(){
+		$modalInstance.dismiss('cancel');
+	};	
 })
 ;

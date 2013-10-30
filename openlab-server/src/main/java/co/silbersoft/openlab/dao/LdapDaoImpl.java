@@ -16,9 +16,9 @@ import org.springframework.ldap.filter.LikeFilter;
 import co.silbersoft.openlab.models.LdapUser;
 
 public class LdapDaoImpl implements LdapDao {
-	@Autowired
-	public LdapDaoImpl(LdapContextSource contextSource){
-		this.ldapTemplate = new LdapTemplate(contextSource);
+
+	public LdapDaoImpl(){
+		
 	}
 	
 	@Override
@@ -31,8 +31,10 @@ public class LdapDaoImpl implements LdapDao {
 
 	@Override
 	public List<LdapUser> findByEmployeeId(String id) {
-		// TODO Auto-generated method stub
-		return null;
+		AndFilter filter = new AndFilter();
+		filter.and(new EqualsFilter("objectclass", "person"));
+		filter.and(new LikeFilter("uceduUCID", id+"*"));
+		return ldapTemplate.search("", filter.encode(), new LdapUserMapper());
 	}
 	
 	private class LdapUserMapper implements AttributesMapper {
@@ -42,10 +44,11 @@ public class LdapDaoImpl implements LdapDao {
 			u.setCn((String) attr.get("cn").get());
 			u.setFullName((String) attr.get("givenName").get() + " " + (String)attr.get("sn").get());
 			u.setMnumber((String) attr.get("uceduUCID").get());
+			u.setEmail((String) attr.get("mail").get());
 			return u;
 		}		
 	}
 
-	private LdapTemplate ldapTemplate;
+	@Autowired private LdapTemplate ldapTemplate;
 		
 }

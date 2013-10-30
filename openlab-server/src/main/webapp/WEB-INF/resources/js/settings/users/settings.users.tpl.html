@@ -32,7 +32,7 @@
   							<td>
   								<ul>
   									<li> <a ng-click="openDisableUserModal(user)"> <i class="icon-ban-circle" ></i> Disable </a> </li>
-  									<li> <a> <i class="icon-remove-sign" style="color:red"></i> Delete </a> </li>  						
+  									<li> <a ng-click="deleteUserModal(user)"> <i class="icon-remove-sign" style="color:red"></i> Delete </a> </li>  						
   								</ul>
   							</td>
   						</tr>
@@ -42,7 +42,7 @@
   		</div>
  	 </div>
  	  	  	  	 
-	<div class="row-fluid">
+	<div class="row-fluid" ng-if="disabledUsers.length > 0">
   		<div class="widget">
   			<div class="widget-header">  		  		
   				<i class="icon-ban-circle" style="color:red"></i>		
@@ -67,7 +67,7 @@
   							<td>
   								<ul>
   									<li> <a ng-click="enableUser(user)"> <i class="icon-ok"></i> Enable </a></li>
-  									<li> <a> <i class="icon-remove-sign" style="color:red"></i> Delete </a> </li>  						
+  									<li> <a ng-click="deleteUserModal(user)"> <i class="icon-remove-sign" style="color:red"></i> Delete </a> </li>  						
   								</ul>
   							</td>
   						</tr>

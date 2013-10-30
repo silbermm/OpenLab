@@ -1,20 +1,21 @@
 <nav id="group-sidebar" class="span3"> 
-    <form class="" id="search-form" style="height:2%">
-        <input type="text" class="search-query" ng-model="search" id='search' placeholder="Search" />
-    </form>
+
+	 <div class="form-group">
+        <input type="text" class="form-search" style="height:2%" ng-model="search" id='search' placeholder="Search">
+      </div>
     <h4 class="dashboard" style="height:2%">
-        <a href="#"> <i class="icon-home"></i> Groups </a>                 
+        <a href="#"> <i class="fa fa-home"></i> Groups </a>                 
     </h4> 
     <div id="groups-overflow" >
         <ul class="groups" ng-model="chosenGroup">
             <li class="closed" ui-route='/groups/all/:view' ng-class="{active:$state.params.id == 'all'}" >
-                <span class='toggle'><i class='icon-caret-right'></i></span>
+                <span class='toggle'><i class='fa fa-caret-right'></i></span>
                 <h4 class="groupName">
                     <a href="#/groups/all/table"> All </a>
                 </h4>
                 <span class='loader'>Loading</span>
                 <div class="options dropdown">
-                    <a dropdown-toggle> <i class="icon-filter"></i> </a>
+                    <a dropdown-toggle> <i class="fa fa-filter"></i> </a>
                     <ul class="dropdown-menu groups-dropdown-menu">
                         <li ng-repeat="choice in optionsItems">
                             <a> {{choice.display}}</a>
@@ -23,13 +24,13 @@
                 </div>
             </li>
             <li class="closed" ng-repeat="group in groups" ng-class="{active:$state.params.id == group.groupId}">
-                <span class="toggle"><i class="icon-caret-right"></i></span>
+                <span class="toggle"><i class="fa fa-caret-right"></i></span>
                 <h4 class="groupName"> 
                     <a href="#/groups/{{group.groupId}}/table" ng-model="group.name"> {{group.name}} </a> 
                 </h4> 
                 <span class='loader'>Loading</span>
                 <div class="options dropdown">
-                    <a dropdown-toggle> <i class="icon-filter"></i> </a>
+                    <a dropdown-toggle> <i class="fa fa-filter"></i> </a>
                     <ul class="dropdown-menu groups-dropdown-menu">
                         <li ng-repeat="choice in optionsItems">
                             <a>{{choice.display}}</a>
@@ -42,12 +43,11 @@
 
     <div class="grp-controls container">
         <ul class="inline"> 
-            <li> <a popover-placement="right" popover="Add a new Group" popover-trigger="mouseenter" ng-click='openNewGroupDialog()'> <i class='icon-plus'></i> </a> </li>
-            <li> <a popover-placement="right" popover="Edit selected Group" popover-trigger="mouseenter" ng-click='openEditGroupDialog()'><i class="icon-edit"></i></a> </li>
-            <li> <a popover-placement="right" popover="Remove selected Group" popover-trigger="mouseenter" ><i class="icon-ban-circle"></i> </a></li>
+            <li> <a popover-placement="right" popover="Add a new Group" popover-trigger="mouseenter" ng-click='openNewGroupDialog()'> <i class='fa fa-plus'></i> </a> </li>
+            <li> <a popover-placement="right" popover="Edit selected Group" popover-trigger="mouseenter" ng-click='openEditGroupDialog()'><i class="fa fa-edit"></i></a> </li>
+            <li> <a popover-placement="right" popover="Remove selected Group" popover-trigger="mouseenter" ><i class="fa fa-ban text-danger"></i> </a></li>
         </ul>
     </div>
-
 </nav>
 
 <div id="ui-view-main">
@@ -56,18 +56,18 @@
             <div class="pull-left">
                 <div class="btn-group">
                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="icon-tasks"></i> Actions
+                        <i class="fa fa-tasks"></i> Actions
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
                         <li ng-class="{disabled: !isMachineSelected()}">
-                            <a ng-click="openMoveDialog(machineSelected)" ><i class="icon-fixed-width icon-move"></i>Move</a>
+                            <a ng-click="openMoveDialog(machineSelected)" ><i class="fa fa-move"></i>Move</a>
                         </li>                   
                         <li ng-class="{disabled: !isMachineSelected()}">
-                            <a ><i class="icon-fixed-width icon-off"></i>Power</a>
+                            <a ><i class="fa fa-fixed-width fa-power-off"></i>Power</a>
                         </li>
                         <li ng-class="{disabled: !isMachineSelected()}">
-                            <a ng-click="deleteSelected(machineSelected)"><i class="icon-fixed-width icon-trash"></i>Delete</a>  
+                            <a ng-click="deleteSelected(machineSelected)"><i class="fa fa-trash-o"></i>Delete</a>  
                         </li>
                     </ul>
                 </div>
@@ -75,15 +75,15 @@
 
             <div class="pull-right">
                 <ul class="nav nav-pills">
-                    <li ui-route="/groups/{{currentGroup}}/table" ng-class="{active:$uiRoute}"><a href="#/groups/{{currentGroup}}/table"> <i class="icon-list"></i> Table View</a></li>
-                    <li ui-route="/groups/{{currentGroup}}/grid" ng-class="{active:$uiRoute}"> <a href="#/groups/{{currentGroup}}/grid"><i class="icon-th"></i> Grid View</a></li>                
+                    <li ui-route="/groups/{{currentGroup}}/table" ng-class="{active:$uiRoute}"><a href="#/groups/{{currentGroup}}/table"> <i class="fa fa-list"></i> Table View</a></li>
+                    <li ui-route="/groups/{{currentGroup}}/grid" ng-class="{active:$uiRoute}"> <a href="#/groups/{{currentGroup}}/grid"><i class="fa fa-th"></i> Grid View</a></li>                
                 </ul>
             </div>
         </header>
     </div>
 
-    <div id="main-content-right" class="row-fluid">
-        <div ui-view></div>
+    <div id="main-content-right" class="row-fluid" style="top: 59px;">
+        <div ui-view class=""></div>
     </div>
 
 </div>
