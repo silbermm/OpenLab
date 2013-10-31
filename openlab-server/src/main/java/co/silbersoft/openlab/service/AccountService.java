@@ -12,12 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import co.silbersoft.openlab.dao.AuthorityDao;
 import co.silbersoft.openlab.dao.LdapDao;
+import co.silbersoft.openlab.dao.PermissionDao;
 import co.silbersoft.openlab.dao.WebUserDao;
+import co.silbersoft.openlab.exceptions.EmptyPermissionException;
 import co.silbersoft.openlab.exceptions.GenericDataException;
 import co.silbersoft.openlab.exceptions.NoUserException;
 import co.silbersoft.openlab.exceptions.UserExistsException;
 import co.silbersoft.openlab.models.Authority;
 import co.silbersoft.openlab.models.LdapUser;
+import co.silbersoft.openlab.models.Permission;
 import co.silbersoft.openlab.models.WebUser;
 
 @Service
@@ -229,13 +232,39 @@ public class AccountService {
 			throw new NameNotFoundException(e.getMessage());
 		} catch (Exception e){
 			throw new NameNotFoundException(e.getMessage());
-		}
-		
+		}		
+	}
+	
+	public List<Permission> findPermissions(){
+		try{
+			return permissionDao.getAll();
+		}catch (RuntimeException e){
+			throw new NameNotFoundException(e.getMessage());
+		} catch (Exception e){
+			throw new NameNotFoundException(e.getMessage());
+		}	 
+	}
+	
+	@Transactional(readOnly=false)
+	public Set<Permission> findPermissionsForRole(long roleId){
+		try{
+			Authority a = authDao.get(roleId);
+			if(!a.getPermissions().isEmpty()){
+				return a.getPermissions();
+			} else {
+				throw new EmptyPermissionException("The role " + a.getAuthority() + " doesn't have any permissions");
+			}
+		}catch (RuntimeException e){
+			throw new NameNotFoundException(e.getMessage());
+		} catch (Exception e){
+			throw new NameNotFoundException(e.getMessage());
+		}	 
 	}
 	
 	
 	private static final Logger log = LoggerFactory.getLogger(AccountService.class); 
 	@Autowired AuthorityDao authDao;
 	@Autowired WebUserDao webUserDao;
+	@Autowired PermissionDao permissionDao;
 	@Autowired LdapDao ldapDao;
 }

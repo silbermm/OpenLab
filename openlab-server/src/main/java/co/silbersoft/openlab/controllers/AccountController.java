@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import co.silbersoft.openlab.beanmappings.AuthorityMapping;
 import co.silbersoft.openlab.beanmappings.UserMapping;
+import co.silbersoft.openlab.exceptions.EmptyPermissionException;
 import co.silbersoft.openlab.exceptions.GenericDataException;
 import co.silbersoft.openlab.exceptions.MethodNotSupportedException;
 import co.silbersoft.openlab.exceptions.NoUserException;
@@ -38,6 +39,7 @@ import co.silbersoft.openlab.exceptions.UserExistsException;
 import co.silbersoft.openlab.models.Authority;
 import co.silbersoft.openlab.models.Failure;
 import co.silbersoft.openlab.models.LdapUser;
+import co.silbersoft.openlab.models.Permission;
 import co.silbersoft.openlab.models.WebUser;
 import co.silbersoft.openlab.service.AccountService;
 
@@ -116,7 +118,11 @@ public class AccountController {
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody List<AuthorityMapping> showAllRoles(){    	
     	List<AuthorityMapping> rAuth = new ArrayList<AuthorityMapping>();
-    	for(Authority a : accountService.getAllAuthorities()){    		    	
+    	for(Authority a : accountService.getAllAuthorities()){    		
+    		AuthorityMapping am = new AuthorityMapping(a.getAuthorityId(), a.getAuthority());
+    		if(a.getPermissions() != null || !a.getPermissions().isEmpty()){
+    			am.setPermissions(a.getPermissions());
+    		}
     		rAuth.add(new AuthorityMapping(a.getAuthorityId(), a.getAuthority()));
     	}
         return rAuth;
@@ -180,13 +186,32 @@ public class AccountController {
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+	@RequestMapping(value="role/{roleId}/permissions", method=RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody Set<Permission> getPermissionsForRole(@PathVariable long roleId){
+		return accountService.findPermissionsForRole(roleId);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+	@RequestMapping(value="permissions", method=RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody List<Permission> getPermissions(){
+		return accountService.findPermissions();
+	}
+		
+	@PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
 	@RequestMapping(value="find", method=RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody List<LdapUser> findUser(@RequestParam("query") String query){		
 		return accountService.searchForUser(query);		
+	}	
+    
+	@ExceptionHandler(EmptyPermissionException.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	public @ResponseBody Failure handleEmptyPermissionException(EmptyPermissionException e){
+		return new Failure(e.getMessage());
 	}
 	
-    
     @ExceptionHandler(NotAuthenticatedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public @ResponseBody Failure handleNotAuthenticatedException(NotAuthenticatedException e){

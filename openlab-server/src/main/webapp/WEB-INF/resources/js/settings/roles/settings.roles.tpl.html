@@ -1,17 +1,40 @@
 <div class="container"> 
 	<div class="row-fluid">
-  		<div class="widget">
-  			<div class="widget-header">  		  		
-  				<i class="icon-ok" style="color:green"></i>		
-  				<h3> Roles </h3>	  				
-  				<form class="form-search" style="display:inline">  					
-    				<input type="text" class="search-query" ng-model="searchRoles" id='searchRoles' placeholder="Search">    					  					  				
-				</form>		
-				<button class="btn pull-right" ng-click="openAddUserModal()" ><i class="icon-plus"></i> Add User </button>					
-  			</div>
-  			<div class="widget-content">
-  				  				
-  			</div>  			
+	
+  		<div class="span4 well">
+  				 
+  				<ul class="nav nav-list">
+  					<li class="nav-header">
+  						Roles
+  					</li>
+  					<li ng-repeat="role in roles" ng-class="{active : role.authority == currentrole.authority}">
+  						<a ng-click="setCurrentRole(role)"> {{role.authority}} </a>
+  					</li>
+  					<li class="divider"></li>
+  					<li>
+  						<a> <i class="fa fa-plus"></i>  Add a new Role </a>
+  					</li>
+  				</ul>				
+  			
+  		</div>	
+  			
+  		<div class="span4 well" ng-if="currentrole">
+  			<ul class="nav nav-list">
+  				<li class="nav-header">
+  					Permissions for {{currentrole.authority}}
+  				</li>
+  				<li ng-repeat="perm in permissions" ng-class="{active:currentpermission == perm.name">
+  					<a ng-click="setCurrentPermission(perm.name)"> {{perm.name}}</a>	
+  				</li>
+  				<li class="divider"></li>
+  				<li>
+  					<a ng-click="addPermissionModal()"> <i class="fa fa-plus"></i>  Add Permissions </a>
+  				</li>
+  			</ul> 			  		
   		</div>
+  		
+  			
+  			
+  		
  	 </div>
 </div>

@@ -29,36 +29,50 @@ angular.module('heartbeat.settings', [
 })
 .controller('SettingsCtrl', function SettingsController($scope,titleService,$stateParams,$state,$http,$log,authService,growl,$modal) {	
 	titleService.setTitle("All Settings");	
-	authService.isAdmin().then(function(retVal){
-		$log.debug(retVal);
-		if(!retVal){
-			$log.debug("NOT AUTHORIZED!")
-			$state.transitionTo("home"); //really need to transition to login
-		} else {
-			$log.debug("AUTHORIZED!");
-		}
-	});	
+		
+	
 	$scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {		
+		// Check every time this page, or subsequent pages, is loaded that it is authorized
+		authService.isAdmin().then(function(retVal){
+			$log.debug(retVal);
+			if(!retVal){
+				$log.debug("NOT AUTHORIZED!")
+				$state.transitionTo("home"); //really need to transition to login
+			} else {
+				$log.debug("AUTHORIZED!");
+			}
+		});
+		
+		$scope.currentrole = null;			
 		// settings.user
 		if($state.is("settings.users")){									
 			$http.get("accounts/show/users/enabled").success(function(data, status, config, other){
 				$scope.users = data;
-			}).error(function(data,status,config,other){
-				$log.debug(data);
+			}).error(function(data,status,config,other){				
 				growl.addErrorMessage("Unable to get enabled users at this time");
 			});			
 			$http.get("accounts/show/users/disabled").success(function(data, status, config, other){
 				$scope.disabledUsers = data;
-			}).error(function(data,status,config,other){
-				$log.debug(data);
+			}).error(function(data,status,config,other){				
 				growl.addErrorMessage("Unable to get disabled users at this time");
 			});			
+		// settings.roles	
 		} else if($state.is("settings.roles")){
-			
-			
+			$http.get("accounts/show/roles").success(function(data,status,config,other){				
+				$scope.roles = data;
+			}).error(function(data,status,config,other){
+				
+			});			
 		}										
-	});	
-	// Enable User Modal
+	});				
+	$scope.setCurrentRole = function(role){
+		$scope.currentrole = role;
+		$log.debug('accounts/role/' + role.authorityId + '/permissions');
+		$http.get('accounts/role/' + role.authorityId + '/permissions').success(function(data,status,config,other){			
+			$scope.permissions = data;
+		}).error(function(data,status,config,other){			
+		});			
+	}		
 	$scope.enableUser = function(user){
 		$http.put("accounts/user/" + user.id + "/enable").success(function(data,status,config,other){
 			growl.addSuccessMessage("Successfully enabled " + user.cn);
@@ -77,7 +91,37 @@ angular.module('heartbeat.settings', [
 			growl.addErrorMessage("Unable to disable " + user.cn);
 		});
 	}	
-	// Add User Modal
+	
+	/**********************
+	 * ADD PERMISSION MODAL
+	 **********************/
+	$scope.addPermissionModal = function(){
+		var modalInstance = $modal.open({
+			templateUrl: 'resources/js/settings/roles/add-permission.modal.html',
+	        controller: 'AddPermissionModalCtrl',
+	        resolve: {
+        		items: function() {
+        			return {
+        				'role' : $scope.currentrole,
+        				'permissions' : ($scope.permissions ? $scope.permissions : new Array())
+        			};
+        		}
+        	}
+		});
+		modalInstance.result.then(function(obj){
+			$http.put('accounts/permissions/role/' + obj.role.authorityId, obj.perms).success(function(data,status,config,other){
+				
+			}).error(function(data,status,config,other){
+				
+			});
+		});
+	}
+	
+	
+	
+	/**********************
+	 *** ADD USER MODAL ***
+	 **********************/
 	$scope.openAddUserModal = function(){
 		var modalInstance = $modal.open({
 			templateUrl: 'resources/js/settings/users/new-user.modal.html',
@@ -279,5 +323,34 @@ angular.module('heartbeat.settings', [
 	$scope.cancel = function(){
 		$modalInstance.dismiss('cancel');
 	};	
+}).controller('AddPermissionModalCtrl', function AddPermissionModalController($scope, $modalInstance, $log, $http, items){
+	$scope.role = items.role;
+	$scope.perms = items.permissions;
+	$scope.allPerms = new Array();			
+	$http.get('accounts/permissions').success(function(data,status,config,other){
+		angular.forEach(data, function(val,idx){
+    		if(!inPermissionsArray(val.permission, $scope.perms)){
+    			$scope.allPerms.push(val);
+    		}
+    	});
+		
+	}).error(function(data,status,config,other){
+		$log.error(data);
+	});	
+	$scope.ok=function(sentPerms){		
+		$modalInstance.close({'role':$scope.role,'perms':sentPerms});
+	};
+	$scope.cancel = function(){
+		$modalInstance.dismiss('cancel');
+	};	
+	// Utility Functions    
+    var inPermissionsArray = function(needle, haystack){
+    	for(var i=0; i<haystack.length; i++){
+    		if(haystack[i].authority === needle){
+    			return true;
+    		}
+    	}
+    	return false;
+    }	
 })
 ;
