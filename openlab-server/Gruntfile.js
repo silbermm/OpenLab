@@ -2,6 +2,28 @@ module.exports = function(grunt) {
 	grunt
 			.initConfig({
 				pkg : grunt.file.readJSON('package.json'),	
+				html2js: {
+					options: {
+						rename : function (moduleName) {
+							  return  moduleName.replace('main/webapp/WEB-INF/assets/dev/js/', '');
+						},
+					  htmlmin: {
+						  collapseBooleanAttributes: true,
+		    			collapseWhitespace: true,
+		    			removeAttributeQuotes: true,
+		    			removeComments: true,
+		    			removeEmptyAttributes: true,
+		   	 			removeRedundantAttributes: true,
+		    			removeScriptTypeAttributes: true,
+		    			removeStyleLinkTypeAttributes: true
+			  		}	
+						//custom options, see below    
+		     	},
+		      main: {
+		      	src: ['src/main/webapp/WEB-INF/assets/dev/js/**/*.tpl.html'],
+		        dest: 'src/main/webapp/WEB-INF/assets/js/templates.js'
+		       },
+		    },	
 				concat: {
 			 		basic_and_extras: {
 						files: {
@@ -82,5 +104,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-html2js');	
 	grunt.registerTask('default', [ 'concat','uglify', 'less', 'cssmin' ]);
 };
