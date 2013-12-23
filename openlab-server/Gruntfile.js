@@ -75,6 +75,7 @@ module.exports = function(grunt) {
 					combine: {
 						files: {
 					    	'src/main/webapp/WEB-INF/assets/css/main.css': [
+									'src/main/webapp/WEB-INF/assets/dev/css/heartbeat.css',
 									'src/main/webapp/WEB-INF/assets/dev/css/main.css',
 							 		'src/main/webapp/WEB-INF/assets/dev/angular-growl/build/angular-growl.min.css',
 					    	 	'src/main/webapp/WEB-INF/assets/dev/ng-grid/ng-grid.css',	
@@ -105,5 +106,5 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-html2js');	
-	grunt.registerTask('default', [ 'concat','uglify', 'less', 'cssmin' ]);
+	grunt.registerTask('default', [ 'html2js','concat','uglify', 'less', 'cssmin' ]);
 };
