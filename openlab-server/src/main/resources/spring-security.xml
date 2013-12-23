@@ -30,10 +30,8 @@
 		<beans:constructor-arg value="#{config.getString('ldap.url')}" />
 		<beans:property name="authoritiesMapper" ref="grantedAuthoritiesMapper" />
 		<beans:property name="userDetailsContextMapper" ref="userDetailsContextMapper" />
-		<beans:property name="useAuthenticationRequestCredentials"
-			value="true" />
-		<beans:property name="convertSubErrorCodesToExceptions"
-			value="true" />
+		<beans:property name="useAuthenticationRequestCredentials" value="true" />
+		<beans:property name="convertSubErrorCodesToExceptions" value="true" />
 	</beans:bean>
 
 	<beans:bean id="expressionHandler"
@@ -50,19 +48,14 @@
 		</beans:constructor-arg>
 	</beans:bean>
 	
-	<beans:bean id="groupPermission" class="co.silbersoft.openlab.service.authentication.permission.MachineGroupPermission" />
-	  	   	
+	<beans:bean id="groupPermission" class="co.silbersoft.openlab.service.authentication.permission.MachineGroupPermission" />	  	   	
 	<beans:bean id="grantedAuthoritiesMapper" class="co.silbersoft.openlab.service.authentication.ActiveDirectoryAuthoritiesMapper" />
 	<beans:bean id="userDetailsContextMapper" class="co.silbersoft.openlab.service.authentication.ActiveDirectoryUserContextMapper" />
 	<beans:bean id="adUserDetailsService" class="co.silbersoft.openlab.service.authentication.ActiveDirectoryUserDetailsService" />
 
-	<sec:global-method-security
-		pre-post-annotations="enabled" />
+	<sec:global-method-security pre-post-annotations="enabled" />
 
-	<beans:bean class=" org.springframework.security.access.vote.RoleVoter"
-		id="roleVoter" />
-	<beans:bean
-		class="org.springframework.security.access.vote.AuthenticatedVoter"
-		id="authenticatedVoter" />
+	<beans:bean class=" org.springframework.security.access.vote.RoleVoter" id="roleVoter" />
+	<beans:bean class="org.springframework.security.access.vote.AuthenticatedVoter" id="authenticatedVoter" />
 
 </beans:beans>

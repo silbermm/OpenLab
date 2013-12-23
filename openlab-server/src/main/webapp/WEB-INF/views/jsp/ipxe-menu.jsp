@@ -17,7 +17,7 @@ goto \${selected}
 :drbl
 kernel http://labs.uc.edu/tftp/nbi_img/live/vmlinuz
 initrd http://labs.uc.edu/tftp/nbi_img/live/initrd.img
-imgargs vmlinuz boot=live config noswap nolocales edd=on nomodeset noprompt ocs_prerun1="dhclient -v eth0" ocs_prerun2="sleep 5" ocs_prerun3="mount -t nfs -o noatime,nodiratime labs.uc.edu:/home/partimag /home/partimag" ocs_live_run="/opt/drbl/sbin/ocs-sr -x" ocs_live_keymap="NONE" ocs_live_batch="no" ocs_lang="en_US.UTF-8" vga="788" ip="frommedia" nosplash fetch=tftp://labs.uc.edu/live/filesystem.squashfs
+imgargs vmlinuz boot=live config noswap nolocales edd=on nomodeset noprompt ocs_prerun1="dhclient -v eth0" ocs_prerun2="sleep 5" ocs_prerun3="mount -t nfs -o noatime,nodiratime labs.uc.edu:/home/partimag /home/partimag" ocs_live_run="/usr/sbin/ocs-sr -x" ocs_live_keymap="NONE" ocs_live_batch="no" ocs_lang="en_US.UTF-8" vga="788" ip="frommedia" nosplash fetch=tftp://labs.uc.edu/live/filesystem.squashfs
 boot || goto failed
 
 :failed
@@ -36,7 +36,7 @@ set submenu-timeout 0
 goto start
 
 :extra
-ocs_prerun1="dhclient -v eth0" ocs_prerun2="sleep 5" ocs_prerun3="mount -t nfs -o noatime,nodiratime labs.uc.edu:/home/partimag /home/partimag" ocs_live_run="/opt/drbl/sbin/ocs-live-restore" ocs_live_extra_param="--batch restoredisk ${image} sda" ocs_live_keymap="NONE" ocs_live_batch="yes" ocs_lang="en_US.UTF-8" 
+ocs_prerun1="dhclient -v eth0" ocs_prerun2="sleep 5" ocs_prerun3="mount -t nfs -o noatime,nodiratime labs.uc.edu:/home/partimag /home/partimag" ocs_live_run="/usr/sbin/ocs-live-restore" ocs_live_extra_param="--batch restoredisk ${image} sda" ocs_live_keymap="NONE" ocs_live_batch="yes" ocs_lang="en_US.UTF-8" 
 
 :reboot
 reboot
@@ -44,14 +44,13 @@ reboot
 :mcast
 kernel http://labs.uc.edu/tftp/nbi_img/live/vmlinuz
 initrd http://labs.uc.edu/tftp/nbi_img/live/initrd.img
-imgargs vmlinuz boot=live config noswap nolocales edd=on nomodeset noprompt ocs_prerun1="dhclient -v eth0" ocs_prerun2="sleep 5" ocs_prerun3="mount -t nfs -o noatime,nodiratime labs.uc.edu:/home/partimag /home/partimag" ocs_live_run="/opt/drbl/sbin/ocs-sr" ocs_live_extra_param="-icds -g auto -e1 auto -e2 -r --clone-hidden-data -p reboot --mcast-port 2232 multicast_restoredisk ask_user sda" ocs_live_keymap="NONE" ocs_live_batch="yes" ocs_lang="en_US.UTF-8" vga="788" ip="frommedia" nosplash fetch=tftp://labs.uc.edu/live/filesystem.squashfs
+imgargs vmlinuz boot=live config noswap nolocales edd=on nomodeset noprompt ocs_prerun1="dhclient -v eth0" ocs_prerun2="sleep 5" ocs_prerun3="mount -t nfs -o noatime,nodiratime labs.uc.edu:/home/partimag /home/partimag" ocs_live_run="/usr/sbin/ocs-sr -g auto -e1 auto -e2 -r --clone-hidden-data -p reboot --mcast-port 2232 multicast_restoredisk ask_user sda" ocs_live_extra_param="" ocs_live_batch="yes" ocs_live_keymap="NONE" ocs_lang="en_US.UTF-8" vga="788" ip="frommedia" nosplash fetch=tftp://labs.uc.edu/live/filesystem.squashfs
 boot || goto failed
 
 
 :mcastPart
 kernel http://labs.uc.edu/tftp/nbi_img/live/vmlinuz
 initrd http://labs.uc.edu/tftp/nbi_img/live/initrd.img
-imgargs vmlinuz boot=live config noswap nolocales edd=on nomodeset noprompt ocs_prerun1="dhclient -v eth0" ocs_prerun2="sleep 5" ocs_prerun3="mount -t nfs -o noatime,nodiratime labs.uc.edu:/home/partimag /home/partimag" ocs_live_run="/opt/drbl/sbin/ocs-sr" ocs_live_extra_param="-icds -g auto -e1 auto -e2 -r --clone-hidden-data -p reboot --mcast-port 2232 -k multicast_restoreparts ask_user ask_user" ocs_live_keymap="NONE" ocs_live_batch="yes" ocs_lang="en_US.UTF-8" vga="788" ip="frommedia" nosplash fetch=tftp://labs.uc.edu/live/filesystem.squashfs
-imgargs vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 text 1  clientdir=node_root ocs_opt="-l en_US.UTF-8 -icds -g auto -e1 auto -e2 -r --clone-hidden-data -p reboot --mcast-port 2232 -k --batch multicast_restoreparts ask_user ask_user"
+imgargs vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 text 1 clientdir=node_root ocs_opt="-l en_US.UTF-8  -g auto -e1 auto -e2 -r --clone-hidden-data -p reboot --max-time-to-wait 300 --mcast-port 2232 multicast_restoredisk ask_user sda"
 boot || goto failed
 

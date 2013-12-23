@@ -198,6 +198,22 @@ public class AccountController {
 	public @ResponseBody List<Permission> getPermissions(){
 		return accountService.findPermissions();
 	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
+	@RequestMapping(value="permissions/role/{roleId}", method=RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody List<Permission> addPermissionsToRole(@RequestBody List<Permission> permissions, @PathVariable long roleId){
+		List<Permission> successPerm = new ArrayList<Permission>();
+		for(Permission p : permissions){
+			boolean isAdded = accountService.addPermissionToRole(p.getPermissionId(), roleId);
+			if(isAdded) successPerm.add(p);
+		}	
+		if(successPerm.isEmpty()){
+			throw new EmptyPermissionException("Unable to add permissions to role with id " + roleId);
+		}
+		return successPerm;
+	}
+	
 		
 	@PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
 	@RequestMapping(value="find", method=RequestMethod.GET)

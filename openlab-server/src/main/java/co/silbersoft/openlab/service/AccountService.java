@@ -261,6 +261,21 @@ public class AccountService {
 		}	 
 	}
 	
+	@Transactional(readOnly=false)
+	public boolean addPermissionToRole(long permId, long roleId){
+		try {
+			Authority a = authDao.get(roleId);
+			Permission p = permissionDao.get(permId);
+			a.addPermission(p);
+			authDao.update(a);
+			return true;
+		}catch (RuntimeException e){
+			return false;
+		} catch (Exception e){
+			return false;
+		} 
+	}
+	
 	
 	private static final Logger log = LoggerFactory.getLogger(AccountService.class); 
 	@Autowired AuthorityDao authDao;

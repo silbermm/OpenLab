@@ -89,4 +89,8 @@ public class Authority implements Serializable, GrantedAuthority {
 	public void setMachineGroups(Set<MachineGroup> machineGroups) {
 		this.machineGroups = machineGroups;
 	}
+	
+	public void addPermission(Permission p){
+		this.permissions.add(p);
+	}
 }

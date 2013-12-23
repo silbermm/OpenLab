@@ -72,6 +72,7 @@ public class AppContext {
 		basicDataSource.setPassword(config().getString("db.dev.password"));
 		basicDataSource.setMaxWait(config().getLong("db.dev.maxwait"));
 		basicDataSource.addConnectionProperty("autoReconnect", "true");
+		basicDataSource.setMaxActive(-1);	    
 		return basicDataSource;
 	}
 	

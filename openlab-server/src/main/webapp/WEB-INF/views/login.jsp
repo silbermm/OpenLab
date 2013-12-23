@@ -17,21 +17,6 @@
         <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet" />
         <link href="<c:url value='/resources/css/heartbeat.css'/>" rel="stylesheet" />
         <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/angular.min.js'/>"></script>        
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/bootstrap.min.js'/>"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/angular-resource.min.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/ui-bootstrap-0.5.0.min.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/ng-grid.min.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/ui-route.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/ui-utils.min.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/underscore.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/vender/restangular.min.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/app.js' />"></script>        
-        <script type="text/javascript" src="<c:url value='/resources/js/services/titleService.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/services/searchService.js' />"></script>
-        <script type="text/javascript" src="<c:url value='/resources/js/home/home.js' />"></script>        
-        <script type="text/javascript" src="<c:url value='/resources/js/computer/computer.js' />"></script>  
-        <script type="text/javascript" src="<c:url value='/resources/js/groups/groups.js' />"></script>  
     </head>
     <body>
         <c:url var="postLoginUrl" value="/j_spring_security_check" />
