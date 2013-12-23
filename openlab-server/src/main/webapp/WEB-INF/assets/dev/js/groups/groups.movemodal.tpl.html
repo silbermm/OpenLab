@@ -1,0 +1,10 @@
+<div class="modal-header">
+    <h3> Move computers </h3>
+</div>
+<div class="modal-body">
+    <p> Where do you want to move the selected computers to?</p>    
+    <select ng-model="chosenGroup" ng-options="g.name for g in allGroups"></select>
+</div>
+<div class="modal-footer">
+    <button ng-click="apply(chosenGroup)" class="btn btn-primary" >Move</button>    
+</div>
