@@ -1,7 +1,6 @@
 'use strict';
 angular.module('heartbeat.settings', [
     'ui.router.state',
-    'titleService',
     'ngGrid',
     'ui.bootstrap',
     'authService',
@@ -13,21 +12,21 @@ angular.module('heartbeat.settings', [
         views: {
             "main": {
                 controller: "SettingsCtrl",
-                templateUrl: 'settings/settings.tpl.html'
+                templateUrl: 'settings/settings.tpl.html',
+                data:{ pageTitle: 'Settings' }
             }
         }   
     }).state('settings.users', {
     	url: '/users',
-    	templateUrl: 'assets/js/settings/users/settings.users.tpl.html',    	
+    	templateUrl: 'settings/users/settings.users.tpl.html',    	
     }).state('settings.roles', {
     	url: '/roles',
-    	templateUrl: 'assets/js/settings/roles/settings.roles.tpl.html',
+    	templateUrl: 'settings/roles/settings.roles.tpl.html',
     }).state('settings.permissions',{
     	url: '/permissions',
-    	templateUrl: 'assets/js/settings/permissions/settings.permissions.tpl.html',
+    	templateUrl: 'settings/permissions/settings.permissions.tpl.html',
     });
-}).controller('SettingsCtrl', function SettingsController($scope,titleService,$stateParams,$state,$http,$log,authService,growl,$modal) {	
-	titleService.setTitle("All Settings");				
+}).controller('SettingsCtrl', function SettingsController($scope,$stateParams,$state,$http,$log,authService,growl,$modal) {				
 	$scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {		
 		// Check every time this page, or subsequent pages, is loaded that it is authorized
 		authService.isAdmin().then(function(retVal){

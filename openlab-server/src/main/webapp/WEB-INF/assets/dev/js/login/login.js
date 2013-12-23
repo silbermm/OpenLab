@@ -7,12 +7,13 @@ angular.module('heartbeat.home', [
         url: '/home',
         views: {
             "main": {
-                controller: "HomeCtrl",
-                templateUrl: 'home/home.tpl.html'
+                controller: "LoginCtrl",
+                templateUrl: 'login/login.tpl.html',
+                data:{ pageTitle: 'Login' }
             }
         }
     })
-}).controller('HomeCtrl', function HomeController($scope, titleService) {
+}).controller('LoginCtrl', function LoginController($scope, titleService) {
     
 
 })

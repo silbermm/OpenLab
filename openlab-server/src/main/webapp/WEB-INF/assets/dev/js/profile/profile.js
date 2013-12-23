@@ -1,7 +1,6 @@
 'use strict';
 angular.module('heartbeat.profile', [
     'ui.router.state',
-    'titleService',
     'authService'
 ]).config(function config($stateProvider) {
     $stateProvider.state('profile', {
@@ -9,12 +8,12 @@ angular.module('heartbeat.profile', [
         views: {
             "main": {
                 controller: "ProfileCtrl",
-                templateUrl: 'profile/profile.tpl.html'
+                templateUrl: 'profile/profile.tpl.html',
+                data:{ pageTitle: 'Profile' }
             }
         }
     })
-}).controller('ProfileCtrl', function ProfileController($scope, titleService, authService, $log) {
-	titleService.setTitle("User Profile");
+}).controller('ProfileCtrl', function ProfileController($scope, authService, $log) {
 	authService.getRoles().then(function(data){
 		$log.debug(data);
 		if(data.status === 200){

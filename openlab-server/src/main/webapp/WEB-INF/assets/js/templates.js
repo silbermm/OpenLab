@@ -1,4 +1,4 @@
-angular.module('templates-main', ['computer/computer.tpl.html', 'groups/groups.deletemodal.tpl.html', 'groups/groups.gridview.tpl.html', 'groups/groups.movemodal.tpl.html', 'groups/groups.tableview.tpl.html', 'groups/groups.tpl.html', 'home/home.tpl.html', 'login/login.tpl.html', 'profile/profile.tpl.html', 'settings/all/settings.all.tpl.html', 'settings/roles/settings.roles.tpl.html', 'settings/settings.tpl.html', 'settings/users/settings.users.tpl.html']);
+angular.module('templates-main', ['computer/computer.tpl.html', 'groups/groups.deletemodal.tpl.html', 'groups/groups.gridview.tpl.html', 'groups/groups.movemodal.tpl.html', 'groups/groups.tableview.tpl.html', 'groups/groups.tpl.html', 'home/home.tpl.html', 'login/login.tpl.html', 'profile/profile.tpl.html', 'settings/all/settings.all.tpl.html', 'settings/permissions/settings.permissions.tpl.html', 'settings/roles/settings.roles.tpl.html', 'settings/settings.tpl.html', 'settings/users/settings.users.tpl.html']);
 
 angular.module("computer/computer.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("computer/computer.tpl.html",
@@ -108,6 +108,11 @@ angular.module("profile/profile.tpl.html", []).run(["$templateCache", function($
 
 angular.module("settings/all/settings.all.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("settings/all/settings.all.tpl.html",
+    "");
+}]);
+
+angular.module("settings/permissions/settings.permissions.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("settings/permissions/settings.permissions.tpl.html",
     "");
 }]);
 

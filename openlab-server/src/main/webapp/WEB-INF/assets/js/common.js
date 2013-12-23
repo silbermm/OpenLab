@@ -35962,15 +35962,20 @@ angular.module('heartbeat', [
 .config( function myAppConfig($stateProvider, $urlRouterProvider, growlProvider) {      
     growlProvider.globalTimeToLive(8000);    
 })
-.run(function run(titleService, $rootScope, $state, $stateParams){
+.run(function run($rootScope, $state, $stateParams){
     $rootScope.$state = $state;    
-    $rootScope.$stateParams = $stateParams;
-    titleService.setSuffix(' | OpenLab');   
+    $rootScope.$stateParams = $stateParams;       
     $state.transitionTo("home");    
 })
 .controller('AppCtrl', function AppCtrl($scope, $location, titleService, authService){
-    titleService.setTitle("Home");       
-        
+    //titleService.setTitle("Home");       
+     
+    $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
+        if ( angular.isDefined( toState.data.pageTitle ) ) {
+          $scope.pageTitle = toState.data.pageTitle + ' | OpenLab' ;
+        }
+    });
+    
     authService.isAuthenticated().then(function(data){
     	if(data.status === 200){
     		$scope.isAuthenticated = true;
@@ -35985,21 +35990,18 @@ angular.module('heartbeat', [
 
 
 'use strict';
-angular.module('heartbeat.computer', [
-    'ui.router.state',
-    'titleService',
-]).config(function config($stateProvider) {
+angular.module('heartbeat.computer', [ 'ui.router.state']).config(function config($stateProvider) {
     $stateProvider.state('computer', {
         url: '/computer/:id',
         views: {
             "main": {
                 controller: "ComputerCtrl",
-                templateUrl: 'computer/computer.tpl.html'
+                templateUrl: 'computer/computer.tpl.html',
+                data:{ pageTitle: 'Computers' }
             }
         }
     })
-}).controller('ComputerCtrl', function ComputerController($scope, titleService, $stateParams) {
-    titleService.setTitle($stateParams.id);
+}).controller('ComputerCtrl', function ComputerController($scope, $stateParams) {
     $scope.computerid = $stateParams.id;
     
 
@@ -36016,7 +36018,6 @@ angular.module('loggedIn', []).directive('loggedIn', function(){
 'use strict';
 angular.module('heartbeat.groups', [
     'ui.router.state',
-    'titleService',
     'ngGrid',
     'ui.bootstrap',
     'angular-growl',
@@ -36033,11 +36034,13 @@ angular.module('heartbeat.groups', [
     }).state('groups.tableview', {
         url: '/table',
         templateUrl: 'groups/groups.tableview.tpl.html',
+        data:{ pageTitle: 'Groups Table View' }
     }).state('groups.gridview', {
         url: '/grid',
         templateUrl: 'groups/groups.gridview.tpl.html',
+        data:{ pageTitle: 'Groups Grid View' }
     });
-}).controller('GroupsCtrl', function GroupsController($scope, titleService, $modal, $stateParams, $state, $http, $log, growl) {
+}).controller('GroupsCtrl', function GroupsController($scope, $modal, $stateParams, $state, $http, $log, growl) {
     $scope.currentGroup = $stateParams.id;
     $scope.machineSelected = {};
     $scope.selectAll;
@@ -36051,11 +36054,9 @@ angular.module('heartbeat.groups', [
                     $scope.machines = $scope.machines.concat(data[i].machines);
                 }
             }
-            titleService.setTitle('All Machines');
         } else {
             $scope.group = data;
             $scope.machines = data.machines;
-            titleService.setTitle(data.name);
         }
     }).error(function(data, status, headers, config) {
         growl.addErrorMessage("Unable to get the Machines in the " + $stateParams.id + " group. " + data.error);
@@ -36264,24 +36265,24 @@ angular.module('heartbeat.groups', [
         $modalInstance.dismiss('cancel');
     };
 })
-        ;
+;
 
 
 'use strict';
 angular.module('heartbeat.home', [
     'ui.router.state',
-    'titleService',
 ]).config(function config($stateProvider) {
     $stateProvider.state('home', {
         url: '/home',
         views: {
             "main": {
                 controller: "HomeCtrl",
-                templateUrl: 'home/home.tpl.html'
+                templateUrl: 'home/home.tpl.html',
+                data:{ pageTitle: 'Home' }
             }
         }
     })
-}).controller('HomeCtrl', function HomeController($scope, titleService) {
+}).controller('HomeCtrl', function HomeController($scope) {
     
 
 })
@@ -36296,12 +36297,13 @@ angular.module('heartbeat.home', [
         url: '/home',
         views: {
             "main": {
-                controller: "HomeCtrl",
-                templateUrl: 'home/home.tpl.html'
+                controller: "LoginCtrl",
+                templateUrl: 'login/login.tpl.html',
+                data:{ pageTitle: 'Login' }
             }
         }
     })
-}).controller('HomeCtrl', function HomeController($scope, titleService) {
+}).controller('LoginCtrl', function LoginController($scope, titleService) {
     
 
 })
@@ -36310,7 +36312,6 @@ angular.module('heartbeat.home', [
 'use strict';
 angular.module('heartbeat.profile', [
     'ui.router.state',
-    'titleService',
     'authService'
 ]).config(function config($stateProvider) {
     $stateProvider.state('profile', {
@@ -36318,12 +36319,12 @@ angular.module('heartbeat.profile', [
         views: {
             "main": {
                 controller: "ProfileCtrl",
-                templateUrl: 'profile/profile.tpl.html'
+                templateUrl: 'profile/profile.tpl.html',
+                data:{ pageTitle: 'Profile' }
             }
         }
     })
-}).controller('ProfileCtrl', function ProfileController($scope, titleService, authService, $log) {
-	titleService.setTitle("User Profile");
+}).controller('ProfileCtrl', function ProfileController($scope, authService, $log) {
 	authService.getRoles().then(function(data){
 		$log.debug(data);
 		if(data.status === 200){
@@ -36451,7 +36452,6 @@ angular.module('titleService', []).factory('titleService', function($document){
 'use strict';
 angular.module('heartbeat.settings', [
     'ui.router.state',
-    'titleService',
     'ngGrid',
     'ui.bootstrap',
     'authService',
@@ -36463,21 +36463,21 @@ angular.module('heartbeat.settings', [
         views: {
             "main": {
                 controller: "SettingsCtrl",
-                templateUrl: 'settings/settings.tpl.html'
+                templateUrl: 'settings/settings.tpl.html',
+                data:{ pageTitle: 'Settings' }
             }
         }   
     }).state('settings.users', {
     	url: '/users',
-    	templateUrl: 'assets/js/settings/users/settings.users.tpl.html',    	
+    	templateUrl: 'settings/users/settings.users.tpl.html',    	
     }).state('settings.roles', {
     	url: '/roles',
-    	templateUrl: 'assets/js/settings/roles/settings.roles.tpl.html',
+    	templateUrl: 'settings/roles/settings.roles.tpl.html',
     }).state('settings.permissions',{
     	url: '/permissions',
-    	templateUrl: 'assets/js/settings/permissions/settings.permissions.tpl.html',
+    	templateUrl: 'settings/permissions/settings.permissions.tpl.html',
     });
-}).controller('SettingsCtrl', function SettingsController($scope,titleService,$stateParams,$state,$http,$log,authService,growl,$modal) {	
-	titleService.setTitle("All Settings");				
+}).controller('SettingsCtrl', function SettingsController($scope,$stateParams,$state,$http,$log,authService,growl,$modal) {				
 	$scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {		
 		// Check every time this page, or subsequent pages, is loaded that it is authorized
 		authService.isAdmin().then(function(retVal){

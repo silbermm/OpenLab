@@ -1,19 +1,16 @@
 'use strict';
-angular.module('heartbeat.computer', [
-    'ui.router.state',
-    'titleService',
-]).config(function config($stateProvider) {
+angular.module('heartbeat.computer', [ 'ui.router.state']).config(function config($stateProvider) {
     $stateProvider.state('computer', {
         url: '/computer/:id',
         views: {
             "main": {
                 controller: "ComputerCtrl",
-                templateUrl: 'computer/computer.tpl.html'
+                templateUrl: 'computer/computer.tpl.html',
+                data:{ pageTitle: 'Computers' }
             }
         }
     })
-}).controller('ComputerCtrl', function ComputerController($scope, titleService, $stateParams) {
-    titleService.setTitle($stateParams.id);
+}).controller('ComputerCtrl', function ComputerController($scope, $stateParams) {
     $scope.computerid = $stateParams.id;
     
 

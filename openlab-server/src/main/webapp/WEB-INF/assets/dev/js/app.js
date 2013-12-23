@@ -16,15 +16,20 @@ angular.module('heartbeat', [
 .config( function myAppConfig($stateProvider, $urlRouterProvider, growlProvider) {      
     growlProvider.globalTimeToLive(8000);    
 })
-.run(function run(titleService, $rootScope, $state, $stateParams){
+.run(function run($rootScope, $state, $stateParams){
     $rootScope.$state = $state;    
-    $rootScope.$stateParams = $stateParams;
-    titleService.setSuffix(' | OpenLab');   
+    $rootScope.$stateParams = $stateParams;       
     $state.transitionTo("home");    
 })
 .controller('AppCtrl', function AppCtrl($scope, $location, titleService, authService){
-    titleService.setTitle("Home");       
-        
+    //titleService.setTitle("Home");       
+     
+    $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
+        if ( angular.isDefined( toState.data.pageTitle ) ) {
+          $scope.pageTitle = toState.data.pageTitle + ' | OpenLab' ;
+        }
+    });
+    
     authService.isAuthenticated().then(function(data){
     	if(data.status === 200){
     		$scope.isAuthenticated = true;

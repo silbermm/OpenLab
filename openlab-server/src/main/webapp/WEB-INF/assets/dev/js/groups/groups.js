@@ -1,7 +1,6 @@
 'use strict';
 angular.module('heartbeat.groups', [
     'ui.router.state',
-    'titleService',
     'ngGrid',
     'ui.bootstrap',
     'angular-growl',
@@ -18,11 +17,13 @@ angular.module('heartbeat.groups', [
     }).state('groups.tableview', {
         url: '/table',
         templateUrl: 'groups/groups.tableview.tpl.html',
+        data:{ pageTitle: 'Groups Table View' }
     }).state('groups.gridview', {
         url: '/grid',
         templateUrl: 'groups/groups.gridview.tpl.html',
+        data:{ pageTitle: 'Groups Grid View' }
     });
-}).controller('GroupsCtrl', function GroupsController($scope, titleService, $modal, $stateParams, $state, $http, $log, growl) {
+}).controller('GroupsCtrl', function GroupsController($scope, $modal, $stateParams, $state, $http, $log, growl) {
     $scope.currentGroup = $stateParams.id;
     $scope.machineSelected = {};
     $scope.selectAll;
@@ -36,11 +37,9 @@ angular.module('heartbeat.groups', [
                     $scope.machines = $scope.machines.concat(data[i].machines);
                 }
             }
-            titleService.setTitle('All Machines');
         } else {
             $scope.group = data;
             $scope.machines = data.machines;
-            titleService.setTitle(data.name);
         }
     }).error(function(data, status, headers, config) {
         growl.addErrorMessage("Unable to get the Machines in the " + $stateParams.id + " group. " + data.error);
@@ -249,5 +248,5 @@ angular.module('heartbeat.groups', [
         $modalInstance.dismiss('cancel');
     };
 })
-        ;
+;
 
