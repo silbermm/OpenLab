@@ -94,3 +94,4 @@ public abstract class AbstractDao<T extends Object> implements Dao<T> {
         this.sessionFactory = sessionFactory;
     }
 }
+

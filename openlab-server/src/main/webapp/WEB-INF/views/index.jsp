@@ -14,40 +14,41 @@
 <script src="<c:url value='/assets/js/templates.js' />"></script>
 </head>
 <body>	
-	<div class="navbar navbar-static-top">
-		 <div class="navbar-inner">
-			
-    			<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-      				<span class="sr-only">Toggle navigation</span>
-      				<span class="fa fa-bar"></span>
-      				<span class="fa fa-bar"></span>
-      				<span class="fa fa-bar"></span>
-    			</button>
-    			<a class="brand" href="#"> OpenLab </a>  				
-				<div class="collapse nav-collapse">
-					<ul class="nav navbar-nav">							
-						<li ui-route="/groups" ng-class="{active: $state.includes('groups')}">
-							<a href="#/groups/all/table"> <i class="fa fa-home"></i> Home </a>
-						</li>
-						<li ui-route="/settings/all" ng-class="{active: $state.includes('settings')}" ng-if="isAuthenticated">
-							<a href="#/settings/users"> <i class="fa fa-gears"></i> Settings </a>
-						</li>																			
-					</ul>
-			
-					<ul class="nav navbar-nav pull-right">
-						<li ng-if="!isAuthenticated">
-							<a href="<c:url value='/login' />"> <i class="icon-lock"></i> Login </a>
-						</li>
-						<li ng-if="isAuthenticated" ui-route="/profile" ng-class="{active: $state.includes('profile')}" >
-							<a href="#/profile"> Logged in as: {{username}} </a>
-						</li>						
-						<li ng-if="isAuthenticated">
-							<a href="<c:url value="/j_spring_security_logout" />"> <i class="fa fa-lock"></i> Logout </a>
-						</li>			
-					</ul>						
-				</div>				
+	<img id="logo" src="<c:url value='/assets/img/logo.gif' />" width="90px" /> 
+	<nav class="navbar navbar-default navbar-static-top" role="navigation">
+		 <div class="navbar-header right-of-logo">			
+    		<button type="button" class="navbar-toggle" data-toggle="collapse">
+    			<span class="sr-only">Toggle navigation</span>
+      			<span class="icon-bar"></span>
+      			<span class="icon-bar"></span>
+      			<span class="icon-bar"></span>
+    		</button>
+    		 <a class="navbar-brand" href="#">OpenLab</a>  				
+    		
 		</div>
-	</div>
+				
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav right-of-logo">							
+				<li ui-route="/groups" ng-class="{active: $state.includes('groups')}">
+					<a href="#/groups/all/table"> <i class="fa fa-home"></i> Home </a>
+				</li>
+				<li ui-route="/settings/all" ng-class="{active: $state.includes('settings')}" ng-if="isAuthenticated">
+					<a href="#/settings/users"> <i class="fa fa-gears"></i> Settings </a>
+				</li>	
+				<li ng-if="!isAuthenticated">
+					<a href="<c:url value='/login' />"> <i class="icon-lock"></i> Login </a>
+				</li>												
+			</ul>
+			<ul class="nav navbar-nav pull-right">
+				<li ng-if="isAuthenticated" ui-route="/profile" ng-class="{active: $state.includes('profile')}" >
+					<a href="#/profile"> Logged in as: {{username}} </a>
+				</li>						
+				<li ng-if="isAuthenticated">
+					<a href="<c:url value="/j_spring_security_logout" />"> <i class="fa fa-lock"></i> Logout </a>
+				</li>									
+			</ul>											
+		</div>				
+	</nav>
 	
 	<div growl class="growl-container"></div>
 	<div ui-view="main" class="row-fluid"></div>

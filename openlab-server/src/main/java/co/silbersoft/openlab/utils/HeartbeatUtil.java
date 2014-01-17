@@ -9,7 +9,6 @@ import edu.uc.labs.heartbeat.domain.ClientMachine;
  * @author silbermm
  */
 public class HeartbeatUtil {
-
     public static ClientMachine convertMachineToClientMachine(Machine m){
         ClientMachine cm = new ClientMachine();
         cm.setCurrentUser(m.getCurrentUser());

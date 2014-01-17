@@ -24,10 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- *
- * @author silbermm
- */
+
 @Configuration
 public class RabbitConfig {
 
@@ -64,16 +61,16 @@ public class RabbitConfig {
     }
 
     @Bean
-    public HttpClient rabbitHttpClient() {                        
+    public HttpClient rabbitHttpClient() {
         CredentialsProvider credsProvider = new BasicCredentialsProvider();
         credsProvider.setCredentials(
                 new AuthScope(config.getString("rabbit.host"), 15672),
                 new UsernamePasswordCredentials(config.getString("rabbit.username"), config.getString("rabbit.password")));
         CloseableHttpClient httpclient = HttpClients.custom()
-                .setDefaultCredentialsProvider(credsProvider).build();                                
-        return httpclient;        
+                .setDefaultCredentialsProvider(credsProvider).build();
+        return httpclient;
     }
-    
+
     @Bean
     public HttpGet httpGet() {
         String vhost;
@@ -85,7 +82,7 @@ public class RabbitConfig {
         HttpGet httpget = new HttpGet("http://" + config.getString("rabbit.host") + ":" + config.getString("rabbit.mgmtport") + "/api/queues/" + vhost);;
         return httpget;
     }
-    
+
     @Autowired
     Config config;
 }

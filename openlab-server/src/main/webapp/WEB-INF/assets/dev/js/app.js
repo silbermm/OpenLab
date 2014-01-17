@@ -1,8 +1,8 @@
 'use strict';
 angular.module('heartbeat', [
    	'templates-main', 
-		"ui.router",	
-		"ui.router.state", 
+	"ui.router",	
+	"ui.router.state", 
     "ngGrid",
     "ui.bootstrap",
     "heartbeat.home",
@@ -23,12 +23,14 @@ angular.module('heartbeat', [
 })
 .controller('AppCtrl', function AppCtrl($scope, $location, titleService, authService){
     //titleService.setTitle("Home");       
-     
+    
+	/*
     $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
         if ( angular.isDefined( toState.data.pageTitle ) ) {
           $scope.pageTitle = toState.data.pageTitle + ' | OpenLab' ;
         }
     });
+    */
     
     authService.isAuthenticated().then(function(data){
     	if(data.status === 200){

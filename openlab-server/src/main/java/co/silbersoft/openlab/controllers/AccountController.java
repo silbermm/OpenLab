@@ -47,20 +47,20 @@ import co.silbersoft.openlab.service.AccountService;
 @Controller
 @RequestMapping(value="/accounts/")
 public class AccountController {
-        
+
     @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
     @RequestMapping(value="create", method=RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void createAccountFromLdapUser(@RequestBody LdapUser user){
-    	WebUser u = convertUser(user);
-    	accountService.createWebUser(u);
+      WebUser u = convertUser(user);
+      accountService.createWebUser(u);
     }
     
     @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
     @RequestMapping(value="delete/{id}", method=RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void deleteAccount(@PathVariable long id){
-        accountService.deleteWebUser(id);
+      accountService.deleteWebUser(id);
     }
     
     @PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
@@ -78,7 +78,6 @@ public class AccountController {
     	List<WebUser> foundUsers;
     	if(enabled.equals("enabled")){
     		foundUsers = accountService.getAllEnabledWebUsers();
-    		
     	} else if(enabled.equals("disabled")){
     		foundUsers = accountService.getAllDisabledWebUsers();
     		
